@@ -17,7 +17,8 @@
     position: absolute;
     left: -10000px;
 }
-.errMsg
+.errmsg
 {
     color: red;
+    font-weight: bold;
 }

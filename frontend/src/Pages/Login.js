@@ -64,7 +64,7 @@ const Login = () => {
 
     const content = isLoading ? <h1 className='login'>loading...</h1> : (
         <section className='login'>
-            <p ref={errRef} className={errMsg != '' ? "errmsg" : "offscreen"}> {errMsg}</p>
+            <p ref={errRef} className={errMsg !== '' ? "errmsg" : "offscreen"}> {errMsg}</p>
 
             <h1>Login</h1>
 

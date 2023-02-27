@@ -16,7 +16,7 @@ class UserRegistration(Resource):
         data = parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
-            return {'message': 'User {} already exists.'.format(data['username'])}
+            return {'message': 'Username {} already exists.'.format(data['username'])},409
 
         new_user = UserModel(
             username = data['username'],
@@ -45,7 +45,7 @@ class UserLogin(Resource):
         print(data)
 
         if not current_user:
-            return {'message': 'User {} doesn\'t exist'.format(data['username'])}
+            return {'message': 'Username {} doesn\'t exist'.format(data['username'])}
         
         if UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity=data['username'])

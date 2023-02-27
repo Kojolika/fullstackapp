@@ -34,7 +34,13 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if(pwd != confirmPwd) throw new Error("Password is not the same!");
+            if(pwd !== confirmPwd) 
+            {   
+                console.log("pwd dont match");
+                const newError = "Password is not the same!";
+                setErrMsg(newError);
+                return;
+            }
             
             const userData = await register({ 'username': user, 'password': pwd }).unwrap();
             const accessToken = userData.access_token;
@@ -46,15 +52,10 @@ const Register = () => {
             console.log("Success")
         }
         catch (err) {
-            if (!err?.response) {
-                setErrMsg('No server response');
-            } else if (err.response?.status === 400) {
-                setErrMsg('Missing Username or Password');
-            } else if (err.response?.status === 409){
-                setErrMsg('Username already exists.');
-            }
-            else {
-                setErrMsg(err);
+            if (err?.data?.message) {
+                setErrMsg(err.data.message);
+            }else {
+                setErrMsg('No server response.');
             }
             errRef.current.focus();
         }
@@ -62,11 +63,11 @@ const Register = () => {
 
     const handleUserInput = (e) => setUser(e.target.value);
     const handlePwdInput = (e) => setPwd(e.target.value);
-    const handlePwdConfirmInput = (e) => setPwd(e.target.value);
+    const handlePwdConfirmInput = (e) => setConfirmPwd(e.target.value);
 
     const content = isLoading ? <h1 className='login'>loading...</h1> : (
         <section className='login'>
-            <p ref={errRef} className={errMsg != '' ? "errmsg" : "offscreen"}> {errMsg}</p>
+            <p ref={errRef} className={errMsg !== '' ? "errmsg" : "offscreen"}> {errMsg}</p>
 
             <h1>Register</h1>
 
@@ -89,4 +90,21 @@ const Register = () => {
                     value={pwd}
                     required
                 />
-                <label htmlFor='confirmPassw
+                <label htmlFor='confirmPassword'>Confirm Password:</label>
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    onChange={handlePwdConfirmInput}
+                    value={confirmPwd}
+                    required
+                />
+                <button>Register Now</button>
+            </form>
+            <span>Already have an account? <Link to='/login'>Sign in.</Link></span>
+
+        </section>
+    )
+    return content;
+}
+
+export default Register;
