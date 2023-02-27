@@ -1,0 +1,54 @@
+.imageObject
+{
+    display: flex;
+    justify-content: center;
+}
+
+.image
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+}
+
+.homeMainContainer
+{
+    width: 100%;
+    height: 100%;
+}
+.getStartedButton *
+{
+    font-size: 30px;
+    text-decoration: none;
+    color: black;
+}
+.getStartedButton
+{
+    width: 12%;
+    padding: 1%;
+    white-space: nowrap;
+    justify-content: center;
+    display: flex;
+}
+
+.content
+{
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
+.description
+{
+    opacity: 1;
+    text-align: center;
+    font-size: 40px;
+}
