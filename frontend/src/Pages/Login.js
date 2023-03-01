@@ -45,16 +45,11 @@ const Login = () => {
 
         }
         catch (err) {
-            if (!err?.response) {
-                setErrMsg('No server response');
-            } else if (err.response?.status === 400) {
-                setErrMsg('Missing Username or Password');
-            } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
-            } else {
-                setErrMsg('Login failed');
+            if (err?.data?.message) {
+                setErrMsg(err.data.message);
+            }else {
+                setErrMsg('No server response.');
             }
-            console.log("err?")
             errRef.current.focus();
         }
     }

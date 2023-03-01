@@ -56,7 +56,7 @@ class UserLogin(Resource):
                 'refresh_token': refresh_token
                 }
         else:
-            return {'message': 'Wrong credentials'}
+            return {'message': 'Wrong credentials'}, 400
         
 class UserLogoutAccess(Resource):
     @jwt_required()

@@ -36,7 +36,6 @@ const Register = () => {
         try {
             if(pwd !== confirmPwd) 
             {   
-                console.log("pwd dont match");
                 const newError = "Password is not the same!";
                 setErrMsg(newError);
                 return;

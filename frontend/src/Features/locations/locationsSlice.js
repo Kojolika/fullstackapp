@@ -6,7 +6,7 @@ const initialState = [
         province:'Michigan'
     },
     {   city: 'Toronto',
-    province: 'Ontario'    
+        province: 'Ontario'    
     }
 ];
 
@@ -16,11 +16,8 @@ const locationsSlice = createSlice({
     reducers:{
         getUserLocations: (state, action) =>
         {
-            const {user, accessToken} = action.payload;
-
-        },
-        getCurrentLocation: (state, action) =>
-        {
+            const {locations} = action.payload;
+            state.locations = locations;
 
         },
         addLocation: (state,action) =>
@@ -31,7 +28,7 @@ const locationsSlice = createSlice({
     }
 });
 
-export const {getCurrentLocation, getUserLocations} = locationsSlice.actions;
+export const {addLocation, getUserLocations} = locationsSlice.actions;
 
 export const selectAllLocations = (state) => state.locations;
 
