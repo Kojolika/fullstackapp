@@ -21,10 +21,11 @@ class UserModel(db.Model):
     def return_all(cls):
         def to_json(x):
             return{
+                'id' : x.id,
                 'username': x.username,
                 'password': x.password
             }
-        return {'users': list(map(lambda x: to_json(x), UserModel.query.all()))}
+        return {'users': list(map(lambda x: to_json(x), cls.query.all()))}
     
     @classmethod
     def delete_all(cls):
@@ -44,7 +45,9 @@ class UserModel(db.Model):
         return sha256.verify(password, hash)
 
 class RevokeTokenModel(db.Model):
+    
     __tablename__ = 'revoked_tokens'
+
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(120))
 
@@ -63,4 +66,14 @@ class RevokeTokenModel(db.Model):
             return{
                 'jti': x.jti
             }
-        return {'tokens': list(map(lambda x: to_json(x), RevokeTokenModel.query.all()))}
+        return {'tokens': list(map(lambda x: to_json(x), cls.query.all()))}
+    
+class LocationsModel(db.Model):
+
+    __tablename__ = 'locations'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    def add(self):
+        db.session.add(self)
+        db.session.commit
