@@ -1,6 +1,6 @@
 print(f'Loading {__name__}')
 from flask_restful import Resource, reqparse
-from .models import UserModel, RevokeTokenModel
+from .models import UserModel, RevokeTokenModel, LocationModel, Coordinates
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt)
 #API changes:
 #Renamed get_raw_jwt() to get_jwt()
@@ -14,9 +14,11 @@ class UserRegistration(Resource):
     def post(self):
         
         data = parser.parse_args()
-
+        
+        #create locationmodel class to add to new user
         if UserModel.find_by_username(data['username']):
             return {'message': 'Username {} already exists.'.format(data['username'])},409
+
 
         new_user = UserModel(
             username = data['username'],
@@ -45,7 +47,7 @@ class UserLogin(Resource):
         print(data)
 
         if not current_user:
-            return {'message': 'Username {} doesn\'t exist'.format(data['username'])}
+            return {'message': 'Username {} doesn\'t exist'.format(data['username'])},409
         
         if UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity=data['username'])
