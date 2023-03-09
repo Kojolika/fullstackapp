@@ -56,6 +56,7 @@ def check_if_token_in_blacklist(decrypted_token_header, decrypted_token_payload:
 def create_tables():
     db.create_all()
 
+
 #adds endpoints (url destinations essentially) to the api
 api.add_resource(resources.UserRegistration, '/registration')
 api.add_resource(resources.UserLogin, '/login')
