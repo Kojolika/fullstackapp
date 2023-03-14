@@ -93,9 +93,12 @@ class GetAllLocations(Resource):
     @jwt_required()
     def get(self):
         data = get_all_location_parser.parse_args()
-        user_id = UserModel.find_by_username(data['username']).id
-        print(user_id)
-        #locations = LocationModel.return_all_from_user()
+
+        try:
+            user_id = UserModel.find_by_username(data['username']).id
+            return LocationModel.return_all_from_user(user_id)
+        except:
+            return {'message': 'Something went wrong'},500 
 
 
 

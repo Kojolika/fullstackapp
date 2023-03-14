@@ -8,6 +8,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import composite, mapped_column
 from sqlalchemy import ForeignKey
+from sqlalchemy import select
 
 from typing import List
 from typing import Optional
@@ -89,9 +90,21 @@ class LocationModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    @classmethod
+    @classmethod 
     def return_all_from_user(cls,user_id):
-        return cls.query.filter_by(user_id = user_id).scalar()
+        
+        result = db.session.scalars(select(cls).where(cls.user_id == user_id)).all()
+        locations = []
+        print(result)
+        for location in result:
+            locations.append({
+                'long': location.long,
+                'lat': location.lat,
+                'city' : location.city,
+                'province': location.province
+            })
+
+        return {'locations': locations}
 
 
 class RevokeTokenModel(db.Model):
