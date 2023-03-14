@@ -15,7 +15,6 @@ class UserRegistration(Resource):
         
         data = parser.parse_args()
         
-        #create locationmodel class to add to new user
         if UserModel.find_by_username(data['username']):
             return {'message': 'Username {} already exists.'.format(data['username'])},409
 
@@ -59,7 +58,47 @@ class UserLogin(Resource):
                 }
         else:
             return {'message': 'Wrong credentials'}, 400
+
+location_parser = reqparse.RequestParser()
+location_parser.add_argument('username', help = 'This field cannot be blank', required = True)
+location_parser.add_argument('lat', help = 'This field cannot be blank', required = True)
+location_parser.add_argument('long', help = 'This field cannot be blank', required = True)
+location_parser.add_argument('city')
+location_parser.add_argument('province')
+
+class AddLocation(Resource):
+    @jwt_required()
+    def post(self):
         
+        data = location_parser.parse_args()
+        #do login check on frontend, if not logged in, no request will be made to database (nothing to store)
+        current_user = UserModel.find_by_username(data['username'])
+
+        new_location = LocationModel(
+            long = data['long'],
+            lat = data['lat'],
+            user_id = current_user.id
+        )
+        try:
+            new_location.save_to_db() 
+            return {'message': 'Added location with latitude: {}, and longitude: {}'.format(data['lat'],data['long'])}
+        except Exception as e:
+            print(e)
+            return{'message': 'Something went wrong'}, 500
+
+get_all_location_parser = reqparse.RequestParser()
+get_all_location_parser.add_argument('username', help = 'This field cannot be blank', required = True)
+
+class GetAllLocations(Resource):
+    @jwt_required()
+    def get(self):
+        data = get_all_location_parser.parse_args()
+        user_id = UserModel.find_by_username(data['username']).id
+        print(user_id)
+        #locations = LocationModel.return_all_from_user()
+
+
+
 class UserLogoutAccess(Resource):
     @jwt_required()
     def post(self):

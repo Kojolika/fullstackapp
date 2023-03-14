@@ -37,9 +37,8 @@ class UserModel(db.Model):
             location_data = []
             for loc in locations:
                 location_data.append({
-                    'id': loc.id,
-                    'city':loc.city,
-                    'province': loc.province
+                    'lat': loc.lat,
+                    'long': loc.long
             })
             return location_data
         
@@ -79,18 +78,21 @@ class LocationModel(db.Model):
 
     __tablename__ = 'location'
 
-    id = db.Column(db.Integer, primary_key=True)
-
     coordinates: Mapped[Coordinates] = composite(mapped_column("lat"),mapped_column("long"))
     city: Mapped[Optional[str]] = mapped_column()
     province: Mapped[Optional[str]] = mapped_column()
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     user: Mapped["UserModel"] = relationship(back_populates="locations")
 
-    def add(self):
+    def save_to_db(self):
         db.session.add(self)
-        db.session.commit
+        db.session.commit()
+
+    @classmethod
+    def return_all_from_user(cls,user_id):
+        return cls.query.filter_by(user_id = user_id).scalar()
+
 
 class RevokeTokenModel(db.Model):
     
@@ -101,7 +103,7 @@ class RevokeTokenModel(db.Model):
 
     def add(self):
         db.session.add(self)
-        db.session.commit
+        db.session.commit()
 
     @classmethod
     def is_jti_blacklisted(cls,jti):
