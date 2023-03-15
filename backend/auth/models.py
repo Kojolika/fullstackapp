@@ -79,11 +79,12 @@ class LocationModel(db.Model):
 
     __tablename__ = 'location'
 
+    id: Mapped[int] = mapped_column(primary_key = True, unique= True)
     coordinates: Mapped[Coordinates] = composite(mapped_column("lat"),mapped_column("long"))
     city: Mapped[Optional[str]] = mapped_column()
     province: Mapped[Optional[str]] = mapped_column()
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["UserModel"] = relationship(back_populates="locations")
 
     def save_to_db(self):
@@ -92,14 +93,21 @@ class LocationModel(db.Model):
 
     @classmethod 
     def return_all_from_user(cls,user_id):
-        
-        result = db.session.scalars(select(cls).where(cls.user_id == user_id)).all()
+        query = select(
+            cls.id,
+            cls.lat,
+            cls.long,
+            cls.city,
+            cls.province
+        ).where(cls.user_id == user_id)
+        result = db.session.execute(query).all()
         locations = []
         print(result)
         for location in result:
             locations.append({
-                'long': location.long,
-                'lat': location.lat,
+                'id': location.id,
+                'latitude': location.lat,
+                'longitude': location.long,
                 'city' : location.city,
                 'province': location.province
             })

@@ -77,6 +77,8 @@ class AddLocation(Resource):
         new_location = LocationModel(
             long = data['long'],
             lat = data['lat'],
+            city = data['city'],
+            province = data['province'],
             user_id = current_user.id
         )
         try:
@@ -91,7 +93,7 @@ get_all_location_parser.add_argument('username', help = 'This field cannot be bl
 
 class GetAllLocations(Resource):
     @jwt_required()
-    def get(self):
+    def post(self):
         data = get_all_location_parser.parse_args()
 
         try:

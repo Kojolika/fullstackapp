@@ -14,7 +14,7 @@ const locationsSlice = createSlice({
     name: 'locations',
     initialState,
     reducers:{
-        getUserLocations: (state, action) =>
+        setUserLocations: (state, action) =>
         {
             const {locations} = action.payload;
             state.locations = locations;
@@ -28,7 +28,7 @@ const locationsSlice = createSlice({
     }
 });
 
-export const {addLocation, getUserLocations} = locationsSlice.actions;
+export const {addLocation, setUserLocations} = locationsSlice.actions;
 
 export const selectAllLocations = (state) => state.locations;
 
