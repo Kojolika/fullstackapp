@@ -30,8 +30,11 @@ const Locations = () => {
             )
 
     return (
-        <div className="locationsMainPage">
-            {renderedLocations}
+        <div>
+            <button>Add New Location</button>
+            <div className="locationsMainPage">
+                {renderedLocations}
+            </div>   
         </div>
     )
 }
