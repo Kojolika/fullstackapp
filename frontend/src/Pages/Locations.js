@@ -32,14 +32,14 @@ const Locations = () => {
                 </article>
             )
     
-    const onClose = () => {
+    const toggleClose = () => {
         setAddLocationPopUp(0);
         setIsAddLocationButtonEnabled(true);
     };
 
     const [isAddLocationButtonEnabled, setIsAddLocationButtonEnabled] = useState(true);
     const [addLocationPopUp, setAddLocationPopUp] = useState(0);
-    const addLocationMoodle = addLocationPopUp === 0 ? <></> : <AddLocationManual onClose={onClose}/>
+    const addLocationMoodle = addLocationPopUp === 0 ? <></> : <AddLocationManual toggleClose={toggleClose}/>
     
     const handleSubmit = () => {
         setIsAddLocationButtonEnabled(false);

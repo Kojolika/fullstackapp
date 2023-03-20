@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Select from 'react-select'
-import { useGetCountriesQuery, useGetStatesQuery, useGetCitiesQuery } from '../../Features/locations/locationApiSlice'
 
-const AddLocationManual = () => {
+import { useGetCountriesQuery} from '../../Features/locations/locationApiSlice'
+
+import SelectState from '../../Atoms/SelectState'
+import SelectCity from '../../Atoms/SelectCity'
+
+
+const AddLocationManual = (props) => {
 
     const [country, setCountry] = useState();
     const [state, setState] = useState();
@@ -18,44 +23,11 @@ const AddLocationManual = () => {
         });
     });
 
-    const { data: dataStates, isSuccess: isSuccessStates } = useGetStatesQuery({ "country": country });
-    const states = isSuccessStates ? dataStates.data : [];
-    const optionsStates = [];
-    states.forEach(item => {
-        optionsStates.push({
-            value: item.state,
-            label: item.state
-        });
-    });
+    const handleStateChange = (state) => setState(state);
+    const stateSelect = country ? <SelectState country={country} setState={handleStateChange} /> : <></>;
 
-    const { data: dataCities, isSuccess: isSuccessCities } = useGetCitiesQuery({ "country": country, "state": state });
-    const cities = isSuccessCities ? dataCities.data : [];
-    const optionsCities = [];
-    cities.forEach(item => {
-        optionsCities.push({
-            value: item.city,
-            label: item.city
-        });
-    });
-
-    const stateSelect = country ?
-        <div>
-            <span>State/Province</span>
-            <br />
-            <Select
-                options={optionsStates}
-                onChange={((newValue) => setState(newValue.value))}
-            />
-        </div> : <></>;
-    const citySelect = state ?
-        <div>
-            <span>City</span>
-            <br />
-            <Select
-                options={optionsCities}
-                onChange={((newValue) => setCity(newValue.value))}
-            />
-        </div> : <></>;
+    const handleCityChange = (city) => setCity(city);
+    const citySelect = state ? <SelectCity country={country} state={state} setCity={handleCityChange}/> : <></>;
 
     return (
         <div>
@@ -66,12 +38,6 @@ const AddLocationManual = () => {
             }}>Check country var</button>
 
             <br />
-            <button>Use my current location</button>
-            <br />
-            <span>- OR -</span>
-            <br />
-            <span>Add a location manually</span>
-            <br />
             <span> Country </span>
             <Select
                 options={optionsCountries}
@@ -79,7 +45,7 @@ const AddLocationManual = () => {
             />
             {stateSelect}
             {citySelect}
-
+            <button onClick={() => props.toggleClose()}>Close</button>
         </div>
     )
 }
