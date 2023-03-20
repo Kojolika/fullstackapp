@@ -1,14 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [
-    {
-        city:'Canton',
-        province:'Michigan'
-    },
-    {   city: 'Toronto',
-        province: 'Ontario'    
-    }
-];
+const initialState = [];
 
 const locationsSlice = createSlice({
     name: 'locations',
