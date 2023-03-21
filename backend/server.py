@@ -55,6 +55,9 @@ def check_if_token_in_blacklist(decrypted_token_header, decrypted_token_payload:
 @app.before_first_request
 def create_tables():
     db.create_all()
+    #To drop a table:
+    #from auth.models import LocationModel
+    #LocationModel.__table__.drop(db.engine)
 
 
 #adds endpoints (url destinations essentially) to the api
@@ -66,7 +69,6 @@ api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.AddLocation, '/addlocation')
 api.add_resource(resources.GetAllLocations, '/locations')
-api.add_resource(resources.SecretResource, '/secret')
 
 api.add_resource(air_visual_api_resources.Countries, '/airVisualApi/countries')
 api.add_resource(air_visual_api_resources.States, '/airVisualApi/states')

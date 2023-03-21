@@ -39,7 +39,7 @@ class States(Resource):
 
         except requests.exceptions.HTTPError as e:
             return {
-                'Data': [],
+                'data': [],
                 'Message' : 'Some error, probably no country sent in request' 
             }
         
@@ -59,6 +59,6 @@ class Cities(Resource):
 
         except requests.exceptions.HTTPError as e:
             return {
-                'Data': [],
+                'data': [],
                 'Message' : 'Some error, probably no country/city sent in request' 
             }

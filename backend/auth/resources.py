@@ -1,6 +1,7 @@
 print(f'Loading {__name__}')
 from flask_restful import Resource, reqparse
-from .models import UserModel, RevokeTokenModel, LocationModel, Coordinates
+from __main__ import db
+from .models import UserModel, RevokeTokenModel, LocationModel
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt)
 #API changes:
 #Renamed get_raw_jwt() to get_jwt()
@@ -61,10 +62,11 @@ class UserLogin(Resource):
 
 location_parser = reqparse.RequestParser()
 location_parser.add_argument('username', help = 'This field cannot be blank', required = True)
-location_parser.add_argument('lat', help = 'This field cannot be blank', required = True)
-location_parser.add_argument('long', help = 'This field cannot be blank', required = True)
+location_parser.add_argument('latitude')
+location_parser.add_argument('longitude')
 location_parser.add_argument('city')
 location_parser.add_argument('province')
+location_parser.add_argument('country')
 
 class AddLocation(Resource):
     @jwt_required()
@@ -75,15 +77,19 @@ class AddLocation(Resource):
         current_user = UserModel.find_by_username(data['username'])
 
         new_location = LocationModel(
-            long = data['long'],
-            lat = data['lat'],
+            latitude = data['latitude'],
+            longitude = data['longitude'],
             city = data['city'],
             province = data['province'],
+            country = data['country'],
             user_id = current_user.id
         )
         try:
             new_location.save_to_db() 
-            return {'message': 'Added location with latitude: {}, and longitude: {}'.format(data['lat'],data['long'])}
+            return {
+                'message': 'Added location'
+            }
+        
         except Exception as e:
             print(e)
             return{'message': 'Something went wrong'}, 500
@@ -140,7 +146,3 @@ class AllUsers(Resource):
     def delete(self):
         return UserModel.delete_all()
     
-class SecretResource(Resource):
-    @jwt_required()
-    def get(self):
-        return RevokeTokenModel.return_all_tokens()

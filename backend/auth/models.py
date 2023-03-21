@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm import composite, mapped_column
+from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey
 from sqlalchemy import select
 
@@ -70,21 +70,25 @@ class UserModel(db.Model):
     def verify_hash(password, hash):
         return sha256.verify(password, hash)
 
-@dataclass
+""" @dataclass
 class Coordinates():
-    lat: float
-    long: float
-
+    latitude: float
+    longitude: float
+ """
 class LocationModel(db.Model):
 
-    __tablename__ = 'location'
+    __tablename__ = 'locations'
 
     id: Mapped[int] = mapped_column(primary_key = True, unique= True)
-    coordinates: Mapped[Coordinates] = composite(mapped_column("lat"),mapped_column("long"))
+    latitude: Mapped[Optional[float]] = mapped_column()
+    longitude: Mapped[Optional[float]] = mapped_column()
     city: Mapped[Optional[str]] = mapped_column()
     province: Mapped[Optional[str]] = mapped_column()
+    country: Mapped[Optional[str]] = mapped_column()
+    sa.UniqueConstraint(latitude,longitude)
+    sa.UniqueConstraint(city,province,country)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey(UserModel.id))
     user: Mapped["UserModel"] = relationship(back_populates="locations")
 
     def save_to_db(self):
@@ -95,21 +99,22 @@ class LocationModel(db.Model):
     def return_all_from_user(cls,user_id):
         query = select(
             cls.id,
-            cls.lat,
-            cls.long,
+            cls.latitude,
+            cls.longitude,
             cls.city,
-            cls.province
+            cls.province,
+            cls.country
         ).where(cls.user_id == user_id)
         result = db.session.execute(query).all()
         locations = []
-        print(result)
         for location in result:
             locations.append({
                 'id': location.id,
-                'latitude': location.lat,
-                'longitude': location.long,
+                'latitude': location.latitude,
+                'longitude': location.longitude,
                 'city' : location.city,
-                'province': location.province
+                'province': location.province,
+                'country' : location.country
             })
 
         return {'locations': locations}

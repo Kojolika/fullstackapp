@@ -14,7 +14,7 @@ const AddLocation = (props) => {
   const [addLocationOptionsMenu, setAddLocationOptionsMenu] = useState(true);
 
   //could refactor to a single function in the future
-  //need ability to get react component type ?
+  //may need ability to get react component type ?
   const toggleCloseManual = () => {
     if (addLocationManualMenu === false) {
       setAddLocationManualMenu(true);
@@ -67,6 +67,7 @@ const AddLocation = (props) => {
 
   return (
     <div className="addLocationMoodle">
+      <span className='title-spacing'>Add a Location</span>
       {addLocationOptionsButtons}
       {manualMenu}
       {coordinatesMenu}

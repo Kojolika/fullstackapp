@@ -6,19 +6,25 @@
     left: 0;
     right: 0;
 
-    height: 20%;
-    width: 15%;
-    min-height: 100px;
+    height: fit-content;
+    width: fit-content;
+    min-height: 50px;
     min-width: 200px;
 
     background-color: lightskyblue;
-    padding: 2%;
+    padding: 1%;
     margin: auto;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    border: 2px solid black;
+}
+.addLocationOptionsContent{
+    min-height: 95px;
+    min-width: 195px;
 }
 
 .addLocationButton
@@ -30,4 +36,24 @@
 .addLocationBackButton
 {
     margin-top: 15px;
+}
+
+.note
+{
+    font-size: 10px;
+    font-style: italic;
+}
+.disabled
+{
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.title-spacing
+{
+    margin-bottom: 20px;
+}
+#manualButtons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -33,7 +33,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: {...username}
             })
-        })
+        }),
+        addUserLocation: builder.mutation({
+            query: locationData => ({
+                url: '/addLocation',
+                method: 'POST',
+                body: locationData
+            })
+        }) 
     })
 })
 
@@ -41,6 +48,7 @@ export const {
     useLoginMutation,
     useLogoutMutation,
     useRegisterMutation,
-    useGetUserLocationsQuery
+    useGetUserLocationsQuery,
+    useAddUserLocationMutation
 } = authApiSlice;
 
