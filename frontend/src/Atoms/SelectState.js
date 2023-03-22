@@ -1,10 +1,11 @@
 import Select from 'react-select'
+import { useEffect } from 'react';
 import { useGetStatesQuery } from '../Features/locations/locationApiSlice';
 
 const SelectState = (props) => {
 
-    const { data: dataStates, isSuccess: isSuccessStates } = useGetStatesQuery({ "country": props.country });
-    const states = isSuccessStates ? dataStates.data : [];
+    const { data, isSuccess, refetch } = useGetStatesQuery({ "country": props.country });
+    const states = isSuccess ? data.data : [];
     const optionsStates = [];
     states.forEach(item => {
         optionsStates.push({
@@ -13,11 +14,16 @@ const SelectState = (props) => {
         });
     });
 
+    useEffect(() =>{
+        refetch();
+    },[props.country])
+
     return (
         <div>
-            <span>State/Province</span>
+            <label htmlFor='state'>State/Province</label>
             <br />
             <Select
+                id='state'
                 options={optionsStates}
                 onChange={(newValue) => props.setState(newValue.value)}
             />

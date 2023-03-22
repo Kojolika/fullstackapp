@@ -49,7 +49,7 @@ const AddLocation = (props) => {
     }
   }
 
-  const manualMenu = addLocationManualMenu ? <AddLocationManual toggleClose={toggleCloseManual} /> : <></>;
+  const manualMenu = addLocationManualMenu ? <AddLocationManual toggleClose={toggleCloseManual} toggleMoodleClose={props.toggleClose} /> : <></>;
   const coordinatesMenu = addLocationCoordinatesMenu ? <AddLocationCoordinates toggleClose={toggleCloseCoordinates} /> : <></>;
   const currentLocationMenu = addLocationCurrentLocationMenu ? <AddLocationCurrentLocation toggleClose={toggleCloseCurrentLocation} /> : <></>;
 

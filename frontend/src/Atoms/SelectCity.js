@@ -1,5 +1,5 @@
 import Select from 'react-select'
-import React from 'react'
+import { useEffect } from 'react'
 import { useGetCitiesQuery } from '../Features/locations/locationApiSlice'
 
 import './../Styles/addLocation.css'
@@ -8,7 +8,7 @@ import './../Styles/addLocation.css'
 const SelectCity = (props) => {
 
     const noOptionsSring = "Note: If no options for cities, then there are no active stations reporting weather data in that state.";
-    const { data, currentData, isSuccess } = useGetCitiesQuery({ "country": props.country, "state": props.state });
+    const { data, currentData, isSuccess, refetch } = useGetCitiesQuery({ "country": props.country, "state": props.state });
     const cities = isSuccess ? currentData ? currentData.data : data.data : [];
     const optionsCities = [];
     cities.forEach(item => {
@@ -17,11 +17,18 @@ const SelectCity = (props) => {
             label: item.city
         });
     });
+
+    useEffect(() =>{
+        refetch();
+    },[props.country,props.state])
+
+
     return (
         <div>
-            <span>City</span>
+            <label htmlFor='city'>City</label>
             <br />
             <Select
+                id="city"
                 options={optionsCities}
                 onChange={(newValue) => props.setCity(newValue.value)}
             />

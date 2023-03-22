@@ -34,22 +34,12 @@ class UserModel(db.Model):
     
     @classmethod
     def return_all(cls):
-        def location_data_to_json(locations):
-            location_data = []
-            for loc in locations:
-                location_data.append({
-                    'lat': loc.lat,
-                    'long': loc.long
-            })
-            return location_data
-        
         def users_data_to_json(user):
-
             return{
                 'id' : user.id,
                 'username': user.username,
                 'password': user.password,
-                'locations': location_data_to_json(user.locations)
+                'locations': LocationModel.return_all_from_user(user.id)
             }
         return {'users': list(map(lambda x: users_data_to_json(x), cls.query.all()))}
     

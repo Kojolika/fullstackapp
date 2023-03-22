@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Select from 'react-select'
 import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 import { useGetCountriesQuery } from '../../Features/locations/locationApiSlice'
 import { selectCurrentUser } from '../../Features/auth/authSlice'
@@ -19,7 +20,14 @@ const AddLocationManual = (props) => {
     const [state, setState] = useState();
     const [city, setCity] = useState();
 
+    useEffect(() => {
+        setCity();
+        setState();
+        setCountry();
+    },[])
+
     const { data, currentData, isSuccess } = useGetCountriesQuery();
+
     const countries = isSuccess ? currentData ? currentData.data : data.data : []; //data is the response from the backend, data.data is the list of countries
     const optionsCountries = [];
     countries.forEach(item => {
@@ -50,23 +58,20 @@ const AddLocationManual = (props) => {
                 setCountry();
             }
             catch(err){
+                console.log(err?.status);
                 console.log("Error with backend call");
             }
         }
-        props.toggleClose();
+        props.toggleMoodleClose();
     }
-    const submitButton = country ? state ? city ? <button id="manualSubmit" onClick={() => addToDatabase()}>Submit</button> : <></> : <></> : <></>;
+    const submitButton = country ? state ? city ? <button id="manualSubmit" >Submit</button> : <></> : <></> : <></>;
 
     return (
-        <div className='addLocationOptionsContent'>
-            <button onClick={() => {
-                console.log(country);
-                console.log(state);
-                console.log(city);
-            }}>Check vars</button>
+        <form className='addLocationManualContent' onSubmit={addToDatabase}>
             <br />
-            <span> Country </span>
+            <label htmlFor='country'> Country </label>
             <Select
+                id="country"
                 options={optionsCountries}
                 onChange={((newValue) => { 
                     setCountry(newValue.value);
@@ -77,10 +82,10 @@ const AddLocationManual = (props) => {
             {stateSelect}
             {citySelect}
             <div id="manualButtons">
-                <button id="manualClose" onClick={() => props.toggleClose()}>Close</button>
                 {submitButton}
             </div>
-        </div>
+            <button id="manualClose" onClick={() => props.toggleClose()}>Close</button>
+        </form>
     )
 }
 

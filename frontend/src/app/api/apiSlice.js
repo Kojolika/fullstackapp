@@ -14,6 +14,7 @@ const baseQuery = fetchBaseQuery({
         }
         headers.set('Access-Control-Allow-Origin', url)
         headers.set('Access-Control-Allow-Credentials', 'true')
+        headers.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
         return headers;
     }
 

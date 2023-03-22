@@ -1,11 +1,11 @@
 print(f'Loading {__name__}')
+import sqlite3
 from flask_restful import Resource, reqparse
+from sqlalchemy import exc
 from __main__ import db
 from .models import UserModel, RevokeTokenModel, LocationModel
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt)
-#API changes:
-#Renamed get_raw_jwt() to get_jwt()
-#@jwt_refresh_token_required is now @jwt_required(refresh=True)
+
 
 parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
@@ -44,7 +44,6 @@ class UserLogin(Resource):
 
         data = parser.parse_args()
         current_user = UserModel.find_by_username(data['username'])
-        print(data)
 
         if not current_user:
             return {'message': 'Username {} doesn\'t exist'.format(data['username'])},409
@@ -91,7 +90,9 @@ class AddLocation(Resource):
             }
         
         except Exception as e:
-            print(e)
+            if(type(e) == exc.IntegrityError):
+                return{'mesesage': 'Cannot add same location twice'}, 409
+            
             return{'message': 'Something went wrong'}, 500
 
 get_all_location_parser = reqparse.RequestParser()

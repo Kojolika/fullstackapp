@@ -22,9 +22,10 @@
 
     border: 2px solid black;
 }
-.addLocationOptionsContent{
-    min-height: 95px;
-    min-width: 195px;
+.addLocationManualContent{
+    min-height: 250px;
+    min-width: 450px;
+    margin-bottom: 5%;
 }
 
 .addLocationButton
@@ -56,4 +57,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+#manualClose{
+    position: absolute;
+    left: 3%;
+    bottom: 3%;
 }
