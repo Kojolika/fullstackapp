@@ -5,7 +5,7 @@ import Select from 'react-select'
 const SelectCountry = (props) => {
 
     const { data: countriesList, currentData: currentCountriesList, isLoading, isSuccess, isError, error } = useGetCountriesQuery();
-    const countries = isSuccess ? currentCountriesList ? currentCountriesList.data : countriesList.data : [];
+    const countries = isSuccess ? currentCountriesList ? currentCountriesList : countriesList : [];
     const optionsCountries = [];
     countries.forEach(item => {
         optionsCountries.push({

@@ -38,7 +38,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: locationData => ({
                 url: '/addLocation',
                 method: 'POST',
-                body: locationData
+                body: {...locationData}
             })
         }) 
     })

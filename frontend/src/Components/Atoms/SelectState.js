@@ -5,7 +5,7 @@ import { useGetStatesQuery } from '../../Features/locations/locationApiSlice';
 const SelectState = (props) => {
 
     const { data: stateList, currentData: currentStateList, isLoading, isSuccess, refetch } = useGetStatesQuery({ "country": props.country });
-    const states = isSuccess ? currentStateList ? currentStateList.data : stateList.data : [];
+    const states = isSuccess ? currentStateList ? currentStateList : stateList : [];
     const optionsStates = [];
     states.forEach(item => {
         optionsStates.push({

@@ -7,9 +7,8 @@ import './../../Styles/addLocation.css'
 
 const SelectCity = (props) => {
 
-    
     const { data: cityList , currentData: currentCityList, isLoading, isSuccess, refetch } = useGetCitiesQuery({ "country": props.country, "state": props.state });
-    const cities = isSuccess ? currentCityList ? currentCityList.data : cityList.data : [];
+    const cities = isSuccess ? currentCityList ? currentCityList : cityList : [];
     const optionsCities = [];
     cities.forEach(item => {
         optionsCities.push({

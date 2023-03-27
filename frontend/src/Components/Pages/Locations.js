@@ -12,8 +12,8 @@ import '../../Styles/locations.css';
 const Locations = () => {
 
     const user = useSelector(selectCurrentUser);
-    const skip = user ? false: true;
-    const { data, isLoading, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': user },{skip});
+    const skipUserLocations = user ? false : true;
+    const { data, isLoading, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': user },{skip: skipUserLocations});
     const locations = isSuccess? data.locations : [];
 
     const reloadData = () => {
@@ -25,7 +25,7 @@ const Locations = () => {
     //otherwise display all locations that the user has
     const renderedLocations = isLoading ?
         <div>loading...</div>
-        : locations === [] ?
+        : locations.length === 0?
             <div>Add a location to get started</div>
             : locations.map(location =>
                 <article className="location" key={location.id}>

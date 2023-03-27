@@ -62,11 +62,6 @@ const AddLocationManual = (props) => {
 
     return (
         <form className='addLocationManualContent' onSubmit={addToDatabase}>
-            <button onClick={()=>{
-                console.log(country);
-                console.log(state);
-                console.log(city);
-            }}></button>
             {errMsg}
             <br />
             {countrySelect}
