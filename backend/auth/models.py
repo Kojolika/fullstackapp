@@ -60,11 +60,6 @@ class UserModel(db.Model):
     def verify_hash(password, hash):
         return sha256.verify(password, hash)
 
-""" @dataclass
-class Coordinates():
-    latitude: float
-    longitude: float
- """
 class LocationModel(db.Model):
 
     __tablename__ = 'locations'

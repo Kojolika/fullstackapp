@@ -10,10 +10,10 @@ import { useSelector,useDispatch } from 'react-redux';
 import { logOut, selectCurrentUser,selectCurrentToken } from './Features/auth/authSlice';
 import { useLogoutMutation } from './Features/auth/authApiSlice';
 
-import Locations from './Pages/Locations';
-import Login from './Pages/Login';
-import Register from './Pages/Register';
-import Home from './Pages/Home';
+import Locations from './Components/Pages/Locations';
+import Login from './Components/Pages/Login';
+import Register from './Components/Pages/Register';
+import Home from './Components/Pages/Home';
 
 import './Styles/app.css';
 

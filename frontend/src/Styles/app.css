@@ -57,8 +57,17 @@
     align-items: center;
     left: 20px;
 }
-
 #logout
 {
     cursor: pointer;
+}
+.offscreen
+{
+    position: absolute;
+    left: -10000px;
+}
+.errmsg
+{
+    color: red;
+    font-weight: bold;
 }
