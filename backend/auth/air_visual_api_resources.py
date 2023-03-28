@@ -17,8 +17,9 @@ class Countries(Resource):
 
 
         except requests.exceptions.HTTPError as e:
-            # handle any errors here
-            return {'Error': 'something went wrong'}, 500
+            return {
+                'message' : 'Something went wrong' 
+            }, 500
 
 parser = reqparse.RequestParser()
 parser.add_argument('country')
@@ -39,9 +40,8 @@ class States(Resource):
 
         except requests.exceptions.HTTPError as e:
             return {
-                'data': [],
-                'Message' : 'Some error, probably no country sent in request' 
-            }
+                'message' : 'Something went wrong' 
+            }, 500
         
 class Cities(Resource):
     def post(self):
@@ -59,6 +59,5 @@ class Cities(Resource):
 
         except requests.exceptions.HTTPError as e:
             return {
-                'data': [],
-                'Message' : 'Some error, probably no country/city sent in request' 
-            }
+                'message' : 'Something went wrong' 
+            }, 500

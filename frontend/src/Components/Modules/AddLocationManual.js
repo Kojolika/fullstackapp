@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '../../Features/auth/authSlice'
 import { useAddUserLocationMutation } from '../../Features/auth/authApiSlice'
 
-import SelectCountry from '../Atoms/SelectCountry'
-import SelectState from '../../Components/Atoms/SelectState'
-import SelectCity from '../../Components/Atoms/SelectCity'
+import SelectLocation from '../Atoms/SelectLocation'
+import { useGetCountriesQuery, useGetStatesQuery, useGetCitiesQuery } from '../../Features/locations/locationApiSlice'
 
 import '../../Styles/addLocation.css';
 import '../../Styles/app.css';
+
 
 
 
@@ -21,7 +21,7 @@ const AddLocationManual = (props) => {
     const [city, setCity] = useState();
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleCountryChange = country =>{
+    const handleCountryChange = country => {
         setCountry(country);
         setState();
         setCity();
@@ -30,10 +30,46 @@ const AddLocationManual = (props) => {
         setState(state);
         setCity();
     };
-    
-    const countrySelect = <SelectCountry setCountry={handleCountryChange} setErrorMessage={setErrorMessage}/>
-    const stateSelect = country ? <SelectState country={country} setState={handleStateChange} /> : <></>;
-    const citySelect = state ? <SelectCity country={country} state={state} setCity={setCity} /> : <></>;
+
+    const countrySelect =         <SelectLocation       
+                                    setLocation={handleCountryChange} 
+                                    setErrorMessage={setErrorMessage}
+                                    options={
+                                        {
+                                            useQuery: useGetCountriesQuery,
+                                            locationType: "country"
+                                        }
+                                    }
+                                    />
+    const stateSelect = country ? <SelectLocation 
+                                    setLocation={handleStateChange}     
+                                    setErrorMessage={setErrorMessage} 
+                                    query={{"country": country}}
+                                    options={
+                                        {
+                                            useQuery: useGetStatesQuery,
+                                            locationType: "state",
+                                            refetchOnMountOrArgChange: true
+                                        }
+                                    }  
+                                    /> : <></>;
+    const citySelect = state ?    <SelectLocation     
+                                    setLocation={setCity}                
+                                    setErrorMessage={setErrorMessage} 
+                                    query={
+                                        {
+                                            "country": country,
+                                            "state": state
+                                        }
+                                    }
+                                    options={
+                                        {
+                                            useQuery: useGetCitiesQuery,
+                                            locationType: "city",
+                                            refetchOnMountOrArgChange: true
+                                        }
+                                    }   
+                                    /> : <></>;
 
     const [addLocation, { isLoading }] = useAddUserLocationMutation();
     const addToDatabase = async (e) => {
@@ -58,7 +94,11 @@ const AddLocationManual = (props) => {
         props.toggleMoodleClose();
     }
     const submitButton = country ? state ? city ? <button id="manualSubmit" >Submit</button> : <></> : <></> : <></>;
-    const errMsg = errorMessage === '' ? <></> : <span className='errmsg'>{errorMessage}</span>;
+    const errMsg = errorMessage === '' ? <></> :
+        <span className='errmsg'>
+            {errorMessage}
+            <button onClick={()=>{}}>Retry</button>
+        </span>;
 
     return (
         <form className='addLocationManualContent' onSubmit={addToDatabase}>

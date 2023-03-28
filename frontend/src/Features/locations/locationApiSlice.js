@@ -34,6 +34,5 @@ export const locationApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetCitiesQuery,
     useGetCountriesQuery,
-    useGetStatesQuery
+    useGetStatesQuery,
 } = locationApiSlice;
-
