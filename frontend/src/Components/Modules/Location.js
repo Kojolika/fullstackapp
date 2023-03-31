@@ -17,17 +17,21 @@ const Location = (props) => {
 
     const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
     const handleCheckBoxClick = () =>{
+        if(isMarkedForDeletion){
+            props.removeLocationFromMarkedForDeletionList(props.location_id)
+        }else{
+            props.addLocationToMarkedForDeletionList(props.location_id);
+        }
         setIsMarkedForDeletion(!isMarkedForDeletion);
     }
     
-    //reset to unmarked when leaving deleting mode
+    //reset to unmarked when leaving deleting state
     useEffect(()=>{
         setIsMarkedForDeletion(false);
     },[props.toolbarState])
     
     const icon = isMarkedForDeletion ? <CheckBoxChecked/> : <CheckBoxUnchecked />;
-    const checkBox = props.toolbarState === TOOLBAR_STATE.DELETING ? <div className='optionsButtons' onClick={() => handleCheckBoxClick()} >{icon}</div> : <></>
-
+    const checkBox = props.toolbarState === TOOLBAR_STATE.DELETING ? <div className={isMarkedForDeletion? "optionsButtons deletion-selected" : "optionsButtons"} onClick={() => handleCheckBoxClick()} >{icon}</div> : <></>
     
     const location = <article className="location border" >
         <div className='checkbox-position'>

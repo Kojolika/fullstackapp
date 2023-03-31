@@ -66,7 +66,7 @@ const AddLocation = (props) => {
     : <></>;
 
   return (
-    <div className="addLocationMoodle">
+    <div className="addLocationMoodle border">
       <span className='title-spacing'>Add a Location</span>
       {addLocationOptionsButtons}
       {manualMenuJSX}
