@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
 import requests
+from airVisualApiData import apiKey
 
-API_KEY = '0e20fded-24a7-457c-a908-9c8f5f74fe29'
+API_KEY = apiKey.Key.retrieve()
 
 class Countries(Resource):
     def get(self):
@@ -15,15 +16,23 @@ class Countries(Resource):
 
             return response.json()
 
-
         except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+            if (status_code == 400):
+                return {'message': 'Bad request. Try a different location.'}, status_code
+            
+            elif (status_code == 429):
+                return {'message': 'Too many requests, try again in a few seconds.'}, status_code
+            
             return {
-                'message' : 'Something went wrong' 
-            }, 500
+                'message': 'Something went wrong'
+            }, status_code
+
 
 parser = reqparse.RequestParser()
 parser.add_argument('country')
 parser.add_argument('state')
+
 
 class States(Resource):
     def post(self):
@@ -39,10 +48,18 @@ class States(Resource):
             return response.json()
 
         except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+            if (status_code == 400):
+                return {'message': 'Bad request. Try a different location.'}, status_code
+            
+            elif (status_code == 429):
+                return {'message': 'Too many requests, try again in a few seconds.'}, status_code
+            
             return {
-                'message' : 'Something went wrong' 
-            }, 500
-        
+                'message': 'Something went wrong'
+            }, status_code
+
+
 class Cities(Resource):
     def post(self):
         try:
@@ -50,7 +67,7 @@ class Cities(Resource):
             country = data['country']
             state = data['state']
 
-            response = requests.get('http://api.airvisual.com/v2/cities?state='+ state + '&country=' + country + '&key=' + API_KEY)
+            response = requests.get('http://api.airvisual.com/v2/cities?state=' + state + '&country=' + country + '&key=' + API_KEY)
             print(response.status_code)
 
             response.raise_for_status()
@@ -58,6 +75,13 @@ class Cities(Resource):
             return response.json()
 
         except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+            if (status_code == 400):
+                return {'message': 'Not even data at location. Try a different location.'}, status_code
+            
+            elif (status_code == 429):
+                return {'message': 'Too many requests, try again in a few seconds.'}, status_code
+            
             return {
-                'message' : 'Something went wrong' 
-            }, 500
+                'message': 'Something went wrong'
+            }, status_code
