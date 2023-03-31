@@ -77,7 +77,7 @@ class Cities(Resource):
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code
             if (status_code == 400):
-                return {'message': 'Not even data at location. Try a different location.'}, status_code
+                return {'message': 'Bad request. Try a different location.'}, status_code
             
             elif (status_code == 429):
                 return {'message': 'Too many requests, try again in a few seconds.'}, status_code

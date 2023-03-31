@@ -119,3 +119,11 @@
     background-color: rgb(255, 42, 42);
     cursor: pointer;
 }
+
+#location-search{
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 51; /*One more than the locations on the page */
+}

@@ -1,20 +1,24 @@
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
+import { useGetWorldDataQuery } from "../../Features/locations/locationApiSlice";
 import { useEffect, useState } from "react";
 
 import Location from "../Modules/Location";
 import AddLocation from "../Modules/AddLocation";
+import SearchLocation from "../Atoms/SearchLocation";
 
 import '../../Styles/locations.css';
 import '../../Styles/app.css';
 
 import { Plus, Delete } from "../../Icons/svgImages/index.js";
+import Select from 'react-select'
 
 const TOOLBAR_STATE = {
     NONE : 'NONE',
     ADDING : 'ADDING',
-    DELETING : 'DELETING'
+    DELETING : 'DELETING',
+    SEARCHING : 'SEARCHING'
 }
 
 const Locations = () => {
@@ -25,10 +29,12 @@ const Locations = () => {
     const locations = isSuccess? data.locations : [];
 
     const reloadData = () => {
-        refetch();
+        refetch(); 
     }
 
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
+
+    const locationSearch = <SearchLocation/>
     
     const toggleAddMoodle = () => {
         if(toolbarState === TOOLBAR_STATE.ADDING) setToolbarState(TOOLBAR_STATE.NONE);
@@ -57,7 +63,7 @@ const Locations = () => {
         }
     }
     const handleLocationDeletion = () =>{
-        
+
     }
     const confirmDeletionButton = markedForDeletionList.length !== 0 ?  
         <div className="confirm-location-delete" onClick={() => handleLocationDeletion()}>
@@ -96,6 +102,7 @@ const Locations = () => {
             {confirmDeletionButton}
             {addLocationMoodle} 
             <div className="locationsOptionsArea border">
+                {locationSearch}
                 {addLocationButton}
                 {deleteLocationButton}
             </div>

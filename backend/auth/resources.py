@@ -149,3 +149,10 @@ class AllUsers(Resource):
     def delete(self):
         return UserModel.delete_all()
     
+class GetWorldLocationData(Resource):
+    def get(self):
+        import json
+        file = open ('C:/Users/amm98\Documents/fullstackapp/backend/worldData/proccessed_for_select_locations.json', "rb")
+        json_data = json.load(file)
+        file.close
+        return json_data

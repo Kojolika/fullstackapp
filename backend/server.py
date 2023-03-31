@@ -69,6 +69,7 @@ api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.AddLocation, '/addLocation')
 api.add_resource(resources.GetAllLocations, '/locations')
+api.add_resource(resources.GetWorldLocationData, '/worldData')
 
 api.add_resource(air_visual_api_resources.Countries, '/airVisualApi/countries')
 api.add_resource(air_visual_api_resources.States, '/airVisualApi/states')

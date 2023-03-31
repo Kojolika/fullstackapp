@@ -27,6 +27,12 @@ export const locationApiSlice = apiSlice.injectEndpoints({
                 body: { ...stateAndCountry }
             }),
             transformResponse: (response, meta, arg) => response.data,
+        }),
+        getWorldData: builder.query({
+            query: () => ({
+                url: '/worldData',
+                method: 'GET'
+            }),
         })
     })
 })
@@ -35,4 +41,5 @@ export const {
     useGetCitiesQuery,
     useGetCountriesQuery,
     useGetStatesQuery,
+    useGetWorldDataQuery
 } = locationApiSlice;
