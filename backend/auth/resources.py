@@ -1,5 +1,4 @@
 print(f'Loading {__name__}')
-import sqlite3
 from flask_restful import Resource, reqparse
 from sqlalchemy import exc
 from __main__ import db
@@ -109,7 +108,10 @@ class GetAllLocations(Resource):
         except:
             return {'message': 'Something went wrong'},500 
 
-
+class DeleteLocations(Resource):
+    @jwt_required()
+    def delete(self):
+        test = 12
 
 class UserLogoutAccess(Resource):
     @jwt_required()

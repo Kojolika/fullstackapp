@@ -31,31 +31,36 @@ const AddLocationManual = (props) => {
         setCity();
     };
 
+
     const countrySelect =         <SelectLocation       
                                     setLocation={handleCountryChange} 
                                     setErrorMessage={setErrorMessage}
                                     options={
                                         {
                                             useQuery: useGetCountriesQuery,
-                                            locationType: "country"
+                                            locationType: "country",
+                                            loadingMessage: "Loading countries...",
+                                            placeholderMessage: "Select country"
                                         }
                                     }
                                     />
     const stateSelect = country ? <SelectLocation 
                                     setLocation={handleStateChange}     
-                                    setErrorMessage={setErrorMessage} 
+                                    setErrorMessage={setErrorMessage}
                                     query={{"country": country}}
                                     options={
                                         {
                                             useQuery: useGetStatesQuery,
                                             locationType: "state",
-                                            refetchOnMountOrArgChange: true
+                                            refetchOnMountOrArgChange: true,
+                                            loadingMessage: "Loading states/provinces...",
+                                            placeholderMessage: "Select state/province"
                                         }
                                     }  
                                     /> : <></>;
     const citySelect = state ?    <SelectLocation     
                                     setLocation={setCity}                
-                                    setErrorMessage={setErrorMessage} 
+                                    setErrorMessage={setErrorMessage}
                                     query={
                                         {
                                             "country": country,
@@ -66,7 +71,10 @@ const AddLocationManual = (props) => {
                                         {
                                             useQuery: useGetCitiesQuery,
                                             locationType: "city",
-                                            refetchOnMountOrArgChange: true
+                                            refetchOnMountOrArgChange: true,
+                                            loadingMessage: "Loading cities...",
+                                            placeholderMessage: "Select city"
+                                            
                                         }
                                     }   
                                     /> : <></>;
@@ -97,7 +105,6 @@ const AddLocationManual = (props) => {
     const errMsg = errorMessage === '' ? <></> :
         <span className='errmsg'>
             {errorMessage}
-            <button onClick={()=>{}}>Retry</button>
         </span>;
 
     return (

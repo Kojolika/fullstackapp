@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Nunito;
+    src: url(../Fonts/Nunito/Nunito-VariableFont_wght.ttf);
+}
+
 .menuBar
 {
     position: fixed;
@@ -12,6 +17,8 @@
     flex-direction: row;
 
     background-color: #457b9d;
+
+    z-index: 100;
 }
 
 .menuBarFill
@@ -45,7 +52,7 @@
 
 .html,body
 {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Nunito;
 }
 
 #greeting
@@ -56,6 +63,7 @@
     justify-content: center;
     align-items: center;
     left: 20px;
+    font-size: 20px;
 }
 #logout
 {
@@ -74,4 +82,10 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+}
+
+.border{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1px;
+    border: 1px solid lightgray;
 }

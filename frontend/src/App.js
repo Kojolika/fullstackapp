@@ -58,7 +58,7 @@ function App() {
 
   return (
     <Router>
-      <div className='menuBar'>
+      <div className='menuBar border' style={{borderWidth:0}}>
         {userGreeting}
         <div className="tabContainer">
           <Link to='/' className="tabName">Home</Link>

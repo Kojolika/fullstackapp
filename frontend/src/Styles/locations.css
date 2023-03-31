@@ -1,19 +1,78 @@
 .locationsMainPage
 {
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
 }
-
+.locationsList{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2%;
+}
 .location
 {
-    background-color: lightblue;
+    position: relative;
+    background-color: whitesmoke;
     padding-top: 2%;
     padding-bottom: 2%;
-    width: 80%;
+    width: 100%;
     text-align: center;
-    margin-bottom: 2%;
-    border-style:solid;
-    border-color: grey;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    z-index: 0;
+}
+.location:hover
+{
+    background-color: gainsboro;
+    cursor: pointer;
+}
+.locationsOptionsArea{
+    background-color: whitesmoke;
+    position: relative;
+    width: 5%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center top;
+}
+.iconOptions{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.optionsButtons{
+    display: flex;
+    border-width: 0;
+    font-family: Nunito;
+    font-size: 24px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    margin: 5px;
+
+}
+.optionsButtons:hover{
+    background-color: lightskyblue;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.button-selected{
+    background-color: lightskyblue;
+}
+
+.checkbox-position{
+    position: absolute;
+    top: 0;
+    left: 0;
 }

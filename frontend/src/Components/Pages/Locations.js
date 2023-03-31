@@ -1,13 +1,21 @@
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { selectAllLocations, setUserLocations } from "../../Features/locations/locationsSlice";
+import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
 import { useState } from "react";
 
+import Location from "../Modules/Location";
 import AddLocation from "../Modules/AddLocation";
 
 import '../../Styles/locations.css';
+import '../../Styles/app.css';
+
+import { Plus, Delete } from "../../Icons/svgImages/index.js";
+
+const TOOLBAR_STATE = {
+    NONE : 'NONE',
+    ADDING : 'ADDING',
+    DELETING : 'DELETING'
+}
 
 const Locations = () => {
 
@@ -20,6 +28,22 @@ const Locations = () => {
         refetch();
     }
 
+    const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
+    
+    const toggleAddMoodle = () => {
+        if(toolbarState === TOOLBAR_STATE.ADDING) setToolbarState(TOOLBAR_STATE.NONE);
+        else setToolbarState(TOOLBAR_STATE.ADDING);
+    };
+
+    const addLocationMoodle = toolbarState === TOOLBAR_STATE.ADDING ? <AddLocation reloadData={reloadData} toggleClose={toggleAddMoodle}/> : <></>
+    const addLocationButton = <div className={toolbarState === TOOLBAR_STATE.ADDING ? "optionsButtons button-selected" : "optionsButtons"} onClick={() => toggleAddMoodle()}><Plus /></div>
+
+    const toggleDeleting = () => {
+        if(toolbarState === TOOLBAR_STATE.DELETING) setToolbarState(TOOLBAR_STATE.NONE)
+        else setToolbarState(TOOLBAR_STATE.DELETING)
+    }
+    
+    const deleteLocationButton = <div className={toolbarState === TOOLBAR_STATE.DELETING ? "optionsButtons button-selected" : "optionsButtons"} onClick={()=>toggleDeleting()}><Delete/></div>
     //if locations is being loaded still, just displaying loading text
     //otherwise if locations is empty, display text to tell the user to add a location
     //otherwise display all locations that the user has
@@ -28,35 +52,29 @@ const Locations = () => {
         : locations.length === 0?
             <div>Add a location to get started</div>
             : locations.map(location =>
-                <article className="location" key={location.id}>
-                    <h2>{location.city === null ? location.latitude : location.city},
-                        {location.province === null ? location.longitude : location.province}</h2>
-                </article>
-            )
+                <Location 
+                    className="location" 
+                    key={location.id}
+                    country={location.country? location.country : null}
+                    province={location.province? location.province : null}
+                    city={location.city? location.city : null}
+                    latitude={location.latitude? location.latitude : null} 
+                    longitude={location.longitude? location.longitude : null}
+                    toolbarState={toolbarState}
+                />)
     
-    const toggleClose = () => {
-        setAddLocationPopUp(0);
-        setIsAddLocationButtonEnabled(true);
-    };
-
-    const [isAddLocationButtonEnabled, setIsAddLocationButtonEnabled] = useState(true);
-    const [addLocationPopUp, setAddLocationPopUp] = useState(0);
-    const addLocationMoodle = addLocationPopUp === 0 ? <></> : <AddLocation reloadData={reloadData} toggleClose={toggleClose}/>
-    
-    const handleSubmit = () => {
-        setIsAddLocationButtonEnabled(false);
-        setAddLocationPopUp(1)
-    }
-    const  addLocationButton = isAddLocationButtonEnabled ? <button onClick={() => handleSubmit()}>Add New Location</button> : <></> 
     return (
-        <div>
-            {addLocationMoodle}
-            {addLocationButton}
-            <div className="locationsMainPage">
+        <div className="locationsMainPage">
+            {addLocationMoodle} 
+            <div className="locationsOptionsArea border">
+                {addLocationButton}
+                {deleteLocationButton}
+            </div>
+            <div className="locationsList">
                 {renderedLocations}
             </div>   
         </div>
     )
 }
-
+export {TOOLBAR_STATE}
 export default Locations;
