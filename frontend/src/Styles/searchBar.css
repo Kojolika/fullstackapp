@@ -1,0 +1,18 @@
+.dropdownBorder{
+
+    width: 100%;
+    height: fit-content;
+    
+    display: flex;
+    flex-direction: column;
+    background-color: whitesmoke;
+
+}
+.queryResult{
+    margin-bottom: 1%;
+}
+
+.queryResult:hover{
+    background-color: lightblue;
+    cursor: pointer;
+}
