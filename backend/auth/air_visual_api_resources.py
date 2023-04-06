@@ -4,6 +4,38 @@ from airVisualApiData import apiKey
 
 API_KEY = apiKey.Key.retrieve()
 
+parser = reqparse.RequestParser()
+parser.add_argument('country')
+parser.add_argument('province')
+parser.add_argument('city')
+
+class GetWeatherDataFromCity(Resource):
+    def post(self):
+        try:
+            data = parser.parse_args()
+            country = data['country']    
+            province = data['province']
+            city = data['city']
+            
+            response = requests.get('http://api.airvisual.com/v2/city?city='+ city + '&state='+ province +'&country=' + country + '&key=' + API_KEY)
+
+            response.raise_for_status()
+
+            return response.json()
+
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+
+            if (status_code == 400):
+                return {'message': 'Bad request. Try a different location.'}, status_code
+            
+            elif (status_code == 429):
+                return {'message': 'Too many requests, try again in a few seconds.'}, status_code
+            
+            return {
+                'message': 'Something went wrong'
+            }, status_code
+
 class Countries(Resource):
     def get(self):
         try:
@@ -29,9 +61,7 @@ class Countries(Resource):
             }, status_code
 
 
-parser = reqparse.RequestParser()
-parser.add_argument('country')
-parser.add_argument('state')
+
 
 
 class States(Resource):
@@ -65,9 +95,9 @@ class Cities(Resource):
         try:
             data = parser.parse_args()
             country = data['country']
-            state = data['state']
+            province = data['province']
 
-            response = requests.get('http://api.airvisual.com/v2/cities?state=' + state + '&country=' + country + '&key=' + API_KEY)
+            response = requests.get('http://api.airvisual.com/v2/cities?state=' + province + '&country=' + country + '&key=' + API_KEY)
             print(response.status_code)
 
             response.raise_for_status()
