@@ -3,8 +3,8 @@ import processed_locations from '../../data/processed_locations.json'
 
 import '../../Styles/searchBar.css';
 
-import { useDispatch,useSelector } from "react-redux";
-import { getLocation, setLocation } from "../../Features/locations/chooseLocationToAddSlice";
+import { useDispatch, } from "react-redux";
+import { setLocation } from "../../Features/locations/chooseLocationToAddSlice";
 
 const SearchLocation = () => {
 
@@ -131,6 +131,7 @@ const SearchLocation = () => {
 
     const dropDown = isFocused ? <div className="dropdownBorder border">
         <label className="dropdownLabel" htmlFor="dropdownResults" ><b>Choose a city:</b></label>
+
         <div id="dropdownResults ">{citiesQueryResultsElements}</div>
     </div> : <></>;
 

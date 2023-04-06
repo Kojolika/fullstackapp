@@ -6,9 +6,10 @@ import {
 } from 'react-router-dom';
 
 
-import { useSelector,useDispatch } from 'react-redux';
-import { logOut, selectCurrentUser,selectCurrentToken } from './Features/auth/authSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { logOut, selectCurrentUser, selectCurrentToken } from './Features/auth/authSlice';
 import { useLogoutMutation } from './Features/auth/authApiSlice';
+import SearchLocation from './Components/Atoms/SearchLocation';
 
 import Locations from './Components/Pages/Locations';
 import Login from './Components/Pages/Login';
@@ -24,15 +25,13 @@ function App() {
   const dispatch = useDispatch();
   const [logout] = useLogoutMutation();
 
-  const handleLogout = async () =>
-  {
-    try{
-      const message = await logout({accessToken}).unwrap();
+  const handleLogout = async () => {
+    try {
+      const message = await logout({ accessToken }).unwrap();
       dispatch(logOut());
       console.log(message);
     }
-    catch(err)
-    {
+    catch (err) {
       console.log(err);
       console.log("something went wrong");
     }
@@ -58,8 +57,11 @@ function App() {
 
   return (
     <Router>
-      <div className='menuBar border' style={{borderWidth:0}}>
-        {userGreeting}
+      <div className='menuBar border' style={{ borderWidth: 0 }}>
+        <div id='left-positioned-menuBar-elements'>
+          <SearchLocation />
+          {userGreeting}
+        </div>
         <div className="tabContainer">
           <Link to='/' className="tabName">Home</Link>
         </div>

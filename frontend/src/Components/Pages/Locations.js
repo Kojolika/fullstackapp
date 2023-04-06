@@ -1,12 +1,10 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import { useEffect, useState } from "react";
 
-import { selectAllLocations, setUserLocations } from "../../Features/locations/locationsSlice";
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
-import { getLocation } from "../../Features/locations/chooseLocationToAddSlice";
 
-import Location from "../Modules/Location";
+import LocationWidget from "../Modules/LocationWidget";
 import AddLocation from "../Modules/AddLocation";
 import SearchLocation from "../Atoms/SearchLocation";
 
@@ -22,11 +20,7 @@ const TOOLBAR_STATE = {
     DELETING: 'DELETING',
     SEARCHING: 'SEARCHING'
 }
-const LOCATIONS_DISPLAY_STATE = {
-    LIST: 'LIST',
-    EXPAND_LOCATION_IN_LIST: 'EXPAND_LOCATION_IN_LIST',
-    EXPAND_LOCATION_NOT_IN_LIST: 'EXPAND_LOCATION_NOT_IN_LIST'
-}
+
 
 const Locations = () => {
 
@@ -35,37 +29,7 @@ const Locations = () => {
     const { data, isLoading, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': user }, { skip: skipUserLocations });
     const locations = isSuccess ? data.locations : [];
     
-    const [locationsDisplayState, setLocationsDisplayState] = useState(LOCATIONS_DISPLAY_STATE.LIST);
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
-
-    const selectedLocation = useSelector(getLocation);
-
-    useEffect(()=>{
-        const {city, province, country } = selectedLocation;
-        
-        if(city !== null && province !== null && country !== null){
-            if(isLocationInList(city, province, country)){
-                setLocationsDisplayState(LOCATIONS_DISPLAY_STATE.EXPAND_LOCATION_IN_LIST);
-                console.log("Change state to loc in list");
-            }
-            else{
-                setLocationsDisplayState(LOCATIONS_DISPLAY_STATE.EXPAND_LOCATION_NOT_IN_LIST);
-                console.log("Change state to loc not in list");
-            }
-        }
-    },[selectedLocation])
-
-    const isLocationInList = (city, province, country) => {
-
-        let result = false;
-
-        locations.forEach(element => {
-            if(element.city === city && element.province === province && element.country === country) result = true;
-        });
-
-        return result;
-    }
-    
 
     const reloadData = () => refetch()
     
@@ -116,7 +80,7 @@ const Locations = () => {
         : locations.length === 0 ?
             <div>Add a location to get started</div>
             : locations.map(location =>
-                <Location
+                <LocationWidget
                     className="location"
                     key={location.id}
                     location_id={location.id}
@@ -136,7 +100,6 @@ const Locations = () => {
                 {confirmDeletionButton}
                 {addLocationMoodle}
                 <div className="locationsOptionsArea border">
-                    <SearchLocation />
                     {addLocationButton}
                     {deleteLocationButton}
                 </div>

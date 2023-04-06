@@ -16,8 +16,7 @@
     justify-content: right;
     flex-direction: row;
 
-    background-color: #457b9d;
-
+    background: linear-gradient(0deg, rgba(69,123,157,0.5) 0%, rgba(69,123,157,0.5) 40%, rgba(86, 140, 174, 1) 100%); 
     z-index: 100;
 }
 
@@ -58,12 +57,13 @@
 #greeting
 {
     height: 100%;
-    position: absolute;
+    
     display: flex;
     justify-content: center;
     align-items: center;
-    left: 20px;
+
     font-size: 20px;
+    white-space: nowrap;
 }
 #logout
 {
@@ -88,4 +88,15 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1px;
     border: 1px solid lightgray;
+}
+#left-positioned-menuBar-elements{
+    position: absolute;
+    left: 20px;
+    display: flex;
+    flex-direction: row;
+
+    height: 100%;
+    width: fit-content;
+    
+    justify-content: space-evenly;
 }
