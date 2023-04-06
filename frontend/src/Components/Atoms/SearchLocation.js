@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import processed_locations from '../../data/processed_locations.json'
 
 import '../../Styles/searchBar.css';
@@ -6,13 +6,17 @@ import '../../Styles/searchBar.css';
 import { useDispatch, } from "react-redux";
 import { setLocation } from "../../Features/locations/currentLocationSlice";
 
+import useOutsideClick from "../../app/hooks/useOutsideClick";
+
 const SearchLocation = () => {
 
     const [isFocused, setIsFocused] = useState(false);
     const [searchValue, setSearchValue] = useState(null);
     const [previousQuery, setPreviousQuery] = useState(null);
     const [queryResult, setQueryResult] = useState([]);
-    
+
+    const searchbarRef = useRef();
+
     const dispatch = useDispatch();
 
     const AMOUNT_OF_RESULTS_TO_DISPLAY = 10;
@@ -107,7 +111,7 @@ const SearchLocation = () => {
     }
 
     useEffect(() => {
-        if(searchValue !== null) queryLocations(searchValue);
+        if (searchValue !== null) queryLocations(searchValue);
     }, [searchValue])
 
     const handleDropDownSelect = (city, state, country) => {
@@ -134,16 +138,20 @@ const SearchLocation = () => {
         <div id="dropdownResults ">{citiesQueryResultsElements}</div>
     </div> : <></>;
 
+    useOutsideClick(searchbarRef, () =>{
+        setIsFocused(false);
+    })
+
     return (
-        <div id="location-search-container">
+        <div id="location-search-container" ref={searchbarRef}>
             <input id="location-search"
                 type="text"
                 name="cities"
                 placeholder={"Search for a city..."}
                 onChange={(e) => handleChange(document.getElementById("location-search").value)}
                 onFocus={() => setIsFocused(true)}
-                /* onBlur={() => setIsFocused(false)} */
                 maxLength={100}
+
             />
             {dropDown}
         </div>
