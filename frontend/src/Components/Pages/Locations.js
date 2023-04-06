@@ -6,7 +6,6 @@ import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
 import AddLocation from "../Modules/AddLocation";
-import SearchLocation from "../Atoms/SearchLocation";
 
 import '../../Styles/locations.css';
 import '../../Styles/app.css';

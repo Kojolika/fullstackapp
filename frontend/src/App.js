@@ -15,6 +15,7 @@ import Locations from './Components/Pages/Locations';
 import Login from './Components/Pages/Login';
 import Register from './Components/Pages/Register';
 import Home from './Components/Pages/Home';
+import LocationData from './Components/Pages/LocationData';
 
 import './Styles/app.css';
 
@@ -77,6 +78,7 @@ function App() {
         <Route exact path='/locations' element={<Locations />}></Route>
         <Route exact path='/login' element={<Login />}></Route>
         <Route exact path='/register' element={<Register />}></Route>
+        <Route exact path='/location' element={<LocationData/>}></Route>
       </Routes>
     </Router>
   );

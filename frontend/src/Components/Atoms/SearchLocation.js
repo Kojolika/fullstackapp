@@ -4,7 +4,7 @@ import processed_locations from '../../data/processed_locations.json'
 import '../../Styles/searchBar.css';
 
 import { useDispatch, } from "react-redux";
-import { setLocation } from "../../Features/locations/chooseLocationToAddSlice";
+import { setLocation } from "../../Features/locations/currentLocationSlice";
 
 const SearchLocation = () => {
 
@@ -21,9 +21,7 @@ const SearchLocation = () => {
         setSearchValue(newValue);
     }
 
-    useEffect(() => {
-        queryLocations(searchValue);
-    }, [searchValue])
+
 
     const doWordArraysMatch = (userQueryWordsArray, locationWordsArray, startIndex = 0, endIndex = userQueryWordsArray.length) => {
         for (let i = startIndex; i < endIndex; i++) {
@@ -68,9 +66,6 @@ const SearchLocation = () => {
                     const cityArray = lowercaseCity.split(/\s+/);
                     const numCityWords = cityArray.length;
 
-                    const lowercaseState = state.name.toLowerCase();
-                    const lowercaseCountry = country.name.toLowerCase();
-
                     const regexExpr = '^' + queryArray[0];
                     const regexQuery = new RegExp(regexExpr);
 
@@ -110,6 +105,10 @@ const SearchLocation = () => {
         citiesQueryResults.slice(0, AMOUNT_OF_RESULTS_TO_DISPLAY - 1).map(item => topResults.push(item))
         setQueryResult(topResults);
     }
+
+    useEffect(() => {
+        if(searchValue !== null) queryLocations(searchValue);
+    }, [searchValue])
 
     const handleDropDownSelect = (city, state, country) => {
         console.log("test click");
