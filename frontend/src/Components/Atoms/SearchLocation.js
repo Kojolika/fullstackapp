@@ -25,8 +25,6 @@ const SearchLocation = () => {
         setSearchValue(newValue);
     }
 
-
-
     const doWordArraysMatch = (userQueryWordsArray, locationWordsArray, startIndex = 0, endIndex = userQueryWordsArray.length) => {
         for (let i = startIndex; i < endIndex; i++) {
             //if not the final word in the query, assume the word is complete and do not match any words that extend past the query word
@@ -115,7 +113,7 @@ const SearchLocation = () => {
     }, [searchValue])
 
     const handleDropDownSelect = (city, state, country) => {
-        console.log("test click");
+        if(country === 'United States') country = 'USA'
         dispatch(setLocation({
             "city": city,
             "province": state,
