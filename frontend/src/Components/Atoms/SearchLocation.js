@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import processed_locations from '../../data/processed_locations.json'
+import { useNavigate } from "react-router-dom";
 
 import '../../Styles/searchBar.css';
 
@@ -16,6 +17,7 @@ const SearchLocation = () => {
     const [queryResult, setQueryResult] = useState([]);
 
     const searchbarRef = useRef();
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -119,6 +121,7 @@ const SearchLocation = () => {
             "province": state,
             "country": country
         }));
+        navigate('/location');
     }
 
     const citiesQueryResultsElements = queryResult.length === 0 ? <></> : queryResult.map((item, index) =>

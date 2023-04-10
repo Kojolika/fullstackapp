@@ -6,24 +6,54 @@ import { useEffect } from "react";
 
 import '../../Styles/location.css';
 
+import { Location } from "../../Icons/svgImages/index.js";
+
 const LocationData = () => {
     const locationBeingDisplayed = useSelector(getLocation);
     const skip = locationBeingDisplayed.city === null ? true : false;
 
-    const { data, isLoading, isSuccess } = useGetWeatherDataQuery(locationBeingDisplayed, { skip })
-    
-    useEffect(()=>{
-        console.log(data);
-    },[isSuccess])
+    const { currentData, isLoading, isSuccess, error, isError } = useGetWeatherDataQuery(locationBeingDisplayed, { skip })
+    console.log(currentData);
 
-    const testLocation = locationBeingDisplayed.city === null ? <span>Null city</span> :
-        <span>{locationBeingDisplayed.city}, 
-            {locationBeingDisplayed.province}, 
-            {locationBeingDisplayed.country}
-        </span>
+    const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
+        {<Location/>}
+        {locationBeingDisplayed.city}, {locationBeingDisplayed.province}, {locationBeingDisplayed.country}
+    </div>
+
+    const dateFormatted = isSuccess ? currentData?.data?.current?.weather?.ts.slice(5,10) : <></>
+    const timeFormatted = isSuccess ? currentData?.data?.current?.weather?.ts.slice(11, 16) : <></>
+
+    const locationData = <article id="location-data-display" >
+        {locationName}
+        <div id="location-data" >
+            <div id='weather' className="border">
+                <div id='temperature'>{currentData?.data?.current?.weather?.tp}°C</div>
+                <div id='other-weather-data'>
+                    <span className="other-weather-data-entry" id="humidity">{currentData?.data?.current?.weather?.hu}%</span>
+                    <span className="other-weather-data-entry" id="wind-speed">{currentData?.data?.current?.weather?.ws} m/s</span>
+                    <span className="other-weather-data-entry" id='wind-direction'>{currentData?.data?.current?.weather?.wd}°</span>
+                    <span className="other-weather-data-entry" id='atmospheric-pressure'>{currentData?.data?.current?.weather?.pr} hPa</span>
+                </div>
+            </div>
+            <div id='pollution' className="border">
+                <div id='AQI'>{currentData?.data?.current?.pollution?.aqius}</div>
+                <span id='AQI-label'>Air Quality</span>
+            </div>
+            
+        </div>
+        <div>
+            <span>Last updated </span>
+            {dateFormatted}, {timeFormatted}
+        </div>
+    </article>
+
+    const err = isError ? <span>{error?.data?.message}</span> : <></>
+    const location = isSuccess ? locationData : <></>;
+
+
     return (
         <div className="location-data-container">
-            {testLocation}
+            {isError ? err : isLoading ? <span>Loading...</span> : location}
         </div>
     )
 }

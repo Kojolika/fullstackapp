@@ -4,6 +4,7 @@ import Delete from "./Delete";
 import CheckBoxChecked from "./CheckBoxChecked";
 import CheckBoxUnchecked from "./CheckBoxUnchecked";
 import Search from "./Search";
+import Location from "./Location";
 
 export {
     ThreeDots,
@@ -11,5 +12,6 @@ export {
     Delete,
     CheckBoxChecked,
     CheckBoxUnchecked,
-    Search
+    Search,
+    Location
 }  
