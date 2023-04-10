@@ -60,10 +60,6 @@ class Countries(Resource):
                 'message': 'Something went wrong'
             }, status_code
 
-
-
-
-
 class States(Resource):
     def post(self):
         try:

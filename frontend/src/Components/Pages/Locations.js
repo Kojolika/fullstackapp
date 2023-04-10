@@ -1,8 +1,10 @@
-import { useSelector} from "react-redux";
+import { useSelector, useDispatch} from "react-redux";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
+import { setLocation } from "../../Features/locations/currentLocationSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
 import AddLocation from "../Modules/AddLocation";
@@ -22,6 +24,9 @@ const TOOLBAR_STATE = {
 
 
 const Locations = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const user = useSelector(selectCurrentUser);
     const skipUserLocations = user ? false : true;
@@ -63,13 +68,22 @@ const Locations = () => {
     }
     const confirmDeletionButton = markedForDeletionList.length !== 0 ?
         <div className="confirm-location-delete" onClick={() => handleLocationDeletion()}>
-            {markedForDeletionList.length === 1 ? <span>Delete Location</span> : <span>Delete {markedForDeletionList.length} locations</span>}
+            {markedForDeletionList.length === 1 ? <span>Remove Location</span> : <span>Remove {markedForDeletionList.length} locations</span>}
         </div>
         : <></>;
 
     useEffect(() => {
         setMarkedForDeletionList([]);
     }, [toolbarState])
+
+    const handleLocatonClick = (city, province, country) => {
+        dispatch(setLocation({
+            "city": city,
+            "province": province,
+            "country": country
+        }));
+        navigate('/location');
+    }
 
     //if locations is being loaded still, just displaying loading text
     //otherwise if locations is empty, display text to tell the user to add a location
@@ -91,6 +105,7 @@ const Locations = () => {
                     toolbarState={toolbarState}
                     addLocationToMarkedForDeletionList={addLocationToMarkedForDeletionList}
                     removeLocationFromMarkedForDeletionList={removeLocationFromMarkedForDeletionList}
+                    onClick = {handleLocatonClick}
                 />)
 
     return (

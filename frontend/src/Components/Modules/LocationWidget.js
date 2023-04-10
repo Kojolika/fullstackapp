@@ -33,7 +33,16 @@ const LocationWidget = (props) => {
     const icon = isMarkedForDeletion ? <CheckBoxChecked/> : <CheckBoxUnchecked />;
     const checkBox = props.toolbarState === TOOLBAR_STATE.DELETING ? <div className={isMarkedForDeletion? "optionsButtons deletion-selected" : "optionsButtons"} onClick={() => handleCheckBoxClick()} >{icon}</div> : <></>
     
-    const location = <article className="location border" >
+    const handleClick = () =>{
+        if(props.toolbarState === TOOLBAR_STATE.DELETING){
+            handleCheckBoxClick();
+        }
+        else{
+            props.onClick(city,province,country);
+        }
+    }
+
+    const location = <article className="location border" onClick={()=>handleClick()}>
         <div className='checkbox-position'>
             {checkBox}
         </div>

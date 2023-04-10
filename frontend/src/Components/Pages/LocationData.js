@@ -2,8 +2,6 @@ import { useSelector } from "react-redux"
 import { getLocation } from "../../Features/locations/currentLocationSlice"
 import { useGetWeatherDataQuery } from "../../Features/locations/locationApiSlice";
 
-import { useEffect } from "react";
-
 import '../../Styles/location.css';
 
 import { Location } from "../../Icons/svgImages/index.js";
@@ -12,7 +10,7 @@ const LocationData = () => {
     const locationBeingDisplayed = useSelector(getLocation);
     const skip = locationBeingDisplayed.city === null ? true : false;
 
-    const { currentData, isLoading, isSuccess, error, isError } = useGetWeatherDataQuery(locationBeingDisplayed, { skip })
+    const { currentData, isLoading, isSuccess, error, isError, isFetching } = useGetWeatherDataQuery(locationBeingDisplayed, { skip })
     console.log(currentData);
 
     const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
@@ -53,7 +51,7 @@ const LocationData = () => {
 
     return (
         <div className="location-data-container">
-            {isError ? err : isLoading ? <span>Loading...</span> : location}
+            {isError ? err : isLoading || isFetching ? <span>Loading...</span> : location}
         </div>
     )
 }
