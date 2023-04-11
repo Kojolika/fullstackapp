@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { getLocation } from "../../Features/locations/currentLocationSlice"
-import { useGetAirVisualAPIWeatherDataQuery } from "../../Features/locations/locationApiSlice";
+import { useGetAirVisualAPIWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 
 import '../../Styles/location.css';
 

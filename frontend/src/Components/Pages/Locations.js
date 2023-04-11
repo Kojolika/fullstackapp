@@ -7,12 +7,11 @@ import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
 import { setLocation } from "../../Features/locations/currentLocationSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
-import AddLocation from "../Modules/AddLocation";
 
 import '../../Styles/locations.css';
 import '../../Styles/app.css';
 
-import { Plus, Delete } from "../../Icons/svgImages/index.js";
+import {Delete } from "../../Icons/svgImages/index.js";
 
 
 const TOOLBAR_STATE = {
@@ -34,15 +33,6 @@ const Locations = () => {
     const locations = isSuccess ? data.locations : [];
     
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
-
-    const reloadData = () => refetch()
-    
-    const toggleAddMoodle = () => {
-        if (toolbarState === TOOLBAR_STATE.ADDING) setToolbarState(TOOLBAR_STATE.NONE);
-        else setToolbarState(TOOLBAR_STATE.ADDING);
-    };
-    const addLocationMoodle = toolbarState === TOOLBAR_STATE.ADDING ? <AddLocation reloadData={reloadData} toggleClose={toggleAddMoodle} /> : <></>
-    const addLocationButton = <div className={toolbarState === TOOLBAR_STATE.ADDING ? "optionsButtons button-selected" : "optionsButtons"} onClick={() => toggleAddMoodle()}><Plus /></div>
 
     const toggleDeleting = () => {
         if (toolbarState === TOOLBAR_STATE.DELETING) setToolbarState(TOOLBAR_STATE.NONE)
@@ -112,9 +102,7 @@ const Locations = () => {
         <div className="locationsMainPage">
             <div className="locationsContainer">
                 {confirmDeletionButton}
-                {addLocationMoodle}
                 <div className="locationsOptionsArea border">
-                    {addLocationButton}
                     {deleteLocationButton}
                 </div>
                 <div className="locationsList">
