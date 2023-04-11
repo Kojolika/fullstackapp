@@ -68,25 +68,6 @@
     top: 0;
     right: 0;
 }
-.optionsButtons{
-    display: flex;
-    border-width: 0;
-    font-family: Nunito;
-    font-size: 24px;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-color: whitesmoke;
-    border-radius: 10px;
-    margin: 5px;
-
-}
-.optionsButtons:hover{
-    background-color: lightskyblue;
-    transition: .3s;
-    cursor: pointer;
-}
-
 .button-selected{
     background-color: lightskyblue;
 }
@@ -102,16 +83,9 @@
 
 .confirm-location-delete
 {
-    position: fixed;
-    top: 65px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 99;
     background-color: red;
 
     border-color: darkred; 
-    border-radius: 5px;
-    padding: 5px;
     align-items: center;
     text-align: center;
     white-space: nowrap;
@@ -127,7 +101,6 @@
     max-width: 200px;
     max-height: 25px;
 
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .confirm-location-delete:hover{
     background-color: rgb(255, 42, 42);
