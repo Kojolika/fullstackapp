@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import '../../Styles/searchBar.css';
 
 import { useDispatch, } from "react-redux";
-import { setLocation } from "../../Features/locations/currentLocationSlice";
+import { setCurrentLocation } from "../../Features/locations/locationsSlice";
 
 import useOutsideClick from "../../app/hooks/useOutsideClick";
 import { Search } from "../../Icons/svgImages/index";
@@ -123,20 +123,11 @@ const SearchLocation = () => {
         if (searchValue !== null) queryLocations(searchValue);
     }, [searchValue])
 
-    const handleDropDownSelect = (city, province, country) => {
-        if (country.name === 'United States') country.name = 'USA' //this is for Air Visual API, for some reason you need to query it as USA
-        dispatch(setLocation({
-            "city": {
-                "name": city.name
-            },
-            "province": {
-                "name": province.name,
-                "state_code": province.state_code
-            },
-            "country": {
-                "name": country.name,
-                "iso2": country.iso2
-            }
+    const handleDropDownSelect = (city, province, country) => { 
+        dispatch(setCurrentLocation({
+            "city": city,
+            "province": province,
+            "country": country
         }));
         navigate('/location');
     }
