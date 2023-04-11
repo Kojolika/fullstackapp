@@ -2,15 +2,17 @@
     font-family: Nunito;
     src: url(../Fonts/Nunito/Nunito-VariableFont_wght.ttf);
 }
-.disabled{
+
+.disabled {
     opacity: 0.5;
 }
-.disabled:hover{
+
+.disabled:hover {
     transform: scale(1);
-    cursor:not-allowed;
+    cursor: not-allowed;
 }
-.menuBar
-{
+
+.menuBar {
     position: fixed;
     left: 0;
     top: 0;
@@ -22,12 +24,11 @@
     justify-content: right;
     flex-direction: row;
 
-    background: linear-gradient(0deg, rgba(69,123,157,0.5) 0%, rgba(69,123,157,0.5) 40%, rgba(86, 140, 174, 1) 100%); 
+    background: linear-gradient(0deg, rgba(69, 123, 157, 0.5) 0%, rgba(69, 123, 157, 0.5) 40%, rgba(86, 140, 174, 1) 100%);
     z-index: 100;
 }
 
-.menuBarFill
-{
+.menuBarFill {
     position: static;
     left: 0;
     top: 0;
@@ -37,8 +38,8 @@
 
 
 }
-.tabName
-{
+
+.tabName {
     color: white;
     text-decoration: none;
     font-size: 20px;
@@ -46,8 +47,7 @@
     opacity: 1;
 }
 
-.tabContainer
-{
+.tabContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,15 +55,17 @@
     opacity: 1;
 }
 
-.html,body
-{
+.html,
+body {
     font-family: Nunito;
+    background: url('../Media/clouds2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
-#greeting
-{
+#greeting {
     height: 100%;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,17 +73,17 @@
     font-size: 20px;
     white-space: nowrap;
 }
-#logout
-{
+
+#logout {
     cursor: pointer;
 }
-.offscreen
-{
+
+.offscreen {
     position: absolute;
     left: -10000px;
 }
-.errmsg
-{
+
+.errmsg {
     color: red;
     font-weight: bold;
     display: flex;
@@ -90,12 +92,13 @@
     align-items: center;
 }
 
-.border{
+.border {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1px;
     border: 1px solid lightgray;
 }
-#left-positioned-menuBar-elements{
+
+#left-positioned-menuBar-elements {
     position: absolute;
     left: 0.5em;
     display: flex;
@@ -103,19 +106,22 @@
 
     height: 100%;
     width: fit-content;
-    
+
     justify-content: space-evenly;
 }
-#home-button{
+
+#home-button {
     margin-right: 0.5em;
 }
-.icon-on-navbar{
+
+.icon-on-navbar {
     height: 100%;
     top: 50%;
     transform: translateY(10%);
 
 }
-.optionsButtons{
+
+.optionsButtons {
     display: flex;
     border-width: 0;
     font-family: Nunito;
@@ -128,18 +134,20 @@
     margin: 5px;
 
 }
-.optionsButtons:hover{
+
+.optionsButtons:hover {
     background-color: lightskyblue;
     transition: .3s;
     cursor: pointer;
 }
-.alert-message{
+
+.alert-message {
     position: fixed;
     top: 65px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 99;
-    
+
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

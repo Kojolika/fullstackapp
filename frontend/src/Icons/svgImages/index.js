@@ -11,6 +11,8 @@ import Star from "./Star";
 import HeartMinus from "./HeartMinus";
 import HeartPlus from "./HeartPlus";
 import Favorite from "./Favorite";
+import StarBorder from "./StarBorder";
+import StarFilled from "./StarFilled";
 
 export {
     ThreeDots,
@@ -25,5 +27,7 @@ export {
     Star,
     HeartMinus,
     HeartPlus,
-    Favorite
+    Favorite,
+    StarBorder,
+    StarFilled
 }  

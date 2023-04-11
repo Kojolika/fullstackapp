@@ -43,7 +43,7 @@ app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access','refresh']
 jwt = JWTManager(app)
 
-from auth import resources, models, air_visual_api_resources
+from auth import resources, models, air_visual_api_resources, accu_weather_api_resources
 
 @jwt.token_in_blocklist_loader
 def check_if_token_in_blacklist(decrypted_token_header, decrypted_token_payload: dict):
@@ -78,6 +78,8 @@ api.add_resource(air_visual_api_resources.GetWeatherDataFromCity, '/airVisualApi
 api.add_resource(air_visual_api_resources.Countries, '/airVisualApi/countries')
 api.add_resource(air_visual_api_resources.States, '/airVisualApi/states')
 api.add_resource(air_visual_api_resources.Cities, '/airVisualApi/cities')
+
+api.add_resource(accu_weather_api_resources.GetLocationKey, '/accuWeatherApi/locationKey')
 
 
 if __name__ == "__main__":

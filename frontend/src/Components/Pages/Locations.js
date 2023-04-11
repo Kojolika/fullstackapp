@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
-import { setLocation } from "../../Features/locations/currentLocationSlice";
+import { setCurrentLocation } from "../../Features/locations/locationsSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
 
@@ -65,7 +65,7 @@ const Locations = () => {
     }, [toolbarState])
 
     const handleLocatonClick = (city, province, country) => {
-        dispatch(setLocation({
+        dispatch(setCurrentLocation({
             "city": city,
             "province": province,
             "country": country

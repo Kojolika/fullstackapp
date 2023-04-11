@@ -11,10 +11,40 @@ export const accuWeatherApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: {...location}
             })
+        }),
+        getDailyForecast: builder.query({
+            query: locationKey => ({
+                url: '/accuWeatherApi/dailyForecast',
+                method: 'POST',
+                body: {
+                    "location_key": locationKey
+                }
+            })
+        }),
+        getDailyForecast5Days: builder.query({
+            query: locationKey => ({
+                url: '/accuWeatherApi/dailyForecast5Days',
+                method: 'POST',
+                body: {
+                    "location_key": locationKey
+                }
+            })
+        }),
+        getHourlyForecast12Hours: builder.query({
+            query: locationKey =>({
+                url: '/accuWeatherApi/hourlyForecast12Hours',
+                method: 'POST',
+                body: {
+                    "location_key": locationKey
+                }
+            })
         })
     })
 })
 
 export const {
-    useGetlocationKeyQuery
+    useGetLocationKeyQuery,
+    useGetDailyForecastQuery,
+    useGetDailyForecast5DaysQuery,
+    useGetHourlyForecast12HoursQuery
 } = accuWeatherApiSlice
