@@ -68,7 +68,9 @@ class LocationModel(db.Model):
     longitude: Mapped[Optional[float]] = mapped_column()
     city: Mapped[Optional[str]] = mapped_column()
     province: Mapped[Optional[str]] = mapped_column()
+    state_code: Mapped[Optional[str]] = mapped_column() 
     country: Mapped[Optional[str]] = mapped_column()
+    iso2: Mapped[Optional[str]] = mapped_column() #country 2 letter code
     sa.UniqueConstraint(latitude, longitude)
     sa.UniqueConstraint(city, province, country)
 

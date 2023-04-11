@@ -8,12 +8,14 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 
 parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
-parser.add_argument('password', help = 'This field cannot be blank', required = True)
+
+user_reg_parser = parser.copy()
+user_reg_parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 class UserRegistration(Resource):
     def post(self):
         
-        data = parser.parse_args()
+        data = user_reg_parser.parse_args()
         
         if UserModel.find_by_username(data['username']):
             return {'message': 'Username {} already exists.'.format(data['username'])},409
@@ -58,13 +60,13 @@ class UserLogin(Resource):
         else:
             return {'message': 'Wrong credentials'}, 400
 
-location_parser = reqparse.RequestParser()
+location_parser = parser.copy()
 location_parser.add_argument('username', help = 'This field cannot be blank', required = True)
 location_parser.add_argument('latitude')
 location_parser.add_argument('longitude')
-location_parser.add_argument('city')
-location_parser.add_argument('province')
-location_parser.add_argument('country')
+location_parser.add_argument('city', type=dict)
+location_parser.add_argument('province', type=dict)
+location_parser.add_argument('country', type=dict)
 
 class AddLocation(Resource):
     @jwt_required()
@@ -77,9 +79,11 @@ class AddLocation(Resource):
         new_location = LocationModel(
             latitude = data['latitude'],
             longitude = data['longitude'],
-            city = data['city'],
-            province = data['province'],
-            country = data['country'],
+            city = data['city']['name'],
+            province = data['province']['name'],
+            state_code = data['province']['state_code'],
+            country = data['country']['name'],
+            iso2 = data['country']['iso2'],
             user_id = current_user.id
         )
         try:
@@ -94,8 +98,7 @@ class AddLocation(Resource):
             
             return{'message': 'Something went wrong'}, 500
 
-get_all_location_parser = reqparse.RequestParser()
-get_all_location_parser.add_argument('username', help = 'This field cannot be blank', required = True)
+get_all_location_parser = parser.copy()
 
 class GetAllLocations(Resource):
     @jwt_required()

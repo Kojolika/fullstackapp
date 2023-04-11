@@ -55,10 +55,14 @@ def check_if_token_in_blacklist(decrypted_token_header, decrypted_token_payload:
 @app.before_first_request
 def create_tables():
     db.create_all()
-    #To drop a table:
-    #from auth.models import LocationModel
-    #LocationModel.__table__.drop(db.engine)
 
+#useful for testing
+def delete_tables():
+    db.drop_all()
+
+with app.app_context():
+    #delete_tables()
+    test = 1
 
 #adds endpoints (url destinations essentially) to the api
 api.add_resource(resources.UserRegistration, '/registration')

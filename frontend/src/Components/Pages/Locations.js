@@ -16,9 +16,7 @@ import { Delete } from "../../Icons/svgImages/index.js";
 
 const TOOLBAR_STATE = {
     NONE: 'NONE',
-    ADDING: 'ADDING',
     DELETING: 'DELETING',
-    SEARCHING: 'SEARCHING'
 }
 
 
@@ -48,7 +46,7 @@ const Locations = () => {
     const removeLocationFromMarkedForDeletionList = id => {
         const index = markedForDeletionList.indexOf(id);
         if (index > -1) { // only splice array when item is found
-            const markedForDeletionListCopy = markedForDeletionList; // 2nd parameter means remove one item only
+            const markedForDeletionListCopy = markedForDeletionList;
             const newArray1 = markedForDeletionListCopy.filter(item => item !== id)
             setMarkedForDeletionList(newArray1);
         }
@@ -86,12 +84,20 @@ const Locations = () => {
                 <LocationWidget
                     className="location"
                     key={location.id}
-                    location_id={location.id}
-                    country={location.country ? location.country : null}
-                    province={location.province ? location.province : null}
-                    city={location.city ? location.city : null}
-                    latitude={location.latitude ? location.latitude : null}
-                    longitude={location.longitude ? location.longitude : null}
+                    location={{ //need to add iso2 and state_code to database
+                        "city": {
+                            "name": location.city ? location.city : null
+                        },
+                        "province": {
+                            "name": location.province ? location.province : null
+                        },
+                        "country": {
+                            "name": location.country ? location.country : null
+                        },
+                        "location_id": location.id,
+                        "latitude": location.latitude ? location.latitude : null,
+                        "longitude": location.longitude ? location.longitude : null
+                    }}
                     toolbarState={toolbarState}
                     addLocationToMarkedForDeletionList={addLocationToMarkedForDeletionList}
                     removeLocationFromMarkedForDeletionList={removeLocationFromMarkedForDeletionList}
