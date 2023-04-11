@@ -1,4 +1,4 @@
-import { useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ import LocationWidget from "../Modules/LocationWidget";
 import '../../Styles/locations.css';
 import '../../Styles/app.css';
 
-import {Delete } from "../../Icons/svgImages/index.js";
+import { Delete } from "../../Icons/svgImages/index.js";
 
 
 const TOOLBAR_STATE = {
@@ -31,7 +31,7 @@ const Locations = () => {
     const skipUserLocations = user ? false : true;
     const { data, isLoading, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': user }, { skip: skipUserLocations });
     const locations = isSuccess ? data.locations : [];
-    
+
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
 
     const toggleDeleting = () => {
@@ -95,7 +95,7 @@ const Locations = () => {
                     toolbarState={toolbarState}
                     addLocationToMarkedForDeletionList={addLocationToMarkedForDeletionList}
                     removeLocationFromMarkedForDeletionList={removeLocationFromMarkedForDeletionList}
-                    onClick = {handleLocatonClick}
+                    onClick={handleLocatonClick}
                 />)
 
     return (

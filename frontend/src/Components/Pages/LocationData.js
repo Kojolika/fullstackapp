@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { getLocation } from "../../Features/locations/currentLocationSlice"
-import { useGetAirVisualAPIWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
+import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 
 import '../../Styles/location.css';
 
@@ -10,7 +10,7 @@ const LocationData = () => {
     const locationBeingDisplayed = useSelector(getLocation);
     const skip = locationBeingDisplayed.city === null ? true : false;
 
-    const { currentData, isLoading, isSuccess, error, isError, isFetching } = useGetAirVisualAPIWeatherDataQuery(locationBeingDisplayed, { skip })
+    const { currentData, isLoading, isSuccess, error, isError, isFetching } = useGetCityWeatherDataQuery(locationBeingDisplayed, { skip })
 
     const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
         {<Location/>}

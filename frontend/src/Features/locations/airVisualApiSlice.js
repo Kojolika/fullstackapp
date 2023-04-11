@@ -5,30 +5,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const airVisualApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getCountries: builder.query({
-            query: () => ({
-                url: '/airVisualApi/countries',
-                method: 'GET'
-            }),
-            transformResponse: (response, meta, arg) => response.data,
-        }),
-        getStates: builder.query({
-            query: country => ({
-                url: '/airVisualApi/states',
-                method: 'POST',
-                body: { ...country }
-            }),
-            transformResponse: (response, meta, arg) => response.data,
-        }),
-        getCities: builder.query({
-            query: stateAndCountry => ({
-                url: '/airVisualApi/cities',
-                method: 'POST',
-                body: { ...stateAndCountry }
-            }),
-            transformResponse: (response, meta, arg) => response.data,
-        }),
-        getAirVisualAPIWeatherData: builder.query({
+        getCityWeatherData: builder.query({
             query: location => ({
                 url: '/airVisualApi/weatherData',
                 method: 'POST',
@@ -39,8 +16,5 @@ export const airVisualApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-    useGetCitiesQuery,
-    useGetCountriesQuery,
-    useGetStatesQuery,
-    useGetAirVisualAPIWeatherDataQuery
+    useGetCityWeatherDataQuery
 } = airVisualApiSlice;
