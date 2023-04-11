@@ -42,6 +42,15 @@ const Login = () => {
             dispatch(setCredentials({ user, accessToken }));
             setUser('');
             setPwd('');
+            
+            try{
+
+            }
+            catch(err){
+
+            }
+            //update to retrieve locations on login
+            //and set website state locations to user locations from database
             navigate('/locations')
 
         }

@@ -55,7 +55,7 @@ const Locations = () => {
 
     }
     const confirmDeletionButton = markedForDeletionList.length !== 0 ?
-        <div className="confirm-location-delete" onClick={() => handleLocationDeletion()}>
+        <div className="confirm-location-delete alert-message" onClick={() => handleLocationDeletion()}>
             {markedForDeletionList.length === 1 ? <span>Remove Location</span> : <span>Remove {markedForDeletionList.length} locations</span>}
         </div>
         : <></>;

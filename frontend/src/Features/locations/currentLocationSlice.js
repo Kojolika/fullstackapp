@@ -31,7 +31,7 @@ export const { setLocation } = currentLocationSlice.actions;
 
 export default currentLocationSlice.reducer;
 
-export const getLocation = (state) => {
+export const selectCurrentLocation = (state) => {
     return {
         "city": state.currentLocation.city,
         "province": state.currentLocation.province,

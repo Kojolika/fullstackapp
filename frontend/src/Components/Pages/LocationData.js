@@ -1,26 +1,42 @@
 import { useSelector } from "react-redux"
-import { getLocation } from "../../Features/locations/currentLocationSlice"
+import { useState } from "react";
+
+import { selectCurrentLocation as selectCurrentLocation } from "../../Features/locations/currentLocationSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 
 import '../../Styles/location.css';
+import '../../Styles/app.css';
 
-import { Location } from "../../Icons/svgImages/index.js";
+import { Favorite, HeartPlus } from "../../Icons/svgImages/index.js";
+import { selectCurrentUser } from "../../Features/auth/authSlice";
 
 const LocationData = () => {
-    const locationBeingDisplayed = useSelector(getLocation);
+    const [isFavorited, setIsFavorited] = useState(false);
+
+    const user = useSelector(selectCurrentUser);
+
+    const locationBeingDisplayed = useSelector(selectCurrentLocation);
     const skip = locationBeingDisplayed.city === null ? true : false;
 
     const { currentData, isLoading, isSuccess, error, isError, isFetching } = useGetCityWeatherDataQuery(locationBeingDisplayed, { skip })
 
     const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
-        {<Location/>}
+
         {locationBeingDisplayed.city.name}, {locationBeingDisplayed.province.name}, {locationBeingDisplayed.country.name}
     </div>
 
-    const dateFormatted = isSuccess ? currentData?.data?.current?.weather?.ts.slice(5,10) : <></>
+    const dateFormatted = isSuccess ? currentData?.data?.current?.weather?.ts.slice(5, 10) : <></>
     const timeFormatted = isSuccess ? currentData?.data?.current?.weather?.ts.slice(11, 16) : <></>
 
-    const locationData = <article id="location-data-display" >
+    const toggleFavorite = () => {
+        if (isFavorited) setIsFavorited(false);
+        else setIsFavorited(true);
+    }
+
+    const locationData = <article id="location-data-display" className="border" >
+        <div id={user? 'favorites-button' : 'favorites-button-disabled'} className='optionsButtons'  onClick={ user ? () => toggleFavorite() : null}>
+            {isFavorited? <Favorite/> : <HeartPlus/>}
+        </div>
         {locationName}
         <div id="location-data" >
             <div id='weather' className="border">
@@ -36,7 +52,7 @@ const LocationData = () => {
                 <div id='AQI'>{currentData?.data?.current?.pollution?.aqius}</div>
                 <span id='AQI-label'>Air Quality</span>
             </div>
-            
+
         </div>
         <div>
             <span>Last updated </span>

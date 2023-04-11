@@ -3,6 +3,7 @@
     justify-content: center;
 }
 #location-data-display{
+    position: relative;
     height: 100%;
     width: fit-content;
 
@@ -15,7 +16,7 @@
 
     align-items: center;
 
-    /* background: linear-gradient(0deg,#F2F2F2 80%, #F2F2F2 100%);  */
+    background: linear-gradient(0deg,#F2F2F2 80%, #F2F2F2 100%);
 }
 #location-data{
     height: 100%;
@@ -30,11 +31,12 @@
     
 }
 #location-name{
-    font-size: 40px;
+    font-size: 32px;
     display: flex;
-    flex-direction: row;
-    margin-bottom: 3%;
+    flex-direction: column;
     margin-top: 3%;
+    justify-content: center;
+    align-items: center;
 }
 #weather{
     display: flex;
@@ -85,4 +87,25 @@
     margin-bottom: 0;
     margin-top: 0;
     white-space: nowrap;
+}
+#favorites-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #F2F2F2;
+    transition: 0s;
+}
+#favorites-button:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+#favorites-button-disabled{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #F2F2F2;
+    opacity: 0.5;
+}
+#favorites-button-disabled:hover{
+    cursor:not-allowed;
 }

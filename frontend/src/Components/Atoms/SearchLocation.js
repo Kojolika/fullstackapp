@@ -167,10 +167,9 @@ const SearchLocation = () => {
                     type="text"
                     name="cities"
                     placeholder={"Search for a city..."}
-                    onChange={(e) => handleChange(document.getElementById("location-search").value)}
+                    onChange={(e) => handleChange(document.getElementById("location-search-input").value)}
                     onFocus={() => setIsFocused(true)}
                     maxLength={100}
-
                 />
                 <Search />
             </div>

@@ -2,7 +2,13 @@
     font-family: Nunito;
     src: url(../Fonts/Nunito/Nunito-VariableFont_wght.ttf);
 }
-
+.disabled{
+    opacity: 0.5;
+}
+.disabled:hover{
+    transform: scale(1);
+    cursor:not-allowed;
+}
 .menuBar
 {
     position: fixed;
@@ -91,7 +97,7 @@
 }
 #left-positioned-menuBar-elements{
     position: absolute;
-    left: 20px;
+    left: 0.5em;
     display: flex;
     flex-direction: row;
 
@@ -101,11 +107,40 @@
     justify-content: space-evenly;
 }
 #home-button{
-    margin-right: 3.5%;
+    margin-right: 0.5em;
 }
 .icon-on-navbar{
     height: 100%;
     top: 50%;
     transform: translateY(10%);
 
+}
+.optionsButtons{
+    display: flex;
+    border-width: 0;
+    font-family: Nunito;
+    font-size: 24px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    margin: 5px;
+
+}
+.optionsButtons:hover{
+    background-color: lightskyblue;
+    transition: .3s;
+    cursor: pointer;
+}
+.alert-message{
+    position: fixed;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

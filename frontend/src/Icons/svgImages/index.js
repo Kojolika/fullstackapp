@@ -7,6 +7,10 @@ import Search from "./Search";
 import Location from "./Location";
 import PartlyCloudy from "./PartlyCloudy";
 import IconHome from "./IconHome";
+import Star from "./Star";
+import HeartMinus from "./HeartMinus";
+import HeartPlus from "./HeartPlus";
+import Favorite from "./Favorite";
 
 export {
     ThreeDots,
@@ -17,5 +21,9 @@ export {
     Search,
     Location,
     PartlyCloudy,
-    IconHome
+    IconHome,
+    Star,
+    HeartMinus,
+    HeartPlus,
+    Favorite
 }  
