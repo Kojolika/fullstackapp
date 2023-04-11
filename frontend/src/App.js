@@ -17,6 +17,8 @@ import Register from './Components/Pages/Register';
 import Home from './Components/Pages/Home';
 import LocationData from './Components/Pages/LocationData';
 
+import { IconHome, Search } from './Icons/svgImages/index';
+
 import './Styles/app.css';
 
 
@@ -40,13 +42,16 @@ function App() {
 
   const userGreeting = user ?
     (<div id="greeting">
-      <span>Hello {user}</span>
+      <span>Hello <b>{user}</b></span>
     </div>) :
     (
       <div id="greeting">
-        <span>Hello Guest</span>
+        <span>Hello <b>Guest</b></span>
       </div>)
 
+  const favorites = user ? <div className="tabContainer">
+                            <Link to='/locations' className="tabName">My Favorites</Link>
+                          </div> :<></>    
 
   const userSignIn = user ?
     (<div className="tabContainer">
@@ -60,15 +65,15 @@ function App() {
     <Router>
       <div className='menuBar border' style={{ borderWidth: 0 }}>
         <div id='left-positioned-menuBar-elements'>
+          <div id='home-button' className='icon-on-navbar'>
+            <Link to='/' className="tabName"><IconHome /></Link>
+          </div>
           <SearchLocation />
+        </div>
+        <div className="tabContainer">
           {userGreeting}
         </div>
-        <div className="tabContainer">
-          <Link to='/' className="tabName">Home</Link>
-        </div>
-        <div className="tabContainer">
-          <Link to='/locations' className="tabName">Locations</Link>
-        </div>
+        {favorites}
         {userSignIn}
       </div>
       <div className='menuBarFill'></div>
@@ -78,7 +83,7 @@ function App() {
         <Route exact path='/locations' element={<Locations />}></Route>
         <Route exact path='/login' element={<Login />}></Route>
         <Route exact path='/register' element={<Register />}></Route>
-        <Route exact path='/location' element={<LocationData/>}></Route>
+        <Route exact path='/location' element={<LocationData />}></Route>
       </Routes>
     </Router>
   );

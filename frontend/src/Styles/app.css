@@ -100,3 +100,12 @@
     
     justify-content: space-evenly;
 }
+#home-button{
+    margin-right: 3.5%;
+}
+.icon-on-navbar{
+    height: 100%;
+    top: 50%;
+    transform: translateY(10%);
+
+}

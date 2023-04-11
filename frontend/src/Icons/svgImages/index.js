@@ -5,6 +5,8 @@ import CheckBoxChecked from "./CheckBoxChecked";
 import CheckBoxUnchecked from "./CheckBoxUnchecked";
 import Search from "./Search";
 import Location from "./Location";
+import PartlyCloudy from "./PartlyCloudy";
+import IconHome from "./IconHome";
 
 export {
     ThreeDots,
@@ -13,5 +15,7 @@ export {
     CheckBoxChecked,
     CheckBoxUnchecked,
     Search,
-    Location
+    Location,
+    PartlyCloudy,
+    IconHome
 }  

@@ -8,6 +8,7 @@ import { useDispatch, } from "react-redux";
 import { setLocation } from "../../Features/locations/currentLocationSlice";
 
 import useOutsideClick from "../../app/hooks/useOutsideClick";
+import { Search } from "../../Icons/svgImages/index";
 
 const SearchLocation = () => {
 
@@ -161,15 +162,18 @@ const SearchLocation = () => {
 
     return (
         <div id="location-search-container" ref={searchbarRef}>
-            <input id="location-search"
-                type="text"
-                name="cities"
-                placeholder={"Search for a city..."}
-                onChange={(e) => handleChange(document.getElementById("location-search").value)}
-                onFocus={() => setIsFocused(true)}
-                maxLength={100}
+            <div id="location-search">
+                <input id="location-search-input"
+                    type="text"
+                    name="cities"
+                    placeholder={"Search for a city..."}
+                    onChange={(e) => handleChange(document.getElementById("location-search").value)}
+                    onFocus={() => setIsFocused(true)}
+                    maxLength={100}
 
-            />
+                />
+                <Search />
+            </div>
             {dropDown}
         </div>
 

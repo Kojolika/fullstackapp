@@ -9,13 +9,13 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
 parser = reqparse.RequestParser()
 parser.add_argument('username', help = 'This field cannot be blank', required = True)
 
-user_reg_parser = parser.copy()
-user_reg_parser.add_argument('password', help = 'This field cannot be blank', required = True)
+user_parser = parser.copy()
+user_parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 class UserRegistration(Resource):
     def post(self):
         
-        data = user_reg_parser.parse_args()
+        data = user_parser.parse_args()
         
         if UserModel.find_by_username(data['username']):
             return {'message': 'Username {} already exists.'.format(data['username'])},409
@@ -43,7 +43,7 @@ class UserRegistration(Resource):
 class UserLogin(Resource):
     def post(self):
 
-        data = parser.parse_args()
+        data = user_parser.parse_args()
         current_user = UserModel.find_by_username(data['username'])
 
         if not current_user:
