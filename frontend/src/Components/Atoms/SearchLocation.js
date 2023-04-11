@@ -66,7 +66,7 @@ const SearchLocation = () => {
             country.states?.forEach(state => {
                 state.cities?.forEach(city => {
 
-                    const lowercaseCity = city.toLowerCase();
+                    const lowercaseCity = city.name.toLowerCase();
                     const cityArray = lowercaseCity.split(/\s+/);
                     const numCityWords = cityArray.length;
 
@@ -89,9 +89,17 @@ const SearchLocation = () => {
                             if (doWordArraysMatch(queryArray, cityArray)) {
                                 citiesQueryResults.push({
                                     'location': {
-                                        'city': city,
-                                        'state': state.name,
-                                        'country': country.name
+                                        "city": {
+                                            "name": city.name
+                                        },
+                                        "province": {
+                                            "name": state.name,
+                                            "state_code": state.state_code
+                                        },
+                                        "country": {
+                                            "name": country.name,
+                                            "iso2": country.iso2
+                                        }
                                     }
                                 });
                             }
@@ -114,12 +122,20 @@ const SearchLocation = () => {
         if (searchValue !== null) queryLocations(searchValue);
     }, [searchValue])
 
-    const handleDropDownSelect = (city, state, country) => {
-        if(country === 'United States') country = 'USA'
+    const handleDropDownSelect = (city, province, country) => {
+        if (country.name === 'United States') country.name = 'USA' //this is for Air Visual API, for some reason you need to query it as USA
         dispatch(setLocation({
-            "city": city,
-            "province": state,
-            "country": country
+            "city": {
+                "name": city.name
+            },
+            "province": {
+                "name": province.name,
+                "state_code": province.state_code
+            },
+            "country": {
+                "name": country.name,
+                "iso2": country.iso2
+            }
         }));
         navigate('/location');
     }
@@ -128,8 +144,8 @@ const SearchLocation = () => {
         <div
             className="queryResult"
             key={index}
-            onClick={() => handleDropDownSelect(item.location.city, item.location.state, item.location.country)}>
-            {'' + item.location.city + ', ' + item.location.state + ', ' + item.location.country}
+            onClick={() => handleDropDownSelect(item.location.city, item.location.province, item.location.country)}>
+            {'' + item.location.city.name + ', ' + item.location.province.name + ', ' + item.location.country.name}
         </div>
     );
 
@@ -139,7 +155,7 @@ const SearchLocation = () => {
         <div id="dropdownResults ">{citiesQueryResultsElements}</div>
     </div> : <></>;
 
-    useOutsideClick(searchbarRef, () =>{
+    useOutsideClick(searchbarRef, () => {
         setIsFocused(false);
     })
 

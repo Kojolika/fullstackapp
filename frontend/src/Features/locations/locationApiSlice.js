@@ -28,11 +28,11 @@ export const locationApiSlice = apiSlice.injectEndpoints({
             }),
             transformResponse: (response, meta, arg) => response.data,
         }),
-        getWeatherData: builder.query({
-            query: location =>({
+        getAirVisualAPIWeatherData: builder.query({
+            query: location => ({
                 url: '/airVisualApi/weatherData',
                 method: 'POST',
-                body: {...location}
+                body: { ...location }
             })
         })
     })
@@ -42,5 +42,5 @@ export const {
     useGetCitiesQuery,
     useGetCountriesQuery,
     useGetStatesQuery,
-    useGetWeatherDataQuery
+    useGetAirVisualAPIWeatherDataQuery
 } = locationApiSlice;

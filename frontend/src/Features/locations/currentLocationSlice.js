@@ -12,9 +12,17 @@ const currentLocationSlice = createSlice({
     reducers: {
         setLocation: (state, action) => {
             const { city, province, country } = action.payload;
-            state.city = city;
-            state.province = province;
-            state.country = country;
+            state.city = {
+                "name": city.name
+            };
+            state.province = {
+                "name": province.name,
+                "state_code": province.state_code
+            }
+            state.country = {
+                "name": country.name,
+                "iso2": country.iso2 //country 2 letter code
+            };
         }
     }
 });

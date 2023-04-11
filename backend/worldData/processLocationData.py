@@ -10,16 +10,19 @@ processed_locations = []
 for country_data in json_data:
     country = {}
     country['name'] = country_data['name']
+    country['iso2'] = country_data['iso2']
 
     states = []
     for state_data in country_data['states']:
         state = {}
         state['name'] = state_data['name']
+        state['state_code'] = state_data['state_code']
         states.append(state)
 
         cities=[]
         for city_data in state_data['cities']:
-            city = city_data['name']
+            city={}
+            city['name'] = city_data['name']
             cities.append(city)
         
         state['cities'] = cities

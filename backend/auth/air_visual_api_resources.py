@@ -1,21 +1,22 @@
 from flask_restful import Resource, reqparse
+from json import loads
 import requests
 from airVisualApiData import apiKey
 
 API_KEY = apiKey.Key.retrieve()
 
 parser = reqparse.RequestParser()
-parser.add_argument('country')
-parser.add_argument('province')
-parser.add_argument('city')
+parser.add_argument('country', type=dict)
+parser.add_argument('province', type=dict)
+parser.add_argument('city', type=dict)
 
 class GetWeatherDataFromCity(Resource):
     def post(self):
         try:
             data = parser.parse_args()
-            country = data['country']    
-            province = data['province']
-            city = data['city']
+            country = data['country']['name']
+            province = data['province']['name']
+            city = data['city']['name']
             
             response = requests.get('http://api.airvisual.com/v2/city?city='+ city + '&state='+ province +'&country=' + country + '&key=' + API_KEY)
 
