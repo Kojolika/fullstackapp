@@ -49,7 +49,7 @@ function App() {
 
   return (
     <Router>
-      <div className='menuBar border' style={{ borderWidth: 0 }}>
+      <div className='menuBar border' style={{ borderWidth: 0, borderRadius: 0 }}>
         <div id='left-positioned-menuBar-elements'>
           <div id='home-button' className='tabContainer'>
             <Link to='/'><IconHome /></Link>

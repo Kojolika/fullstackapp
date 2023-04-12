@@ -48,3 +48,15 @@
     align-items: center;
     height: fit-content;
 }
+
+/*
+Used to wrap elements want to prevent events from clicking on them,
+For example, wrapping the toggle icons of the settings menu
+Since there is hook that turns off the settings menu when clicking outside the elements of the settings menu
+If this was not wrapped around the icon, and the icon was clicked, that element would be removed for a new icon
+And the new icon would not be contained in the settings menu at that time, thus turning it off (unwanted functionality)
+Wrapping the icons in with an element of this class solves this issue because the user clicks the parent element instead of the icon inside
+*/
+.no-pointer-events{
+    pointer-events: none;
+}
