@@ -84,7 +84,7 @@ const SettingsButton = () => {
             <div className="settings-drop-down-option">
                 Theme: {theme}
                 <div className="icon-button" onClick={() => handleClickTheme()}>
-                <div className="no-pointer-events">{themeSetting === "Light" ? <ToggleOn /> : <ToggleOff />}</div>
+                    <div className="no-pointer-events">{themeSetting === "Light" ? <ToggleOn /> : <ToggleOff />}</div>
                 </div>
             </div>
             <div className="settings-drop-down-option icon-button" onClick={() => handleLogout()} >Logout</div>

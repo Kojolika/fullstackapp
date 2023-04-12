@@ -141,9 +141,9 @@ const SearchLocation = () => {
         </div>
     );
 
-    const dropDown = isFocused ? <div className="dropdownBorder border">
+    const dropDown = isFocused ? <div className="dropdownBorder border" >
         <label className="dropdownLabel" htmlFor="dropdownResults" ><b>Choose a city:</b></label>
-
+        <div id="label-divider"></div>
         <div id="dropdownResults ">{citiesQueryResultsElements}</div>
     </div> : <></>;
 
