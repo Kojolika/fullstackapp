@@ -16,7 +16,7 @@ const SearchLocation = () => {
     const [searchValue, setSearchValue] = useState(null);
     const [previousQuery, setPreviousQuery] = useState(null);
     const [queryResult, setQueryResult] = useState([]);
-
+    
     const searchbarRef = useRef();
     const navigate = useNavigate();
 
@@ -134,7 +134,7 @@ const SearchLocation = () => {
 
     const citiesQueryResultsElements = queryResult.length === 0 ? <></> : queryResult.map((item, index) =>
         <div
-            className="queryResult"
+            className="dropDownSelection"
             key={index}
             onClick={() => handleDropDownSelect(item.location.city, item.location.province, item.location.country)}>
             {'' + item.location.city.name + ', ' + item.location.province.name + ', ' + item.location.country.name}
