@@ -1,0 +1,50 @@
+.settings-icon:hover{
+    transform: rotate(-45deg);
+    cursor: pointer;
+}
+.settings-icon{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    transition: .3s;
+}
+.settings-drop-down{
+    position: fixed;
+    background-color: whitesmoke;
+
+    height: fit-content;
+    width: 200px;
+    right: 23px;
+
+    padding: 5px;
+
+    font-weight: bold;
+
+    border-style: solid;
+    border-color: gray;
+    border-radius: 5px;
+}
+.settings-drop-down-option{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+
+    padding: 2px;
+    border-radius: 5px;
+}
+.settings-drop-down-option:hover{
+    background-color: lightblue;
+
+}
+.icon-button:hover{
+    cursor: pointer;
+}
+.icon-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}

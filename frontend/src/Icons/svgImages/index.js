@@ -13,6 +13,9 @@ import HeartPlus from "./HeartPlus";
 import Favorite from "./Favorite";
 import StarBorder from "./StarBorder";
 import StarFilled from "./StarFilled";
+import Settings from "./Settings";
+import ToggleOff from "./ToggleOff";
+import ToggleOn from "./ToggleOn";
 
 export {
     ThreeDots,
@@ -29,5 +32,8 @@ export {
     HeartPlus,
     Favorite,
     StarBorder,
-    StarFilled
+    StarFilled,
+    Settings,
+    ToggleOff,
+    ToggleOn
 }  

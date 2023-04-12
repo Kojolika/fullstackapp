@@ -35,8 +35,6 @@
 
     min-height: 60px;
     width: 100%;
-
-
 }
 
 .tabName {
@@ -74,10 +72,6 @@ body {
     white-space: nowrap;
 }
 
-#logout {
-    cursor: pointer;
-}
-
 .offscreen {
     position: absolute;
     left: -10000px;
@@ -100,25 +94,24 @@ body {
 
 #left-positioned-menuBar-elements {
     position: absolute;
-    left: 0.5em;
+    left: 20px;
     display: flex;
     flex-direction: row;
 
     height: 100%;
     width: fit-content;
 
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 #home-button {
-    margin-right: 0.5em;
-}
-
-.icon-on-navbar {
+    display: flex;
+    justify-content: center;
+    text-align: center;
     height: 100%;
-    top: 50%;
-    transform: translateY(10%);
-
+}
+#home-button:hover{
+    cursor: pointer;
 }
 
 .optionsButtons {

@@ -80,7 +80,9 @@ api.add_resource(air_visual_api_resources.States, '/airVisualApi/states')
 api.add_resource(air_visual_api_resources.Cities, '/airVisualApi/cities')
 
 api.add_resource(accu_weather_api_resources.GetLocationKey, '/accuWeatherApi/locationKey')
-
+api.add_resource(accu_weather_api_resources.GetDailyForecast,'/accuWeatherApi/dailyForecast')
+api.add_resource(accu_weather_api_resources.GetDailyForecast5Days, '/accuWeatherApi/dailyForecast5Days')
+api.add_resource(accu_weather_api_resources.GetHourlyForecast12Hours, '/accuWeatherApi/hourlyForecast12Hours')
 
 if __name__ == "__main__":
     app.run(debug=True)

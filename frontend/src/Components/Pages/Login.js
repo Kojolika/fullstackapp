@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../Features/auth/authSlice';
 import { useLoginMutation } from '../../Features/auth/authApiSlice';
+import { setTheme, setTempUnit } from '../../Features/user_preferences/preferenceSlice';
 
 import '../../Styles/login.css';
 import '../../Styles/app.css';
@@ -37,12 +38,21 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            //send request to backend to see if user has correct credentials
             const userData = await login({ 'username': user, 'password': pwd }).unwrap();
             const accessToken = userData.access_token;
+            //set application logic
             dispatch(setCredentials({ user, accessToken }));
+            //reset page logic (not sure if neccesary?)
             setUser('');
             setPwd('');
             
+            //fetch user prefs if they exist
+            const tempUnit = localStorage.getItem("temperatureUnit");
+            const theme = localStorage.getItem("theme");
+            dispatch(setTempUnit({"unit":tempUnit}));
+            dispatch(setTheme({"theme":theme}))
+
             try{
                 
             }

@@ -1,5 +1,5 @@
 .dropdownBorder{
-
+    position: absolute;
     width: 100%;
     height: fit-content;
     
@@ -8,11 +8,11 @@
     background-color: whitesmoke;
 
 }
-.queryResult{
+.dropDownSelection{
     margin-bottom: 1%;
 }
 
-.queryResult:hover{
+.dropDownSelection:hover{
     background-color: lightblue;
     cursor: pointer;
 }

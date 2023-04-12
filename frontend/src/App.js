@@ -6,10 +6,10 @@ import {
 } from 'react-router-dom';
 
 
-import { useSelector, useDispatch } from 'react-redux';
-import { logOut, selectCurrentUser, selectCurrentToken } from './Features/auth/authSlice';
-import { useLogoutMutation } from './Features/auth/authApiSlice';
+import { useSelector, } from 'react-redux';
+import { selectCurrentUser } from './Features/auth/authSlice';
 import SearchLocation from './Components/Atoms/SearchLocation';
+import SettingsButton from './Components/Atoms/SettingsButton';
 
 import Locations from './Components/Pages/Locations';
 import Login from './Components/Pages/Login';
@@ -17,28 +17,14 @@ import Register from './Components/Pages/Register';
 import Home from './Components/Pages/Home';
 import LocationData from './Components/Pages/LocationData';
 
-import { IconHome, Search } from './Icons/svgImages/index';
+import { IconHome } from './Icons/svgImages/index';
+
 
 import './Styles/app.css';
 
 
 function App() {
   const user = useSelector(selectCurrentUser);
-  const accessToken = useSelector(selectCurrentToken);
-  const dispatch = useDispatch();
-  const [logout] = useLogoutMutation();
-
-  const handleLogout = async () => {
-    try {
-      const message = await logout({ accessToken }).unwrap();
-      dispatch(logOut());
-      console.log(message);
-    }
-    catch (err) {
-      console.log(err);
-      console.log("something went wrong");
-    }
-  }
 
   const userGreeting = user ?
     (<div id="greeting">
@@ -50,12 +36,12 @@ function App() {
       </div>)
 
   const favorites = user ? <div className="tabContainer">
-                            <Link to='/locations' className="tabName">My Favorites</Link>
-                          </div> :<></>    
+    <Link to='/locations' className="tabName">My Favorites</Link>
+  </div> : <></>
 
   const userSignIn = user ?
     (<div className="tabContainer">
-      <span id="logout" onClick={() => handleLogout()} className="tabName">Logout</span>
+      <SettingsButton />
     </div>) :
     (<div className="tabContainer">
       <Link to='/login' className="tabName">Login</Link>
@@ -65,8 +51,8 @@ function App() {
     <Router>
       <div className='menuBar border' style={{ borderWidth: 0 }}>
         <div id='left-positioned-menuBar-elements'>
-          <div id='home-button' className='icon-on-navbar'>
-            <Link to='/' className="tabName"><IconHome /></Link>
+          <div id='home-button' className='tabContainer'>
+            <Link to='/'><IconHome /></Link>
           </div>
           <SearchLocation />
         </div>

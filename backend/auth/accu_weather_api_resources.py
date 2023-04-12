@@ -35,25 +35,58 @@ class GetLocationKey(Resource):
             return { 'message': 'Something went wrong' }, status_code
 
 forecast_parser = reqparse.RequestParser()
-forecast_parser.add_argument('location_key',  help = 'This field cannot be blank', required = Truee)
+forecast_parser.add_argument('location_key',  help = 'This field cannot be blank', required = True)
 
 class GetDailyForecast(Resource):
     def post(self):
-        data = forecast_parser.parse_args()
-        location_key = data['location_key']
+        try:
+            data = forecast_parser.parse_args()
+            location_key = data['location_key']
 
-        url = 'http://dataservice.accuweather.com/forecasts/v1/daily/1day/' + location_key + '?apikey=' + API_KEY
+            url = 'http://dataservice.accuweather.com/forecasts/v1/daily/1day/' + location_key + '?apikey=' + API_KEY
+
+            response = requests.get(url)
+            response.raise_for_status()
+
+            return response.json()
+
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+
+            return { 'message': 'Something went wrong' }, status_code
 
 class GetDailyForecast5Days(Resource):
     def post(self):
-        data = forecast_parser.parse_args()
-        location_key = data['location_key']
+        try:   
+            data = forecast_parser.parse_args()
+            location_key = data['location_key']
 
-        url = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day/' + location_key + '?apikey=' + API_KEY
+            url = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day/' + location_key + '?apikey=' + API_KEY
 
+            response = requests.get(url)
+            response.raise_for_status()
+
+            return response.json()
+
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+
+            return { 'message': 'Something went wrong' }, status_code
+        
 class GetHourlyForecast12Hours (Resource):
     def post(self):
-        data = forecast_parser.parse_args()
-        location_key = data['location_key']
+        try:
+            data = forecast_parser.parse_args()
+            location_key = data['location_key']
 
-        url = 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/' + location_key + '?apikey=' + API_KEY
+            url = 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/' + location_key + '?apikey=' + API_KEY
+
+            response = requests.get(url)
+            response.raise_for_status()
+
+            return response.json()
+
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+
+            return { 'message': 'Something went wrong' }, status_code
