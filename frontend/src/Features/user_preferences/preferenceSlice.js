@@ -26,5 +26,6 @@ export const { setTempUnit, setTheme } = preferenceSlice.actions;
 
 export default preferenceSlice.reducer;
 
-export const selectTempUnit = (state) => state.pref.temperatureUnit;
+export const selectTempUnit = (state) => state.pref.temperatureUnit; 
+
 export const selectTheme = (state) => state.pref.theme;

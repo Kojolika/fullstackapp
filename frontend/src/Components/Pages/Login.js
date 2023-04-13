@@ -46,18 +46,15 @@ const Login = () => {
             //reset page logic (not sure if neccesary?)
             setUser('');
             setPwd('');
-            
+
             //fetch user prefs if they exist
             const tempUnit = localStorage.getItem("temperatureUnit");
             const theme = localStorage.getItem("theme");
-            dispatch(setTempUnit({"unit":tempUnit}));
-            dispatch(setTheme({"theme":theme}))
-
-            try{
-                
+            if (tempUnit === 'Celcius' || tempUnit === 'Fahrenheit') {
+                dispatch(setTempUnit({ "unit": tempUnit }));
             }
-            catch(err){
-
+            if (theme === "Light" || theme === "Dark") {
+                dispatch(setTheme({ "theme": theme }));
             }
             //update to retrieve locations on login
             //and set website state locations to user locations from database
@@ -67,7 +64,7 @@ const Login = () => {
         catch (err) {
             if (err?.data?.message) {
                 setErrMsg(err.data.message);
-            }else {
+            } else {
                 setErrMsg('No server response.');
             }
             errRef.current.focus();

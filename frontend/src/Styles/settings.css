@@ -17,12 +17,10 @@
     right: 23px;
 
     padding: 5px;
+    padding-bottom: 0;
 
     font-weight: bold;
 
-    border-style: solid;
-    border-color: gray;
-    border-radius: 5px;
 }
 .settings-drop-down-option{
     display: flex;

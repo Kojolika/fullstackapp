@@ -59,6 +59,9 @@ const LocationData = () => {
         if (isFavorited) setIsFavorited(false);
         else setIsFavorited(true);
     }
+    const addLocationToUserDatabase = () =>{
+
+    }
 
     const locationData = <article id="location-data-display" className="border" >
         <div id={user ? 'favorites-button' : 'favorites-button-disabled'} className='optionsButtons' onClick={user ? () => toggleFavorite() : null}>
@@ -66,25 +69,25 @@ const LocationData = () => {
         </div>
         {locationName}
         <div id="location-data" >
-            <div id='weather' className="weather-panel border">
+            <div id='weather' className="weather-panel border-no-shadow">
                 <div id='temperature'>{currentDataAirVisual?.data?.current?.weather?.tp}°C</div>
                 <label htmlFor="temperature" id='label'>Current Weather</label>
             </div>
-            <div id='pollution' className="weather-panel border">
+            <div id='pollution' className="weather-panel border-no-shadow">
                 <div id='AQI'>{currentDataAirVisual?.data?.current?.pollution?.aqius}</div>
                 <span id='label'>Air Quality</span>
             </div>
         </div>
-        <div id='other-weather-data' className="weather-panel border">
+        <div id='other-weather-data' className="weather-panel border-no-shadow">
                     <span className="other-weather-data-entry" id="humidity">{currentDataAirVisual?.data?.current?.weather?.hu}%</span>
                     <span className="other-weather-data-entry" id="wind-speed">{currentDataAirVisual?.data?.current?.weather?.ws} m/s</span>
                     <span className="other-weather-data-entry" id='wind-direction'>{currentDataAirVisual?.data?.current?.weather?.wd}°</span>
                     <span className="other-weather-data-entry" id='atmospheric-pressure'>{currentDataAirVisual?.data?.current?.weather?.pr} hPa</span>
                 </div>
-        <div id='hourly-forecast' className="weather-panel border">
+        <div id='hourly-forecast' className="weather-panel border-no-shadow">
             Hourly Forecast Here
         </div>
-        <div id='five-day-forecast' className="weather-panel border">
+        <div id='five-day-forecast' className="weather-panel border-no-shadow">
             5 Day Forecast Here
         </div>
         <div>
