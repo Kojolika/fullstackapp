@@ -15,6 +15,7 @@ import { Sunny,
     Ice,
     FreezingRain,
     RainAndSnow,
+    Cold,
     Hot,
     Windy} from "../../Icons/svgImages/Weather Icons/index";
 
