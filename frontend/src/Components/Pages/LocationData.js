@@ -104,6 +104,11 @@ const LocationData = () => {
             setTwelveHourForecastState("firstHalf");
         }
     }
+    const hourlyForecastButton = isSuccess12HourForecast ? <div id={twelveHourForecastState === "firstHalf" ? "hourly-arrow-right" : "hourly-arrow-left"}
+        className="weather-panel border"
+        onClick={() => handleTwelveHourButtonClick()}>
+        {twelveHourForecastState === "firstHalf" ? <ArrowRight /> : <ArrowLeft />}
+    </div> : <></>;
 
     const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours : [];
     const twelveHourForecastDisplay = twelveHourForecastArray.map((forecast, index) =>
@@ -112,7 +117,7 @@ const LocationData = () => {
                 {forecast?.DateTime.slice(11, 16)}
             </div>
             <div className="weather-icon" >
-                Icon{forecast?.WeatherIcon}
+                <WeatherIcon id={forecast?.WeatherIcon} />
             </div>
             <div>
                 <Temperature options={{ temperature: forecast?.Temperature?.Value, unit: "Fahrenheit" }} />°
@@ -147,7 +152,7 @@ const LocationData = () => {
                 </div>
                 <div id="today-phrase-and-precip">
                     <div>{accuWeatherTodaysWeatherData?.Day?.IconPhrase}</div>
-                    <div id='precip'><WaterDrop />{twelveHourForecastArray[0]?.PrecipitationProbability}%</div>
+                    {isSuccess12HourForecast ? <div id='precip'><WaterDrop />{twelveHourForecastArray[0]?.PrecipitationProbability}%</div> : <></>}
                 </div>
             </div>
             <div className="flex-column">
@@ -180,11 +185,7 @@ const LocationData = () => {
                 {twelveHourForecastDisplay}
             </div>
             <div id="hourly-arrow-container">
-                <div id={twelveHourForecastState === "firstHalf" ? "hourly-arrow-right" : "hourly-arrow-left"}
-                    className="weather-panel border"
-                    onClick={() => handleTwelveHourButtonClick()}>
-                    {twelveHourForecastState === "firstHalf" ? <ArrowRight /> : <ArrowLeft />}
-                </div>
+                {hourlyForecastButton}
             </div>
         </div>
         <div id='five-day-forecast' >
