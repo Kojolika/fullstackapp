@@ -62,7 +62,6 @@ function App() {
         {favorites}
         {userSignIn}
       </div>
-      <div className='menuBarFill'></div>
 
       <Routes>
         <Route exact path='/' element={<Home />}></Route>

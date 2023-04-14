@@ -15,6 +15,7 @@ import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice"
 import Temperature from "../Atoms/Temperature";
 import WeatherIcon from "../Atoms/WeatherIcon";
 import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
+import Month from "../Atoms/Month";
 
 const LocationData = () => {
     const [isFavorited, setIsFavorited] = useState(false);
@@ -72,17 +73,187 @@ const LocationData = () => {
         <span><Temperature options={{ temperature: currentDataAirVisual?.data?.current?.weather?.tp, unit: "Celcius" }} />°{tempDegreeLetter} </span>
         : <></>
 
+    const fiveDayForecastMock = [
+        {
+            Date: '2023-04-14T16:00:00',
+            Day: {
+                Icon: 1,
+                IconPhrase: "Sunny"
+            },
+            Temperature: {
+                Maximum: {
+                    Value: 78
+                },
+                Minimum: {
+                    Value: 49
+                }
+            }
+        },
+        {
+            Date: '2023-04-15T16:00:00',
+            Day: {
+                Icon: 32
+            },
+            Temperature: {
+                Maximum: {
+                    Value: 90
+                },
+                Minimum: {
+                    Value: 75
+                }
+            }
+        },
+        {
+            Date: '2023-04-16T16:00:00',
+            Day: {
+                Icon: 8
+            },
+            Temperature: {
+                Maximum: {
+                    Value: 67
+                },
+                Minimum: {
+                    Value: 44
+                }
+            }
+        },
+        {
+            Date: '2023-04-17T16:00:00',
+            Day: {
+                Icon: 19
+            },
+            Temperature: {
+                Maximum: {
+                    Value: 84
+                },
+                Minimum: {
+                    Value: 52
+                }
+            }
+        },
+        {
+            Date: '2023-04-18T16:00:00',
+            Day: {
+                Icon: 1
+            },
+            Temperature: {
+                Maximum: {
+                    Value: 53
+                },
+                Minimum: {
+                    Value: 41
+                }
+            }
+        }
+    ]
+    const twelveHourForecastMock = [
+        {
+            DateTime: '2023-04-14T16:00:00',
+            WeatherIcon: 21,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T17:00:00',
+            WeatherIcon: 22,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T18:00:00',
+            WeatherIcon: 5,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T19:00:00',
+            WeatherIcon: 26,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T20:00:00',
+            WeatherIcon: 18,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T21:00:00',
+            WeatherIcon: 19,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T22:00:00',
+            WeatherIcon: 6,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T23:00:00',
+            WeatherIcon: 13,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T00:00:00',
+            WeatherIcon: 25,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T01:00:00',
+            WeatherIcon: 29,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T02:00:00',
+            WeatherIcon: 17,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        },
+        {
+            DateTime: '2023-04-14T03:00:00',
+            WeatherIcon: 15,
+            Temperature: {
+                Value: 98
+            },
+            PrecipitationProbability: 24
+        }
+    ]
 
-
-    const fiveDayForecastArray = isSuccess5DayForecast ? currentDataDailyForecast5Days.DailyForecasts : [];
+    const fiveDayForecastArray = isSuccess5DayForecast ? currentDataDailyForecast5Days.DailyForecasts : fiveDayForecastMock;
     const accuWeatherTodaysWeatherData = fiveDayForecastArray[0];
     const fiveDayForecastsDisplay = fiveDayForecastArray.map(forecast =>
         <div key={forecast?.Date} id="individual-forecast-day" className="weather-panel border">
-            <div className="flex-column">
-                <div id='weather-date'>
-                    {forecast?.Date.slice(8, 10)}
+            <div className="flex-column flex-center-align" id="forecast-container">
+                <div id='weather-date' className="flex-center-align">
+                    <Month number={forecast?.Date.slice(6, 7)} abr={true} /> {forecast?.Date.slice(8, 10)}
                 </div>
-                <div className="flex-row">
+                <div className="flex-row" >
                     <div className="weather-icon">
                         <WeatherIcon id={forecast?.Day?.Icon} height={48} width={48} />
                     </div>
@@ -104,26 +275,23 @@ const LocationData = () => {
             setTwelveHourForecastState("firstHalf");
         }
     }
-    const hourlyForecastButton = isSuccess12HourForecast ? <div id={twelveHourForecastState === "firstHalf" ? "hourly-arrow-right" : "hourly-arrow-left"}
+    const hourlyForecastButton = <div id={twelveHourForecastState === "firstHalf" ? "hourly-arrow-right" : "hourly-arrow-left"}
         className="weather-panel border"
         onClick={() => handleTwelveHourButtonClick()}>
         {twelveHourForecastState === "firstHalf" ? <ArrowRight /> : <ArrowLeft />}
-    </div> : <></>;
+    </div>
 
-    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours : [];
+    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours : twelveHourForecastMock;
     const twelveHourForecastDisplay = twelveHourForecastArray.map((forecast, index) =>
         <div key={forecast?.DateTime} id={twelveHourForecastState === "firstHalf" ? "individual-forecast-hour-first-half" : "individual-forecast-hour-last-half"}>
             <div>
                 {forecast?.DateTime.slice(11, 16)}
             </div>
-            <div className="weather-icon" >
+            <div className="weather-icon flex-center-align" >
                 <WeatherIcon id={forecast?.WeatherIcon} />
             </div>
             <div>
                 <Temperature options={{ temperature: forecast?.Temperature?.Value, unit: "Fahrenheit" }} />°
-            </div>
-            <div>
-                {forecast?.IconPhrase}
             </div>
             <div>
                 <div id='precip'><WaterDrop />{forecast?.PrecipitationProbability}%</div>
@@ -140,60 +308,64 @@ const LocationData = () => {
     }
 
     const locationData = <article id="location-data-display" className="border" >
-        <div id={user ? 'favorites-button' : 'favorites-button-disabled'} className="flex-center-align" onClick={user ? () => toggleFavorite() : null}>
-            {isFavorited ? <StarFilled /> : <StarBorder />}
-        </div>
-        {locationName}
-        <div id="location-data" >
-            <div id='weather' className="weather-panel border">
-                <WeatherIcon id={accuWeatherTodaysWeatherData?.Day?.Icon} />
-                <div>
-                    <div id='temperature'>{currentTemperature}</div>
+        <div id="data-formatting-container" className="flex-center-align flex-column">
+            <div id={user ? 'favorites-button' : 'favorites-button-disabled'} className="flex-center-align" onClick={user ? () => toggleFavorite() : null}>
+                {isFavorited ? <StarFilled /> : <StarBorder />}
+            </div>
+            {locationName}
+            <div id="location-data" className="weather-panel-seperation" >
+                <div className="flex-column flex-center-align" id="top-row-left-data">
+
+                    <div id='weather' className="weather-panel border">
+                        <WeatherIcon id={accuWeatherTodaysWeatherData?.Day?.Icon} />
+                        <div>
+                            <div id='temperature'>{currentTemperature}</div>
+                        </div>
+                        <div id="today-phrase-and-precip">
+                            <div>{accuWeatherTodaysWeatherData?.Day?.IconPhrase}</div>
+                            {<div id='precip'><WaterDrop />{twelveHourForecastArray[0]?.PrecipitationProbability}%</div>}
+                        </div>
+                    </div>
+                    <div className="flex-row" id="other-weather-data">
+                        <div className="other-weather-data-entry weather-panel border" id="wind-speed">
+                            <label htmlFor="wind-speed">Wind Speed</label>
+                            {currentDataAirVisual?.data?.current?.weather?.ws} m/s {currentDataAirVisual?.data?.current?.weather?.wd}° {/* wind direction, as an angle of 360° (N=0, E=90, S=180, W=270) */}
+                        </div>
+                        <div className="other-weather-data-entry weather-panel border" id='atmospheric-pressure'>
+                            <label htmlFor="atmospheric-pressure">Atmospheric Pressure</label>
+                            {currentDataAirVisual?.data?.current?.weather?.pr} hPa
+                        </div>
+                    </div>
                 </div>
-                <div id="today-phrase-and-precip">
-                    <div>{accuWeatherTodaysWeatherData?.Day?.IconPhrase}</div>
-                    {isSuccess12HourForecast ? <div id='precip'><WaterDrop />{twelveHourForecastArray[0]?.PrecipitationProbability}%</div> : <></>}
+
+                <div className="flex-column flex-center-align" id="top-row-right-data">
+                    <div className="weather-panel border flex-column flex-center-align" id='AQI'>
+                        <label htmlFor="AQI">Air Quality</label>
+                        {currentDataAirVisual?.data?.current?.pollution?.aqius}
+                    </div>
+
+                    <div className="weather-panel border flex-column flex-center-align" id="humidity">
+                        <label htmlFor="humidity">Humidity</label>
+                        <span>{currentDataAirVisual?.data?.current?.weather?.hu}% </span>
+                    </div>
+
                 </div>
             </div>
-            <div className="flex-column">
-                <div className="other-weather-data-entry weather-panel border" id="humidity">
-                    <label htmlFor="humidity">Humidity</label>
-                    <span>{currentDataAirVisual?.data?.current?.weather?.hu}% </span>
+            <div id="hourly-forecast-container" className="weather-panel-seperation">
+                <div id='hourly-forecast' className="weather-panel border">
+                    {twelveHourForecastDisplay}
                 </div>
-                <div className="other-weather-data-entry weather-panel border" id='AQI'>
-                    <label htmlFor="AQI">Air Quality</label>
-                    {currentDataAirVisual?.data?.current?.pollution?.aqius}
+                <div id="hourly-arrow-container">
+                    {hourlyForecastButton}
                 </div>
             </div>
-        </div>
-        <div className="flex-row weather-panel-seperation ">
-            <div className="other-weather-data-entry weather-panel border" id="wind-speed">
-                <label htmlFor="wind-speed">Wind Speed</label>
-                {currentDataAirVisual?.data?.current?.weather?.ws} m/s
+            <div id='five-day-forecast' className="weather-panel-seperation" >
+                {fiveDayForecastsDisplay}
             </div>
-            <div className="other-weather-data-entry weather-panel border" id='wind-direction'>
-                <label htmlFor="wind-direction">Wind Direction</label>
-                {currentDataAirVisual?.data?.current?.weather?.wd}° {/* wind direction, as an angle of 360° (N=0, E=90, S=180, W=270) */}
+            <div id="last-updated">
+                <span>Last updated </span>
+                {dateFormatted}, {timeFormatted}
             </div>
-            <div className="other-weather-data-entry weather-panel border" id='atmospheric-pressure'>
-                <label htmlFor="atmospheric-pressure">Atmospheric Pressure</label>
-                {currentDataAirVisual?.data?.current?.weather?.pr} hPa
-            </div>
-        </div>
-        <div id="hourly-forecast-container" className="weather-panel-seperation">
-            <div id='hourly-forecast' className="weather-panel border">
-                {twelveHourForecastDisplay}
-            </div>
-            <div id="hourly-arrow-container">
-                {hourlyForecastButton}
-            </div>
-        </div>
-        <div id='five-day-forecast' >
-            {fiveDayForecastsDisplay}
-        </div>
-        <div id="last-updated">
-            <span>Last updated </span>
-            {dateFormatted}, {timeFormatted}
         </div>
     </article>
 

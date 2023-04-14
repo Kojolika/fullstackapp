@@ -25,9 +25,11 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
 
     height: 100%;
-    width: 50%;
+    width: 100%;
+    gap: 5px;
 }
 
 #location-name {
@@ -50,9 +52,29 @@
     justify-content: center;
     align-items: center;
     height: 125px;
-    width: 400px;
+    width: 100%;
 }
-
+#top-row-left-data{
+    width: 100%;
+    gap: 5px;
+}
+#top-row-right-data{
+    height: 100%;
+    width: 50%;
+    gap: 5px;
+}
+#top-row-other-data > div{
+    float: left;
+}
+#today-phrase-and-precip{
+    margin-left: 5%;
+}
+#AQI, #humidity{
+    height: 100%;
+    width: 100%;
+    padding-top: 11.5%;
+    padding-bottom: 11.5%;
+}
 #pollution {
     display: flex;
     justify-content: center;
@@ -85,6 +107,10 @@
     padding: 5px;
     align-items: center;
     height: 100%;
+}
+#other-weather-data{
+    width: 100%;
+    gap: 5px;
 }
 
 #favorites-button {
@@ -122,6 +148,7 @@
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    gap:5px;
 }
 #individual-forecast-day{
     display: flex;
@@ -140,8 +167,8 @@
 }
 #hourly-arrow-right{
     position: absolute;
-    top: 60px;
-    right: -15px;
+    top: 50%;
+    right: -35px;
 
     height: 30px;
     width: 30px;
@@ -160,7 +187,7 @@
 }
 #hourly-arrow-left{
     position: absolute;
-    top: 60px;
+    top: 50%;
     left: -15px;
 
     height: 30px;
@@ -183,6 +210,7 @@
     flex-direction: row;
 }
 #hourly-forecast {
+    position: relative;
     display: flex;
     flex-direction: row;
     text-align: center;
@@ -227,8 +255,6 @@
     height: 100%;
     width: 100%;
     background-color: #e8e8e8;
-    margin-bottom: 5px;
-    margin-left: 5px;
 }
 #today-temp-label{
     display: flex;
@@ -237,4 +263,18 @@
 }
 #last-updated{
     margin-bottom: 1%;
+}
+#weather-date{
+    text-align: center;
+    border-bottom: solid 2px lightgray;
+    height: 100%;
+    width: 100%;
+}
+#forecast-container{
+    height: 100%;
+    width: 100%;
+}
+#data-formatting-container{
+    width: 600px;
+    gap: 5px;
 }

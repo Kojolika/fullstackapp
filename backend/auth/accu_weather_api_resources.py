@@ -32,6 +32,9 @@ class GetLocationKey(Resource):
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code
 
+            if(status_code == 503):
+                 return { 'message': e.response.json()['Message'] }, status_code
+
             return { 'message': 'Something went wrong' }, status_code
 
 forecast_parser = reqparse.RequestParser()
@@ -53,6 +56,9 @@ class GetDailyForecast(Resource):
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code
 
+            if(status_code == 503):
+                 return { 'message': e.response.json()['Message'] }, status_code
+
             return { 'message': 'Something went wrong' }, status_code
 
 class GetDailyForecast5Days(Resource):
@@ -71,6 +77,9 @@ class GetDailyForecast5Days(Resource):
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code
 
+            if(status_code == 503):
+                return { 'message': e.response.json()['Message'] }, status_code
+
             return { 'message': 'Something went wrong' }, status_code
         
 class GetHourlyForecast12Hours (Resource):
@@ -88,5 +97,8 @@ class GetHourlyForecast12Hours (Resource):
 
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code
+
+            if(status_code == 503):
+                return { 'message': e.response.json()['Message'] }, status_code
 
             return { 'message': 'Something went wrong' }, status_code
