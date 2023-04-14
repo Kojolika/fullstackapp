@@ -16,6 +16,9 @@ import StarFilled from "./StarFilled";
 import Settings from "./Settings";
 import ToggleOff from "./ToggleOff";
 import ToggleOn from "./ToggleOn";
+import ArrowRight from "./ArrowRight";
+import ArrowLeft from "./ArrowLeft";
+
 
 export {
     ThreeDots,
@@ -35,5 +38,7 @@ export {
     StarFilled,
     Settings,
     ToggleOff,
-    ToggleOn
+    ToggleOn,
+    ArrowLeft,
+    ArrowRight
 }  

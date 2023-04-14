@@ -1,15 +1,15 @@
 .location-data-container {
+    position: relative;
     display: flex;
     justify-content: center;
-
+    height: 100%;
+    width: 100%;
 }
 
 #location-data-display {
     position: relative;
-    height: 100%;
-    max-width: 75%;
+    height: 200%;
     min-width: 75%;
-
 
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@
     justify-content: center;
 
     height: 100%;
-    width: 60%;
+    width: 50%;
 }
 
 #location-name {
@@ -37,12 +37,20 @@
     margin-top: 3%;
     justify-content: center;
     align-items: center;
+    margin-bottom: 3%;
 }
-
+#precip{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #weather {
     display: flex;
-    flex-direction: column;
-    margin-right: 0.5%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 125px;
+    width: 400px;
 }
 
 #pollution {
@@ -62,35 +70,31 @@
     flex-direction: row;
 }
 
-#AQI {
-    font-size: 75px;
-    text-align: center;
-}
-
 #label {
     text-align: center;
 }
 
-#other-weather-data {
-    font: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+.weather-panel-seperation {
+    margin-bottom: 25px;
 }
 
 .other-weather-data-entry {
-    margin: 2%;
-    margin-bottom: 0;
-    margin-top: 0;
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    align-items: center;
+    height: 100%;
 }
 
 #favorites-button {
     position: absolute;
     top: 0;
     right: 0;
-    background: linear-gradient(0deg, rgba(250, 250, 250, 0.3) 80%, rgba(250, 250, 250, 0.3) 100%);
     transition: 0s;
+
+    border-radius: 10px;
+    margin: 5px;
 }
 
 #favorites-button:hover {
@@ -104,28 +108,134 @@
     right: 0;
     background-color: #F2F2F2;
     opacity: 0.5;
+
+    border-radius: 10px;
+    margin: 5px;
 }
 
 #favorites-button-disabled:hover {
     cursor: not-allowed;
 }
 
-#hourly-forecast {
-    font-size: 75px;
-    text-align: center;
-}
-
 #five-day-forecast {
-
-    font-size: 75px;
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
 }
+#individual-forecast-day{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
 
+    max-width: 96px;
+}
+#hourly-arrow-container{
+    position: absolute;
+
+    height: 152px;
+    width: 580px;
+
+}
+#hourly-arrow-right{
+    position: absolute;
+    top: 60px;
+    right: -15px;
+
+    height: 30px;
+    width: 30px;
+
+    border-radius: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: .2s;
+}
+#hourly-arrow-right:hover{
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+}
+#hourly-arrow-left{
+    position: absolute;
+    top: 60px;
+    left: -15px;
+
+    height: 30px;
+    width: 30px;
+
+    border-radius: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: .2s;
+}
+#hourly-arrow-left:hover{
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+}
+#hourly-forecast-container{
+    display: flex;
+    flex-direction: row;
+}
+#hourly-forecast {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    overflow: hidden;
+    width: 600px;
+}
+#individual-forecast-hour-first-half{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+
+    min-width: 75px;
+
+    transition: 1s;
+}
+#individual-forecast-hour-last-half{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+
+    transition: 1s;
+
+    min-width: 75px;
+    transform: translateX(-560px);
+}
+#temp-min-max{
+    display: flex;
+    flex-direction: column;
+}
 .weather-panel {
     position: relative;
     height: 100%;
-    width: 60%;
+    width: 100%;
+    background-color: #e8e8e8;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+#today-temp-label{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+#last-updated{
     margin-bottom: 1%;
-
-    background-color: #FEFEFE;
 }

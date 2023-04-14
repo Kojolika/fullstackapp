@@ -27,7 +27,15 @@
     background: linear-gradient(0deg, rgba(69, 123, 157, 0.5) 0%, rgba(69, 123, 157, 0.5) 40%, rgba(86, 140, 174, 1) 100%);
     z-index: 100;
 }
+.flex-row{
+    display: flex;
+    flex-direction: row;
+}
 
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
 .menuBarFill {
     position: static;
     left: 0;
@@ -59,6 +67,8 @@ body {
     background: url('../Media/clouds2.jpg') no-repeat center center fixed;
     background-size: cover;
     background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
 }
 
 #greeting {
@@ -143,4 +153,9 @@ body {
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.flex-center-align{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

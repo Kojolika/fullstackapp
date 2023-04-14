@@ -6,9 +6,8 @@ const Temperature = (props) => {
     const currentTempUnit = useSelector(selectTempUnit);
 
     const convertToF = (temp) => Math.round((temp * 1.8) + 32);
-
     const convertToC = (temp) => Math.round((temp - 32) * (5 / 9));
-
+    
     const finalDisplay = unit === currentTempUnit ? temperature 
     : currentTempUnit === "Celcius" ? convertToC(temperature) : convertToF(temperature);
 
