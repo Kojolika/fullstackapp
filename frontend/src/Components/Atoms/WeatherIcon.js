@@ -17,7 +17,8 @@ import { Sunny,
     RainAndSnow,
     Cold,
     Hot,
-    Windy} from "../../Icons/svgImages/Weather Icons/index";
+    Windy,
+    Clear} from "../../Icons/svgImages/Weather Icons/index";
 
 
 const WeatherIcon = (props) => {
@@ -53,6 +54,8 @@ const WeatherIcon = (props) => {
         30: <Hot height={props.height} width={props.width}/>,
         31: <Cold height={props.height} width={props.width}/>,
         32: <Windy height={props.height} width={props.width}/>,
+        33: <Clear height={props.height} width={props.width}/>,
+        34: <Clear height={props.height} width={props.width}/>,
         
     }
 

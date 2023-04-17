@@ -57,6 +57,7 @@ const Login = () => {
                 dispatch(setTheme({ "theme": theme }));
             }
             //update to retrieve locations on login
+            
             //and set website state locations to user locations from database
             navigate('/locations')
 
