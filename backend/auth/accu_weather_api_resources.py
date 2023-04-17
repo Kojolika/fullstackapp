@@ -24,7 +24,7 @@ class GetLocationKey(Resource):
             json_response = response.json()
             for location in json_response:
                 if(location['AdministrativeArea']['EnglishName'] == data['province']['name'] and location['Country']['EnglishName'] == data['country']['name']):
-                    return location['Key']
+                    return location
 
             return {'Message': "Can't find city key"},400
  

@@ -16,7 +16,7 @@ const SearchLocation = () => {
     const [searchValue, setSearchValue] = useState(null);
     const [previousQuery, setPreviousQuery] = useState(null);
     const [queryResult, setQueryResult] = useState([]);
-    
+
     const searchbarRef = useRef();
     const navigate = useNavigate();
 
@@ -71,6 +71,9 @@ const SearchLocation = () => {
                     const cityArray = lowercaseCity.split(/\s+/);
                     const numCityWords = cityArray.length;
 
+                    const lowercaseState = state.name.toLowerCase();
+                    const stateArray = lowercaseState.split(/\s+/);
+
                     const regexExpr = '^' + queryArray[0];
                     const regexQuery = new RegExp(regexExpr);
 
@@ -84,31 +87,32 @@ const SearchLocation = () => {
                         //user query has less words than city name
                         //or user query has more words than city name
                         //in either case check if it matches the city first
-                        if (queryArray.length <= numCityWords) {
-
-                            //check if each word in the city matches each word in the query
-                            if (doWordArraysMatch(queryArray, cityArray)) {
-                                citiesQueryResults.push({
-                                    'location': {
-                                        "city": {
-                                            "name": city.name
-                                        },
-                                        "province": {
-                                            "name": state.name,
-                                            "state_code": state.state_code
-                                        },
-                                        "country": {
-                                            "name": country.name,
-                                            "iso2": country.iso2
-                                        }
-                                    }
-                                });
-                            }
-                        }
-
                         //need to add more logic for when the user attempts to type in the state and country after city
                         //...
                         //...
+                        const cityQuery = queryArray.slice(0, numCityWords);
+                        const stateQuery = queryArray.slice(numCityWords);
+
+                        if (doWordArraysMatch(cityQuery, cityArray) && doWordArraysMatch(stateQuery, stateArray)) {
+                            //check if each word in the city matches each word in the query
+                            citiesQueryResults.push({
+                                'location': {
+                                    "city": {
+                                        "name": city.name
+                                    },
+                                    "province": {
+                                        "name": state.name,
+                                        "state_code": state.state_code
+                                    },
+                                    "country": {
+                                        "name": country.name,
+                                        "iso2": country.iso2
+                                    }
+                                }
+                            });
+
+                        }
+
                     }
                 })
             })
@@ -123,7 +127,7 @@ const SearchLocation = () => {
         if (searchValue !== null) queryLocations(searchValue);
     }, [searchValue])
 
-    const handleDropDownSelect = (city, province, country) => { 
+    const handleDropDownSelect = (city, province, country) => {
         dispatch(setCurrentLocation({
             "city": city,
             "province": province,

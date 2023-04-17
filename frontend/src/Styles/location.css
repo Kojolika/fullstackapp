@@ -97,7 +97,7 @@
 }
 
 .weather-panel-seperation {
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 .other-weather-data-entry {
@@ -276,5 +276,9 @@
 }
 #data-formatting-container{
     width: 600px;
+    gap: 5px;
+}
+#last-updated{
+    white-space: nowrap;
     gap: 5px;
 }

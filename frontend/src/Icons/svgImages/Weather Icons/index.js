@@ -19,6 +19,8 @@ import RainAndSnow from "./RainAndSnow";
 import Hot from "./Hot";
 import Cold from "./Cold";
 import Windy from "./Windy";
+import Clear from "./Clear";
+
 
 
 export{
@@ -42,5 +44,6 @@ export{
     RainAndSnow,
     Hot,
     Cold,
-    Windy
+    Windy,
+    Clear
 }

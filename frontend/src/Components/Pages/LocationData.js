@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux"
 import { useState } from "react";
 
+
 import { selectCurrentLocation } from "../../Features/locations/locationsSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGetLocationKeyQuery } from "../../Features/locations/accuWeatherApiSlice";
@@ -16,6 +17,7 @@ import Temperature from "../Atoms/Temperature";
 import WeatherIcon from "../Atoms/WeatherIcon";
 import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
 import Month from "../Atoms/Month";
+import Time from "../Atoms/Time";
 
 const LocationData = () => {
     const [isFavorited, setIsFavorited] = useState(false);
@@ -43,8 +45,9 @@ const LocationData = () => {
         isError: isErrorAirVisual,
         isFetching: isFetchingAirVisual } = useGetCityWeatherDataQuery(locationBeingDisplayAirVisualCall, { skip })
 
-    const { currentData: locationKey } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
-    console.log(locationKey);
+    const { currentData: currentDataCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
+    console.log(currentDataCityData);
+    const locationKey = currentDataCityData?.Key;
 
     const skipForecasts = locationKey === undefined ? true : false;
     const { currentData: currentDataDailyForecast5Days,
@@ -63,15 +66,15 @@ const LocationData = () => {
         {locationBeingDisplayed.city.name}, {locationBeingDisplayed.province.name}, {locationBeingDisplayed.country.name}
     </div>
 
-    const dateFormatted = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.ts.slice(5, 10) : <></>
-    const timeFormatted = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 16) : <></>
+    const timeFormatted = isSuccessAirVisual ?
+        <div>
+            <Time offset={currentDataCityData?.TimeZone?.GmtOffset} number={currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 16)} /> {currentDataCityData?.TimeZone?.Code}
+        </div>
+        : <></>
 
     const temperatureUnit = useSelector(selectTempUnit);
     const tempDegreeLetter = temperatureUnit === "Celcius" ? 'C' : 'F';
 
-    const currentTemperature = isSuccessAirVisual ?
-        <span><Temperature options={{ temperature: currentDataAirVisual?.data?.current?.weather?.tp, unit: "Celcius" }} />°{tempDegreeLetter} </span>
-        : <></>
 
     const fiveDayForecastMock = [
         {
@@ -151,7 +154,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T16:00:00',
             WeatherIcon: 21,
             Temperature: {
-                Value: 98
+                Value: 82
             },
             PrecipitationProbability: 24
         },
@@ -159,7 +162,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T17:00:00',
             WeatherIcon: 22,
             Temperature: {
-                Value: 98
+                Value: 85
             },
             PrecipitationProbability: 24
         },
@@ -167,7 +170,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T18:00:00',
             WeatherIcon: 5,
             Temperature: {
-                Value: 98
+                Value: 75
             },
             PrecipitationProbability: 24
         },
@@ -175,7 +178,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T19:00:00',
             WeatherIcon: 26,
             Temperature: {
-                Value: 98
+                Value: 89
             },
             PrecipitationProbability: 24
         },
@@ -183,7 +186,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T20:00:00',
             WeatherIcon: 18,
             Temperature: {
-                Value: 98
+                Value: 78
             },
             PrecipitationProbability: 24
         },
@@ -191,7 +194,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T21:00:00',
             WeatherIcon: 19,
             Temperature: {
-                Value: 98
+                Value: 63
             },
             PrecipitationProbability: 24
         },
@@ -199,7 +202,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T22:00:00',
             WeatherIcon: 6,
             Temperature: {
-                Value: 98
+                Value: 68
             },
             PrecipitationProbability: 24
         },
@@ -207,7 +210,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T23:00:00',
             WeatherIcon: 13,
             Temperature: {
-                Value: 98
+                Value: 73
             },
             PrecipitationProbability: 24
         },
@@ -215,7 +218,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T00:00:00',
             WeatherIcon: 25,
             Temperature: {
-                Value: 98
+                Value: 83
             },
             PrecipitationProbability: 24
         },
@@ -223,7 +226,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T01:00:00',
             WeatherIcon: 29,
             Temperature: {
-                Value: 98
+                Value: 65
             },
             PrecipitationProbability: 24
         },
@@ -231,7 +234,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T02:00:00',
             WeatherIcon: 17,
             Temperature: {
-                Value: 98
+                Value: 56
             },
             PrecipitationProbability: 24
         },
@@ -239,7 +242,7 @@ const LocationData = () => {
             DateTime: '2023-04-14T03:00:00',
             WeatherIcon: 15,
             Temperature: {
-                Value: 98
+                Value: 53
             },
             PrecipitationProbability: 24
         }
@@ -281,11 +284,12 @@ const LocationData = () => {
         {twelveHourForecastState === "firstHalf" ? <ArrowRight /> : <ArrowLeft />}
     </div>
 
-    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours : twelveHourForecastMock;
+    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours.slice(3) //remove first 3 elements, accu weather returns hours before current time
+        : twelveHourForecastMock;
     const twelveHourForecastDisplay = twelveHourForecastArray.map((forecast, index) =>
         <div key={forecast?.DateTime} id={twelveHourForecastState === "firstHalf" ? "individual-forecast-hour-first-half" : "individual-forecast-hour-last-half"}>
             <div>
-                {forecast?.DateTime.slice(11, 16)}
+                <Time offset={currentDataCityData?.TimeZone?.GmtOffset} number={forecast?.DateTime.slice(11, 16)} />
             </div>
             <div className="weather-icon flex-center-align" >
                 <WeatherIcon id={forecast?.WeatherIcon} />
@@ -298,6 +302,10 @@ const LocationData = () => {
             </div>
         </div>
     )
+
+    const currentTemperature = isSuccess12HourForecast ?
+        <span><Temperature options={{ temperature: twelveHourForecastArray[0]?.Temperature?.Value, unit: "Fahrenheit" }} />°{tempDegreeLetter} </span>
+        : <></>
 
     const toggleFavorite = () => {
         if (isFavorited) setIsFavorited(false);
@@ -317,7 +325,7 @@ const LocationData = () => {
                 <div className="flex-column flex-center-align" id="top-row-left-data">
 
                     <div id='weather' className="weather-panel border">
-                        <WeatherIcon id={accuWeatherTodaysWeatherData?.Day?.Icon} />
+                        <WeatherIcon id={twelveHourForecastArray[0]?.WeatherIcon} />
                         <div>
                             <div id='temperature'>{currentTemperature}</div>
                         </div>
@@ -362,9 +370,9 @@ const LocationData = () => {
             <div id='five-day-forecast' className="weather-panel-seperation" >
                 {fiveDayForecastsDisplay}
             </div>
-            <div id="last-updated">
+            <div id="last-updated" className="flex-row">
                 <span>Last updated </span>
-                {dateFormatted}, {timeFormatted}
+                {timeFormatted}
             </div>
         </div>
     </article>
