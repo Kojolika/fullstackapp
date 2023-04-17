@@ -1,0 +1,31 @@
+.color-display{
+    border-radius: 50px;
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+}
+#green{
+    background-color: green;
+}
+#yellow{
+    background-color: yellow;
+}
+#red{
+    background-color: red;
+}
+#orange{
+    background-color: orange;
+}
+#purple{
+    background-color: purple;
+}
+#maroon{
+    background-color: maroon;
+}
+#AQI-label{
+    text-align: center;
+    
+}
+.smaller-font{
+    font-size: 12px;
+}

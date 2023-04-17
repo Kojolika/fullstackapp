@@ -15,9 +15,10 @@ import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice"
 
 import Temperature from "../Atoms/Temperature";
 import WeatherIcon from "../Atoms/WeatherIcon";
-import { Flurries, MostlyCloudyFlurriesNight, PartialCloudyShowersNight, PartialSunnyFlurries, PartialSunnyShowers, Showers, Snow, WaterDrop } from "../../Icons/svgImages/Weather Icons";
+import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
 import Month from "../Atoms/Month";
 import Time from "../Atoms/Time";
+import AirQuality from "../Atoms/AirQuality";
 
 const LocationData = () => {
     const [isFavorited, setIsFavorited] = useState(false);
@@ -46,7 +47,6 @@ const LocationData = () => {
         isFetching: isFetchingAirVisual } = useGetCityWeatherDataQuery(locationBeingDisplayAirVisualCall, { skip })
 
     const { currentData: currentDataCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
-    console.log(currentDataCityData);
     const locationKey = currentDataCityData?.Key;
 
     const skipForecasts = locationKey === undefined ? true : false;
@@ -58,9 +58,6 @@ const LocationData = () => {
         isSuccess: isSuccess12HourForecast,
         isFetching: isFetching12HourForecast
     } = useGetHourlyForecast12HoursQuery(locationKey, { skip: skipForecasts });
-
-    console.log(currentDataDailyForecast5Days);
-    console.log(currentDataHourlyForecast12Hours);
 
     const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
         {locationBeingDisplayed.city.name}, {locationBeingDisplayed.province.name}, {locationBeingDisplayed.country.name}
@@ -309,13 +306,13 @@ const LocationData = () => {
             </div>
         </div>
     )
-    twelveHourForecastDisplay.push(<div className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} style={{justifyContent: "center"}} id="individual-forecast-hour">
+    twelveHourForecastDisplay.push(<div key={"no-way-date-is-this"} className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} style={{justifyContent: "center"}} id="individual-forecast-hour">
         <div className="flex-center-align">Updates every hour!</div>
         <div className="flex-center-align"><Sunglasses /></div>
     </div>)
 
-    const currentTemperature = isSuccess12HourForecast ?
-        <span><Temperature options={{ temperature: twelveHourForecastArray[0]?.Temperature?.Value, unit: "Fahrenheit" }} />°{tempDegreeLetter} </span>
+    const currentTemperature = isSuccessAirVisual ?
+        <span><Temperature options={{ temperature: currentDataAirVisual?.data?.current?.weather?.tp, unit: "Celcius" }} />°{tempDegreeLetter} </span>
         : <></>
 
     const toggleFavorite = () => {
@@ -360,7 +357,7 @@ const LocationData = () => {
                 <div className="flex-column flex-center-align" id="top-row-right-data">
                     <div className="weather-panel border flex-column flex-center-align" id='AQI'>
                         <label htmlFor="AQI">Air Quality</label>
-                        {currentDataAirVisual?.data?.current?.pollution?.aqius}
+                        <AirQuality number={currentDataAirVisual?.data?.current?.pollution?.aqius}/>
                     </div>
 
                     <div className="weather-panel border flex-column flex-center-align" id="humidity">

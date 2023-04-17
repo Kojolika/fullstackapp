@@ -1,0 +1,40 @@
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+/* Tooltip text */
+.tooltip-text {
+  position: absolute;
+  top: 30px;
+
+  z-index: 51;
+
+  
+  width: 200px;
+  height: fit-content;
+
+  padding: 15px;
+
+  transition: ease-in-out 0.3s;
+
+  transform: translateX(-50%);
+  
+}
+.hidden{
+  visibility: hidden;
+}
+.visible{
+  visibility: visible;
+}
+.arrow{
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: rotateZ(45deg);
+}
+.tooltip-color{
+  background-color: rgb(192, 204, 213);
+}

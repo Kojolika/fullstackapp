@@ -8,8 +8,8 @@ import {
 
 import { useSelector, } from 'react-redux';
 import { selectCurrentUser } from './Features/auth/authSlice';
-import SearchLocation from './Components/Atoms/SearchLocation';
-import SettingsButton from './Components/Atoms/SettingsButton';
+import SearchLocation from './Components/Modules/SearchLocation';
+import SettingsButton from './Components/Modules/SettingsButton';
 
 import Locations from './Components/Pages/Locations';
 import Login from './Components/Pages/Login';

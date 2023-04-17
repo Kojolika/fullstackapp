@@ -15,7 +15,7 @@ const Time = (props) => {
         const afterOffset = number + props.offset;
 
         //convert from military time on initial render 
-        if ( (afterOffset <= 23 && afterOffset >= 12) || afterOffset < 0) setMeridiem('PM');
+        if ( (afterOffset <= 23 && afterOffset >= 12) || (afterOffset < 0 && afterOffset > -12)) setMeridiem('PM');
         else setMeridiem('AM');
 
         const finaltime = afterOffset < 0 ? (afterOffset + 12) % 12 : afterOffset % 12;

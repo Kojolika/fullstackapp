@@ -19,6 +19,7 @@ import ToggleOn from "./ToggleOn";
 import ArrowRight from "./ArrowRight";
 import ArrowLeft from "./ArrowLeft";
 import Sunglasses from "./Sunglasses";
+import Info from "./Info";
 
 
 export {
@@ -42,5 +43,6 @@ export {
     ToggleOn,
     ArrowLeft,
     ArrowRight,
-    Sunglasses
+    Sunglasses,
+    Info
 }  
