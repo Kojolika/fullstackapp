@@ -1,16 +1,16 @@
 const PartialSunnyThunderStorms = (props) => {
-    const height = props.height;
-    const width = props.width;
+	const height = props.height;
+	const width = props.width;
 
-    return (
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px" 
-        width={width === undefined ? "96px" : width}
-        height={height === undefined ? "96px" : height}
-            viewBox="0 0 96 96" enable-background="new 0 0 96 96" >
-            <g id="Base" display="none">
-            </g>
-            <g id="Dibujo">
-                <path d="M59.999,18c1.104,0,2-0.896,2-2v-4c0-1.104-0.896-2-2-2c-1.105,0-2,0.896-2,2v4C57.999,17.104,58.894,18,59.999,18z
+	return (
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+			width={width === undefined ? "96px" : width}
+			height={height === undefined ? "96px" : height}
+			viewBox="0 0 96 96" enable-background="new 0 0 96 96" >
+			<g id="Base" display="none">
+			</g>
+			<g id="Dibujo">
+				<path d="M59.999,18c1.104,0,2-0.896,2-2v-4c0-1.104-0.896-2-2-2c-1.105,0-2,0.896-2,2v4C57.999,17.104,58.894,18,59.999,18z
 		 M72.555,42.188c0.945-1.915,1.444-4.021,1.444-6.188c0-7.72-6.28-14-14-14c-4.601,0-8.895,2.281-11.496,6.021
 		C48.335,28.016,48.169,28,48,28c-7.664,0-14.219,5.012-16.312,12.184C31.112,40.079,30.507,40,30,40c-6.065,0-11,4.935-11,11
 		s4.935,11,11,11h11.263l-3.927,5.891c-0.409,0.613-0.447,1.402-0.1,2.053C37.585,70.594,38.263,71,39,71h2.263l-3.927,5.891
@@ -28,9 +28,9 @@ const PartialSunnyThunderStorms = (props) => {
 		 M44.443,23.271c0.391,0.391,0.902,0.586,1.414,0.586s1.023-0.195,1.414-0.586c0.781-0.781,0.781-2.047,0-2.828l-2.828-2.828
 		c-0.781-0.781-2.047-0.781-2.828,0c-0.781,0.781-0.781,2.047,0,2.828L44.443,23.271z M83.999,34h-4c-1.105,0-2,0.896-2,2
 		s0.895,2,2,2h4c1.104,0,2-0.896,2-2S85.103,34,83.999,34z"/>
-            </g>
-        </svg>
-    )
+			</g>
+		</svg>
+	)
 }
 
 export default PartialSunnyThunderStorms

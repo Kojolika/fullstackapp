@@ -9,13 +9,13 @@ import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGet
 import '../../Styles/location.css';
 import '../../Styles/app.css';
 
-import { StarBorder, StarFilled, ArrowLeft, ArrowRight } from "../../Icons/svgImages/index.js";
+import { StarBorder, StarFilled, ArrowLeft, ArrowRight, Sunglasses } from "../../Icons/svgImages/index.js";
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice";
 
 import Temperature from "../Atoms/Temperature";
 import WeatherIcon from "../Atoms/WeatherIcon";
-import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
+import { Flurries, MostlyCloudyFlurriesNight, PartialCloudyShowersNight, PartialSunnyFlurries, PartialSunnyShowers, Showers, Snow, WaterDrop } from "../../Icons/svgImages/Weather Icons";
 import Month from "../Atoms/Month";
 import Time from "../Atoms/Time";
 
@@ -250,11 +250,14 @@ const LocationData = () => {
 
     const fiveDayForecastArray = isSuccess5DayForecast ? currentDataDailyForecast5Days.DailyForecasts : fiveDayForecastMock;
     const accuWeatherTodaysWeatherData = fiveDayForecastArray[0];
-    const fiveDayForecastsDisplay = fiveDayForecastArray.map(forecast =>
+    const fiveDayForecastsDisplay = fiveDayForecastArray.map((forecast, index) =>
         <div key={forecast?.Date} id="individual-forecast-day" className="weather-panel border">
             <div className="flex-column flex-center-align" id="forecast-container">
                 <div id='weather-date' className="flex-center-align">
-                    <Month number={forecast?.Date.slice(6, 7)} abr={true} /> {forecast?.Date.slice(8, 10)}
+                    {index === 0 ? <div>Today</div> //todays date is when the index is 0
+                        : <div>
+                            <Month number={forecast?.Date.slice(6, 7)} abr={true} /> {forecast?.Date.slice(8, 10)}
+                        </div>}
                 </div>
                 <div className="flex-row" >
                     <div className="weather-icon">
@@ -287,13 +290,17 @@ const LocationData = () => {
     const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours.slice(3) //remove first 3 elements, accu weather returns hours before current time
         : twelveHourForecastMock;
     const twelveHourForecastDisplay = twelveHourForecastArray.map((forecast, index) =>
-        <div key={forecast?.DateTime} id={twelveHourForecastState === "firstHalf" ? "individual-forecast-hour-first-half" : "individual-forecast-hour-last-half"}>
-            <div>
+        <div key={forecast?.DateTime} className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} id="individual-forecast-hour">
+            <div id="hourly-time">
                 <Time offset={currentDataCityData?.TimeZone?.GmtOffset} number={forecast?.DateTime.slice(11, 16)} />
+            </div>
+            <div id="hourly-phrase">
+                {forecast?.IconPhrase}
             </div>
             <div className="weather-icon flex-center-align" >
                 <WeatherIcon id={forecast?.WeatherIcon} />
             </div>
+
             <div>
                 <Temperature options={{ temperature: forecast?.Temperature?.Value, unit: "Fahrenheit" }} />°
             </div>
@@ -302,6 +309,10 @@ const LocationData = () => {
             </div>
         </div>
     )
+    twelveHourForecastDisplay.push(<div className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} style={{justifyContent: "center"}} id="individual-forecast-hour">
+        <div className="flex-center-align">Updates every hour!</div>
+        <div className="flex-center-align"><Sunglasses /></div>
+    </div>)
 
     const currentTemperature = isSuccess12HourForecast ?
         <span><Temperature options={{ temperature: twelveHourForecastArray[0]?.Temperature?.Value, unit: "Fahrenheit" }} />°{tempDegreeLetter} </span>

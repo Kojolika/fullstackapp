@@ -18,7 +18,15 @@ import { Sunny,
     Cold,
     Hot,
     Windy,
-    Clear} from "../../Icons/svgImages/Weather Icons/index";
+    Clear,
+    MostlyCloudyNight,
+    HazyMoonlight,
+    PartialCloudyShowersNight,
+    PartialCloudyThunderStormsNight,
+    MostlyCloudyFlurriesNight,
+    MostlyCloudySnowNight,
+    Fog,
+    HazySunshine} from "../../Icons/svgImages/Weather Icons/index";
 
 
 const WeatherIcon = (props) => {
@@ -30,11 +38,11 @@ const WeatherIcon = (props) => {
         2: <Sunny height={props.height} width={props.width}/>,
         3: <Sunny height={props.height} width={props.width}/>,
         4: <Sunny height={props.height} width={props.width}/>,
-        5: <MostlyCloudy height={props.height} width={props.width}/>,
+        5: <HazySunshine height={props.height} width={props.width}/>,
         6: <MostlyCloudy height={props.height} width={props.width}/>,
         7: <Cloudy height={props.height} width={props.width}/>,
         8: <Cloudy height={props.height} width={props.width}/>,
-        11:<Cloudy height={props.height} width={props.width}/>,
+        11: <Fog height={props.height} width={props.width}/>,
         12: <Showers height={props.height} width={props.width}/>,
         13: <PartialSunnyShowers height={props.height} width={props.width}/>,
         14: <PartialSunnyShowers height={props.height} width={props.width}/>,
@@ -56,7 +64,16 @@ const WeatherIcon = (props) => {
         32: <Windy height={props.height} width={props.width}/>,
         33: <Clear height={props.height} width={props.width}/>,
         34: <Clear height={props.height} width={props.width}/>,
-        
+        35: <MostlyCloudyNight height={props.height} width={props.width}/>,
+        36: <MostlyCloudyNight height={props.height} width={props.width}/>,
+        37: <HazyMoonlight height={props.height} width={props.width}/>,
+        38: <MostlyCloudyNight height={props.height} width={props.width}/>,
+        39: <PartialCloudyShowersNight height={props.height} width={props.width}/>,
+        40: <PartialCloudyShowersNight height={props.height} width={props.width}/>,
+        41: <PartialCloudyThunderStormsNight height={props.height} width={props.width}/>,
+        42: <PartialCloudyThunderStormsNight height={props.height} width={props.width}/>,
+        43: <MostlyCloudyFlurriesNight height={props.height} width={props.width}/>,
+        44: <MostlyCloudySnowNight height={props.height} width={props.width}/>     
     }
 
     const icon = iconReference[id] === undefined || id === undefined? <BrokenImg height={props.height} width={props.width} />: iconReference[id];
