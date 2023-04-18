@@ -19,13 +19,16 @@ const Time = (props) => {
             if(militaryHour === 0 ) return 12
             else return militaryHour
         };
-
+        const regularHourUTC = regularHour();
         //props.offset is the offset number (+ or -) that converts this time from the UTC timezone to the local time
-        const afterOffset = regularHour + props.offset;
+        const offset = props.offset;
+        const afterOffset = offset > 12 ? 'placeholder'
+        : offset === 12 ? 'placeholder'
+        : 'placeholder' //offset < 12
 
         
 
-        setTime(regularHour);
+        setTime(regularHourUTC);
 
     }, [])
 

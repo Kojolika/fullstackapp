@@ -261,7 +261,7 @@ const LocationData = () => {
     const fiveDayForecastsDisplay = fiveDayForecastArray.map((forecast, index) =>
         <div key={forecast?.Date} id="individual-forecast-day" className="weather-panel border">
             <div className="flex-column flex-center-align" id="forecast-container">
-                <div id='weather-date' className="flex-center-align">
+                <div id='individual-forecast-weather-date' className="flex-center-align">
                     {index === 0 ? <div>Today</div> //todays date is when the index is 0
                         : <div>
                             <Month number={forecast?.Date.slice(6, 7)} abr={true} /> {forecast?.Date.slice(8, 10)}

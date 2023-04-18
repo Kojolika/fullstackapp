@@ -304,11 +304,12 @@
     margin-bottom: 1%;
 }
 
-#weather-date {
+#individual-forecast-weather-date{
     text-align: center;
     border-bottom: solid 2px lightgray;
     height: 100%;
     width: 100%;
+    margin-bottom: 10px;
 }
 
 #forecast-container {
