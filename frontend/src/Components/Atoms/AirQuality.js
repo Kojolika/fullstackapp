@@ -38,7 +38,6 @@ const AirQuality = (props) => {
 
     useEffect(() => {
         const number = props.number;
-        console.log(number);
         switch (true) {
             case (number >= 0 && number <= 50):
                 setLevelOfConcern(LevelsOfConcern.GOOD);

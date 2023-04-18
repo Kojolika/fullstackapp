@@ -48,9 +48,14 @@ const LocationData = () => {
         isError: isErrorAirVisual,
         isFetching: isFetchingAirVisual } = useGetCityWeatherDataQuery(locationBeingDisplayAirVisualCall, { skip })
 
+
     const lastUpdatedhour = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 13) : null;
 
-    const { currentData: currentDataCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
+    const { currentData: currentDataCityData,
+        isSuccess: isSuccessCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
+
+    const timezone = isSuccessCityData ? currentDataCityData?.TimeZone?.Code : 'UTC' // UTC time if no timezone is fetched
+    const gmtOffset = isSuccessCityData ? currentDataCityData?.TimeZone?.GmtOffset : 0 // UTC time if no offset is fetched
 
     const locationKey = currentDataCityData?.Key;
 
@@ -73,7 +78,7 @@ const LocationData = () => {
     //Last updated time from Air Visual
     const timeFormatted = isSuccessAirVisual ?
         <div>
-            <Time offset={currentDataCityData?.TimeZone?.GmtOffset} number={currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 16)} /> {currentDataCityData?.TimeZone?.Code}
+            <Time offset={gmtOffset} number={currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 16)} /> {timezone}
         </div>
         : <></>
 
@@ -162,7 +167,7 @@ const LocationData = () => {
             Temperature: {
                 Value: 82
             },
-            PrecipitationProbability: 24
+            PrecipitationProbability: 24,
         },
         {
             DateTime: '2023-04-14T17:00:00',
@@ -321,7 +326,7 @@ const LocationData = () => {
     const twelveHourForecastDisplay = twelveHourForecastArray.map((forecast, index) =>
         <div key={forecast?.DateTime} className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} id="individual-forecast-hour">
             <div id="hourly-time">
-                <Time offset={currentDataCityData?.TimeZone?.GmtOffset} number={forecast?.DateTime.slice(11, 16)} />
+                <Time offset={gmtOffset} number={forecast?.DateTime.slice(11, 16)} />
             </div>
             <div id="hourly-phrase">
                 {forecast?.IconPhrase}
@@ -391,9 +396,9 @@ const LocationData = () => {
                             <Wind windDirection={windDirection} speed={currentDataAirVisual?.data?.current?.weather?.ws} />
                         </div>
                         <div className="other-weather-data-entry weather-panel border" id='atmospheric-pressure'>
-                            <div className="flex-row" style={{gap: '3px'}}>
+                            <div className="flex-row" style={{ gap: '3px' }}>
                                 <label htmlFor="atmospheric-pressure">Pressure</label>
-                                <ToolTip item={<Info height={16} width={16}/>} label={'Atmospheric Pressure'} text={'Pressure caused by the weight of the atmosphere. At sea level it has a mean value of 1,013.25 hPa but reduces with increasing altitude.'}/>
+                                <ToolTip item={<Info height={16} width={16} />} label={'Atmospheric Pressure'} text={'Pressure caused by the weight of the atmosphere. At sea level it has a mean value of 1,013.25 hPa but reduces with increasing altitude.'} />
                             </div>
                             {currentDataAirVisual?.data?.current?.weather?.pr} hPa
                         </div>
@@ -406,9 +411,9 @@ const LocationData = () => {
                     </div>
 
                     <div className="weather-panel border flex-column flex-center-align" id="humidity">
-                        <div className="flex-row" style={{gap: '3px'}}>
+                        <div className="flex-row" style={{ gap: '3px' }}>
                             <label htmlFor="humidity">Humidity</label>
-                            <ToolTip  item={<Info height={16} width={16}/>} text={'Humidity is the amount of water vapor in the atmosphere. High humidity often feels moist or muggy, while low humidity can feel dry and create static electricity. Consider 40% to 50% humidity as normal or comfortable for indoors.'} />
+                            <ToolTip item={<Info height={16} width={16} />} text={'Humidity is the amount of water vapor in the atmosphere. High humidity often feels moist or muggy, while low humidity can feel dry and create static electricity. Consider 40% to 50% humidity as normal or comfortable for indoors.'} />
                         </div>
                         <span>{currentDataAirVisual?.data?.current?.weather?.hu}% </span>
                     </div>
