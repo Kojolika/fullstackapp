@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
-import { setCurrentLocation } from "../../Features/locations/locationsSlice";
+import { selectAllLocations, setCurrentLocation } from "../../Features/locations/locationsSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
 
@@ -27,8 +27,8 @@ const Locations = () => {
 
     const user = useSelector(selectCurrentUser);
     const skipUserLocations = user ? false : true;
-    const { data, isLoading, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': user }, { skip: skipUserLocations });
-    const locations = isSuccess ? data.locations : [];
+    const userLocations = useSelector(selectAllLocations);
+    const locations = userLocations ? userLocations : [];
     console.log(locations);
 
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
@@ -77,25 +77,23 @@ const Locations = () => {
     //if locations is being loaded still, just displaying loading text
     //otherwise if locations is empty, display text to tell the user to add a location
     //otherwise display all locations that the user has
-    const renderedLocations = isLoading ?
-        <div>loading...</div>
-        : locations.length === 0 ?
+    const renderedLocations = locations.length === 0 ?
             <div>Add a location to get started</div>
             : locations.map(location =>
                 <LocationWidget
                     className="location"
-                    key={location.id}
-                    location={{ //need to add iso2 and state_code to database
+                    key={'' + location.city.name + location.province.state_code + location.country.iso2} //ensures uniqueness
+                    location={{ 
                         "city": {
-                            "name": location?.city
+                            "name": location?.city.name
                         },
                         "province": {
-                            "name": location?.province,
-                            "state_code": location?.state_code
+                            "name": location?.province.name,
+                            "state_code": location?.province.state_code
                         },
                         "country": {
-                            "name": location?.country,
-                            "iso2": location?.iso2
+                            "name": location?.country.name,
+                            "iso2": location?.country.iso2
                         },
                         "location_id": location.id,
                         "latitude": location?.latitude,

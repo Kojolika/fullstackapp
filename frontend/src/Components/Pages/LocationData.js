@@ -28,7 +28,7 @@ const LocationData = () => {
 
     const user = useSelector(selectCurrentUser);
     const locationBeingDisplayed = useSelector(selectCurrentLocation);
-    
+    console.log(locationBeingDisplayed);    
 
     //this is for Air Visual API, you need to query it as 'USA' not 'United States'
     const locationBeingDisplayAirVisualCall = locationBeingDisplayed?.country?.name === 'United States' ?

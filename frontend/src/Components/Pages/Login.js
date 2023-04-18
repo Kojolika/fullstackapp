@@ -1,12 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
-import { Link } from 'react-router-dom';
-
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../../Features/auth/authSlice';
-import { useLoginMutation } from '../../Features/auth/authApiSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser, setCredentials } from '../../Features/auth/authSlice';
+import { useLoginMutation, useGetUserLocationsQuery } from '../../Features/auth/authApiSlice';
 import { setTheme, setTempUnit } from '../../Features/user_preferences/preferenceSlice';
+import { setUserLocations } from '../../Features/locations/locationsSlice';
 
 import '../../Styles/login.css';
 import '../../Styles/app.css';
@@ -27,6 +26,35 @@ const Login = () => {
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useDispatch();
 
+    const loggedInUser = useSelector(selectCurrentUser);
+    const skipUserLocations = loggedInUser ? false : true;
+    const { data, isLoading: isLoadingUserLocations, isSuccess } = useGetUserLocationsQuery({ 'username': loggedInUser }, { skip: skipUserLocations });
+
+    useEffect(() => {
+        if (isSuccess) {
+            const locationsFormattedCorrectly = [];
+            data?.locations.forEach(location => {
+                locationsFormattedCorrectly.push({
+                    "city":{
+                        "name": location.city
+                    },
+                    "province":{
+                        "name": location.province,
+                        "state_code": location.state_code
+                    },
+                    "country":{
+                        "name": location.country,
+                        "iso2": location.iso2
+                    }
+                })
+            });
+            dispatch(setUserLocations({"locations": locationsFormattedCorrectly}));
+            
+            //once locations are set, navigate to new page
+            navigate('/locations')
+        }
+    }, [isSuccess])
+
     useEffect(() => {
         userRef.current.focus();
     }, [])
@@ -43,9 +71,6 @@ const Login = () => {
             const accessToken = userData.access_token;
             //set application logic
             dispatch(setCredentials({ user, accessToken }));
-            //reset page logic (not sure if neccesary?)
-            setUser('');
-            setPwd('');
 
             //fetch user prefs if they exist
             const tempUnit = localStorage.getItem("temperatureUnit");
@@ -56,10 +81,10 @@ const Login = () => {
             if (theme === "Light" || theme === "Dark") {
                 dispatch(setTheme({ "theme": theme }));
             }
-            //update to retrieve locations on login
-            
-            //and set website state locations to user locations from database
-            navigate('/locations')
+
+            //reset page logic (not sure if neccesary?)
+            setUser('');
+            setPwd('');
 
         }
         catch (err) {
