@@ -8,7 +8,7 @@
     background-color: green;
 }
 #yellow{
-    background-color: yellow;
+    background-color: rgb(210, 181, 33);
 }
 #red{
     background-color: red;
@@ -24,7 +24,10 @@
 }
 #AQI-label{
     text-align: center;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 .smaller-font{
     font-size: 12px;

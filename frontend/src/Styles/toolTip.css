@@ -1,18 +1,25 @@
 /* Tooltip container */
 .tooltip {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 /* Tooltip text */
 .tooltip-text {
   position: absolute;
-  top: 30px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  top: 20px;
 
   z-index: 51;
 
-  
-  width: 200px;
+  width: fit-content;
+  min-width: 200px;
   height: fit-content;
+
+  white-space:normal;
 
   padding: 15px;
 
@@ -27,14 +34,9 @@
 .visible{
   visibility: visible;
 }
-.arrow{
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  transform: rotateZ(45deg);
-}
 .tooltip-color{
   background-color: rgb(192, 204, 213);
+}
+.tooltip-label{
+  border-bottom: 2px solid darkgray;
 }

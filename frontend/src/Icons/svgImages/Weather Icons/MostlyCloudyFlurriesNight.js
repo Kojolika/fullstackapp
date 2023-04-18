@@ -6,7 +6,7 @@ const MostlyCloudyFlurriesNight = (props) => {
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
             width={width === undefined ? "96px" : width}
             height={height === undefined ? "96px" : height}
-            viewBox="0 0 96 96" enable-background="new 0 0 96 96">
+            viewBox="0 0 96 96" enableBackground="new 0 0 96 96">
             <g id="Base" display="none">
             </g>
             <g id="Dibujo">

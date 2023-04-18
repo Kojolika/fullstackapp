@@ -10,7 +10,7 @@ const Cloudy = (props) => {
             width={width === undefined ? "96px" : width}
             height={height === undefined ? "96px" : height}
             viewBox="0 0 96 96"
-            enable-background="new 0 0 96 96">
+            enableBackground="new 0 0 96 96">
             <g id="Base" display="none">
             </g>
             <g id="Dibujo">

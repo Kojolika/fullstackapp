@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 import { selectCurrentLocation } from "../../Features/locations/locationsSlice"
@@ -9,7 +9,7 @@ import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGet
 import '../../Styles/location.css';
 import '../../Styles/app.css';
 
-import { StarBorder, StarFilled, ArrowLeft, ArrowRight, Sunglasses } from "../../Icons/svgImages/index.js";
+import { StarBorder, StarFilled, ArrowLeft, ArrowRight, Sunglasses, North, Info } from "../../Icons/svgImages/index.js";
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice";
 
@@ -19,6 +19,8 @@ import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
 import Month from "../Atoms/Month";
 import Time from "../Atoms/Time";
 import AirQuality from "../Atoms/AirQuality";
+import Wind from "../Atoms/Wind";
+import ToolTip from "../Atoms/ToolTip";
 
 const LocationData = () => {
     const [isFavorited, setIsFavorited] = useState(false);
@@ -46,7 +48,10 @@ const LocationData = () => {
         isError: isErrorAirVisual,
         isFetching: isFetchingAirVisual } = useGetCityWeatherDataQuery(locationBeingDisplayAirVisualCall, { skip })
 
+    const lastUpdatedhour = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 13) : null;
+
     const { currentData: currentDataCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
+
     const locationKey = currentDataCityData?.Key;
 
     const skipForecasts = locationKey === undefined ? true : false;
@@ -59,20 +64,24 @@ const LocationData = () => {
         isFetching: isFetching12HourForecast
     } = useGetHourlyForecast12HoursQuery(locationKey, { skip: skipForecasts });
 
+
+    //Display of location name at the top of the page
     const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
         {locationBeingDisplayed.city.name}, {locationBeingDisplayed.province.name}, {locationBeingDisplayed.country.name}
     </div>
 
+    //Last updated time from Air Visual
     const timeFormatted = isSuccessAirVisual ?
         <div>
             <Time offset={currentDataCityData?.TimeZone?.GmtOffset} number={currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 16)} /> {currentDataCityData?.TimeZone?.Code}
         </div>
         : <></>
 
+    //Gets the users preferenced temperature unit
     const temperatureUnit = useSelector(selectTempUnit);
     const tempDegreeLetter = temperatureUnit === "Celcius" ? 'C' : 'F';
 
-
+    //Mock data for when the data cannot be retrieved
     const fiveDayForecastMock = [
         {
             Date: '2023-04-14T16:00:00',
@@ -245,8 +254,10 @@ const LocationData = () => {
         }
     ]
 
+    //Five days forecast data from AccuWeather
     const fiveDayForecastArray = isSuccess5DayForecast ? currentDataDailyForecast5Days.DailyForecasts : fiveDayForecastMock;
-    const accuWeatherTodaysWeatherData = fiveDayForecastArray[0];
+
+    //Five days forecast data displayed as React Components
     const fiveDayForecastsDisplay = fiveDayForecastArray.map((forecast, index) =>
         <div key={forecast?.Date} id="individual-forecast-day" className="weather-panel border">
             <div className="flex-column flex-center-align" id="forecast-container">
@@ -269,6 +280,7 @@ const LocationData = () => {
         </div>
     )
 
+    //the state of the hourly forecast button
     const [twelveHourForecastState, setTwelveHourForecastState] = useState("firstHalf"); //two states, "firstHalf", "lastHalf"
     const handleTwelveHourButtonClick = () => {
         if (twelveHourForecastState === "firstHalf") {
@@ -278,14 +290,34 @@ const LocationData = () => {
             setTwelveHourForecastState("firstHalf");
         }
     }
+
+    //Button that manages the hourly forecast menu, showing the first half of the forecasts or the last half
+    //Showing hours of forecasts is a lot so I split it on two pages
     const hourlyForecastButton = <div id={twelveHourForecastState === "firstHalf" ? "hourly-arrow-right" : "hourly-arrow-left"}
         className="weather-panel border"
         onClick={() => handleTwelveHourButtonClick()}>
         {twelveHourForecastState === "firstHalf" ? <ArrowRight /> : <ArrowLeft />}
     </div>
 
-    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours.slice(3) //remove first 3 elements, accu weather returns hours before current time
+    //Checks which hour of the hourly forcast from AccuWeather corresponds to the current last updated hour from Air Visual data
+    const [hourlyIndex, setHourlyIndex] = useState(0);
+    useEffect(() => {
+        if (isSuccess12HourForecast) {
+            currentDataHourlyForecast12Hours.forEach((entry, index) => {
+                if (entry.DateTime.slice(11, 13) === lastUpdatedhour) {
+                    setHourlyIndex(index);
+                    return;
+                }
+            })
+        }
+        console.log(hourlyIndex)
+    }, [isSuccess12HourForecast])
+
+    //hourly array of forecasts data
+    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours.slice(0, hourlyIndex) //remove hours before current data (who wants to see weather history?)
         : twelveHourForecastMock;
+
+    //hourly forecast React element
     const twelveHourForecastDisplay = twelveHourForecastArray.map((forecast, index) =>
         <div key={forecast?.DateTime} className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} id="individual-forecast-hour">
             <div id="hourly-time">
@@ -306,23 +338,35 @@ const LocationData = () => {
             </div>
         </div>
     )
-    twelveHourForecastDisplay.push(<div key={"no-way-date-is-this"} className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} style={{justifyContent: "center"}} id="individual-forecast-hour">
+
+    //Added the a last entry to the hourly forecast if theres any gaps
+    //ie this will display if previous hours of forecast were removed
+    //The hourly forecast display is meant for 12 but sometimes will display less (AccuWeather returns previous hours of data)
+    twelveHourForecastDisplay.push(<div key={"no-way-date-is-this"} className={twelveHourForecastState === "firstHalf" ? "first-half" : "last-half"} style={{ justifyContent: "center" }} id="individual-forecast-hour">
         <div className="flex-center-align">Updates every hour!</div>
         <div className="flex-center-align"><Sunglasses /></div>
     </div>)
 
+    //Current temperature number from Air Visual API
     const currentTemperature = isSuccessAirVisual ?
         <span><Temperature options={{ temperature: currentDataAirVisual?.data?.current?.weather?.tp, unit: "Celcius" }} />°{tempDegreeLetter} </span>
         : <></>
 
+    //wind direction from Air Visual API, as an angle of 360° (N=0, E=90, S=180, W=270)
+    const windDirection = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.wd : 0;
+
+    //Function that toggles weather or not the location is favorited
     const toggleFavorite = () => {
         if (isFavorited) setIsFavorited(false);
         else setIsFavorited(true);
     }
+
+    //Adds the location to the user database
     const addLocationToUserDatabase = () => {
 
     }
 
+    //Final location data display container
     const locationData = <article id="location-data-display" className="border" >
         <div id="data-formatting-container" className="flex-center-align flex-column">
             <div id={user ? 'favorites-button' : 'favorites-button-disabled'} className="flex-center-align" onClick={user ? () => toggleFavorite() : null}>
@@ -338,17 +382,19 @@ const LocationData = () => {
                             <div id='temperature'>{currentTemperature}</div>
                         </div>
                         <div id="today-phrase-and-precip">
-                            <div>{accuWeatherTodaysWeatherData?.Day?.IconPhrase}</div>
+                            <div>{twelveHourForecastArray[0]?.IconPhrase}</div>
                             {<div id='precip'><WaterDrop />{twelveHourForecastArray[0]?.PrecipitationProbability}%</div>}
                         </div>
                     </div>
                     <div className="flex-row" id="other-weather-data">
-                        <div className="other-weather-data-entry weather-panel border" id="wind-speed">
-                            <label htmlFor="wind-speed">Wind Speed</label>
-                            {currentDataAirVisual?.data?.current?.weather?.ws} m/s {currentDataAirVisual?.data?.current?.weather?.wd}° {/* wind direction, as an angle of 360° (N=0, E=90, S=180, W=270) */}
+                        <div className="other-weather-data-entry weather-panel border">
+                            <Wind windDirection={windDirection} speed={currentDataAirVisual?.data?.current?.weather?.ws} />
                         </div>
                         <div className="other-weather-data-entry weather-panel border" id='atmospheric-pressure'>
-                            <label htmlFor="atmospheric-pressure">Atmospheric Pressure</label>
+                            <div className="flex-row" style={{gap: '3px'}}>
+                                <label htmlFor="atmospheric-pressure">Pressure</label>
+                                <ToolTip item={<Info height={16} width={16}/>} label={'Atmospheric Pressure'} text={'Pressure caused by the weight of the atmosphere. At sea level it has a mean value of 1,013.25 hPa but reduces with increasing altitude.'}/>
+                            </div>
                             {currentDataAirVisual?.data?.current?.weather?.pr} hPa
                         </div>
                     </div>
@@ -356,12 +402,14 @@ const LocationData = () => {
 
                 <div className="flex-column flex-center-align" id="top-row-right-data">
                     <div className="weather-panel border flex-column flex-center-align" id='AQI'>
-                        <label htmlFor="AQI">Air Quality</label>
-                        <AirQuality number={currentDataAirVisual?.data?.current?.pollution?.aqius}/>
+                        <AirQuality number={currentDataAirVisual?.data?.current?.pollution?.aqius} />
                     </div>
 
                     <div className="weather-panel border flex-column flex-center-align" id="humidity">
-                        <label htmlFor="humidity">Humidity</label>
+                        <div className="flex-row" style={{gap: '3px'}}>
+                            <label htmlFor="humidity">Humidity</label>
+                            <ToolTip  item={<Info height={16} width={16}/>} text={'Humidity is the amount of water vapor in the atmosphere. High humidity often feels moist or muggy, while low humidity can feel dry and create static electricity. Consider 40% to 50% humidity as normal or comfortable for indoors.'} />
+                        </div>
                         <span>{currentDataAirVisual?.data?.current?.weather?.hu}% </span>
                     </div>
 

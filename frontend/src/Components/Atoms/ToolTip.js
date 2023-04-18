@@ -17,7 +17,7 @@ const ToolTip = (props) => {
     return <div className="tooltip" onMouseOver={() => handleMouseOver()} onMouseLeave={() => handleMouseLeave()}>
         {itemToHoverOver}
         <div className={isOpen ? "tooltip-text border tooltip-color visible " : "tooltip-text border tooltip-color hidden "}>
-            <div className='arrow tooltip-color '></div>
+            {props.label === undefined ? <></> : <div className='tooltip-label'>{props.label}</div>}
             {text}
         </div>
     </div>

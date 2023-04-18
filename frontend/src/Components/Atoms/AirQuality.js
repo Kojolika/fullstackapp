@@ -3,6 +3,7 @@ import '../../Styles/app.css';
 import '../../Styles/airQuality.css';
 
 import ToolTip from "./ToolTip";
+import { Info } from "../../Icons/svgImages/index";
 
 const LevelsOfConcern = {
     GOOD: {
@@ -74,10 +75,13 @@ const AirQuality = (props) => {
 
     const text = levelOfConcern.text;
 
+
     return (
         <div className="flex-column flex-center-align">
-            <div className="flex-row flex-center-align">{props.number}<ToolTip text={text} item={colorDisplay} /></div>
-            <div id="AQI-label" className={levelOfConcern === LevelsOfConcern.UNHEALTHY_FOR_SENSITIVE_GROUPS ? "smaller-font" : ""}>{levelOfConcern.name} </div>
+            <div className="flex-center-align flex-row" style={{gap: '3px'}}>
+                <label htmlFor="AQI">Air Quality</label><ToolTip label={levelOfConcern.name} text={text} item={<Info height={16} width={16} />} />
+            </div>
+            <div className="flex-row flex-center-align">{props.number}{colorDisplay}</div>
         </div>
     )
 }

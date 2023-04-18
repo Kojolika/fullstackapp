@@ -20,6 +20,7 @@ import ArrowRight from "./ArrowRight";
 import ArrowLeft from "./ArrowLeft";
 import Sunglasses from "./Sunglasses";
 import Info from "./Info";
+import North from "./North";
 
 
 export {
@@ -44,5 +45,6 @@ export {
     ArrowLeft,
     ArrowRight,
     Sunglasses,
-    Info
+    Info,
+    North
 }  
