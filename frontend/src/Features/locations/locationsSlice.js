@@ -27,11 +27,14 @@ const locationsSlice = createSlice({
             }]
         },
         setCurrentLocation: (state, action) => {
-            const { city, province, country } = action.payload;
+            const { city, province, country, latitude, longitude, id } = action.payload;
             state.currentLocation = {
                 "city": city,
                 "province": province,
-                "country": country
+                "country": country,
+                "latitude": latitude,
+                "longitude": longitude,
+                "id" : id //unique database id
             }
         }
     }

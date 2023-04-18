@@ -38,7 +38,7 @@ const LocationWidget = (props) => {
             handleCheckBoxClick();
         }
         else {
-            props.onClick(props.location.city, props.location.province, props.location.country);
+            props.onClick(props.location);
         }
     }
 

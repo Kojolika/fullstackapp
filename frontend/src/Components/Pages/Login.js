@@ -45,7 +45,10 @@ const Login = () => {
                     "country":{
                         "name": location.country,
                         "iso2": location.iso2
-                    }
+                    },
+                    "id": location?.id,
+                    "latitude": location?.latitude,
+                    "longitude": location?.longitude
                 })
             });
             dispatch(setUserLocations({"locations": locationsFormattedCorrectly}));

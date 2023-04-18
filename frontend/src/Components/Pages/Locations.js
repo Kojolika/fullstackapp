@@ -55,6 +55,7 @@ const Locations = () => {
     const handleLocationDeletion = () => {
 
     }
+    
     const confirmDeletionButton = markedForDeletionList.length !== 0 ?
         <div className="confirm-location-delete alert-message" onClick={() => handleLocationDeletion()}>
             {markedForDeletionList.length === 1 ? <span>Remove Location</span> : <span>Remove {markedForDeletionList.length} locations</span>}
@@ -65,12 +66,8 @@ const Locations = () => {
         setMarkedForDeletionList([]);
     }, [toolbarState])
 
-    const handleLocatonClick = (city, province, country) => {
-        dispatch(setCurrentLocation({
-            "city": city,
-            "province": province,
-            "country": country
-        }));
+    const handleLocatonClick = (location) => {
+        dispatch(setCurrentLocation({...location}));
         navigate('/location');
     }
 
@@ -83,22 +80,7 @@ const Locations = () => {
                 <LocationWidget
                     className="location"
                     key={'' + location.city.name + location.province.state_code + location.country.iso2} //ensures uniqueness
-                    location={{ 
-                        "city": {
-                            "name": location?.city.name
-                        },
-                        "province": {
-                            "name": location?.province.name,
-                            "state_code": location?.province.state_code
-                        },
-                        "country": {
-                            "name": location?.country.name,
-                            "iso2": location?.country.iso2
-                        },
-                        "location_id": location.id,
-                        "latitude": location?.latitude,
-                        "longitude": location?.longitude
-                    }}
+                    location={location}
                     toolbarState={toolbarState}
                     addLocationToMarkedForDeletionList={addLocationToMarkedForDeletionList}
                     removeLocationFromMarkedForDeletionList={removeLocationFromMarkedForDeletionList}
