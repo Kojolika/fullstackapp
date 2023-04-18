@@ -29,6 +29,7 @@ const Locations = () => {
     const skipUserLocations = user ? false : true;
     const { data, isLoading, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': user }, { skip: skipUserLocations });
     const locations = isSuccess ? data.locations : [];
+    console.log(locations);
 
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
 
@@ -86,17 +87,19 @@ const Locations = () => {
                     key={location.id}
                     location={{ //need to add iso2 and state_code to database
                         "city": {
-                            "name": location.city ? location.city : null
+                            "name": location?.city
                         },
                         "province": {
-                            "name": location.province ? location.province : null
+                            "name": location?.province,
+                            "state_code": location?.state_code
                         },
                         "country": {
-                            "name": location.country ? location.country : null
+                            "name": location?.country,
+                            "iso2": location?.iso2
                         },
                         "location_id": location.id,
-                        "latitude": location.latitude ? location.latitude : null,
-                        "longitude": location.longitude ? location.longitude : null
+                        "latitude": location?.latitude,
+                        "longitude": location?.longitude
                     }}
                     toolbarState={toolbarState}
                     addLocationToMarkedForDeletionList={addLocationToMarkedForDeletionList}

@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 
 
-import { selectCurrentLocation } from "../../Features/locations/locationsSlice"
+import { addLocation, selectCurrentLocation } from "../../Features/locations/locationsSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGetLocationKeyQuery } from "../../Features/locations/accuWeatherApiSlice";
 
@@ -21,12 +21,14 @@ import Time from "../Atoms/Time";
 import AirQuality from "../Atoms/AirQuality";
 import Wind from "../Atoms/Wind";
 import ToolTip from "../Atoms/ToolTip";
+import { useAddUserLocationMutation } from "../../Features/auth/authApiSlice";
 
 const LocationData = () => {
     const [isFavorited, setIsFavorited] = useState(false);
 
     const user = useSelector(selectCurrentUser);
     const locationBeingDisplayed = useSelector(selectCurrentLocation);
+    
 
     //this is for Air Visual API, you need to query it as 'USA' not 'United States'
     const locationBeingDisplayAirVisualCall = locationBeingDisplayed?.country?.name === 'United States' ?
@@ -315,11 +317,10 @@ const LocationData = () => {
                 }
             })
         }
-        console.log(hourlyIndex)
     }, [isSuccess12HourForecast])
 
     //hourly array of forecasts data
-    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours.slice(0, hourlyIndex) //remove hours before current data (who wants to see weather history?)
+    const twelveHourForecastArray = isSuccess12HourForecast ? currentDataHourlyForecast12Hours.slice(hourlyIndex) //remove hours before current data (who wants to see weather history?)
         : twelveHourForecastMock;
 
     //hourly forecast React element
@@ -366,9 +367,26 @@ const LocationData = () => {
         else setIsFavorited(true);
     }
 
+    const dispatch = useDispatch();
+    const [addLocationToBackendDB] = useAddUserLocationMutation();
     //Adds the location to the user database
-    const addLocationToUserDatabase = () => {
+    const addLocationToUserDatabase = async () => {
+        console.log(locationBeingDisplayed);
+        try{
+            //send backend request
+            const response = await addLocationToBackendDB({username: user, ...locationBeingDisplayed}).unwrap();
+            console.log(response.message);
 
+            //set application logic
+            dispatch(addLocation({...locationBeingDisplayed}));
+
+            //backend request contains unique restraint so only 1 of each location can be added
+            //calling both in the same try block ensures the unique constraint holds for the application logic dispatch
+
+        }catch(error){
+            console.log(error);
+        }
+        
     }
 
     //Final location data display container

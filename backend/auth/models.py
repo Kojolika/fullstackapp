@@ -89,7 +89,9 @@ class LocationModel(db.Model):
             cls.longitude,
             cls.city,
             cls.province,
-            cls.country
+            cls.country,
+            cls.state_code,
+            cls.iso2
         ).where(cls.user_id == user_id)
         result = db.session.execute(query).all()
         locations = []
@@ -100,7 +102,9 @@ class LocationModel(db.Model):
                 'longitude': location.longitude,
                 'city': location.city,
                 'province': location.province,
-                'country': location.country
+                'state_code': location.state_code,
+                'country': location.country,
+                'iso2': location.iso2
             })
 
         return {'locations': locations}
