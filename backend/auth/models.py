@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from typing import List
 from typing import Optional
@@ -20,7 +20,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
-    locations: Mapped[List["LocationModel"]] = relationship(back_populates='user')
+    locations: Mapped[List["LocationModel"]] = relationship(back_populates='users')
 
     def save_to_db(self):
         db.session.add(self)
@@ -74,12 +74,44 @@ class LocationModel(db.Model):
     sa.UniqueConstraint(latitude, longitude)
     sa.UniqueConstraint(city, province, country)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey(UserModel.id))
-    user: Mapped["UserModel"] = relationship(back_populates="locations")
+    user_ids: Mapped[List[int]] = mapped_column(ForeignKey(UserModel.id))
+    users: Mapped[List["UserModel"]] = relationship(back_populates="locations")
 
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+
+    @classmethod
+    def subscribe_user_to_location(cls, location_id, user_id):
+        query = select(cls.user_ids).where(cls.id == location_id)
+        result = db.session.execute(query).first()
+        print(result)
+        print(type(result))
+
+        new_ids = []
+
+        for id in result:
+            if(id == user_id):
+                print('already user here')
+                return
+            new_ids.append(id)
+        
+        new_ids.append(user_id)
+        print('account id: ' + str(user_id))
+        print(new_ids)
+        update_stmt = update(cls).where(cls.id == location_id).values(user_ids = user_id)
+        print(update_stmt)
+        db.session.execute(update_stmt)
+
+    @classmethod
+    def does_location_already_exist(cls, city, province, country):
+        query = select(cls.id).where(cls.city == city, cls.province == province, cls.country == country)
+        result = db.session.execute(query).first()
+
+        if (result == None):
+            return False
+        
+        return result
 
     @classmethod
     def return_all_from_user(cls, user_id):
@@ -92,7 +124,7 @@ class LocationModel(db.Model):
             cls.country,
             cls.state_code,
             cls.iso2
-        ).where(cls.user_id == user_id)
+        ).where(cls.user_ids == user_id)
         result = db.session.execute(query).all()
         locations = []
         for location in result:
@@ -108,6 +140,9 @@ class LocationModel(db.Model):
             })
 
         return {'locations': locations}
+
+
+
 
 
 class RevokeTokenModel(db.Model):
