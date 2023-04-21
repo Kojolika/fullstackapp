@@ -26,10 +26,7 @@ const Login = () => {
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useDispatch();
 
-    //const loggedInUser = useSelector(selectCurrentUser);
-    //const skipUserLocations = loggedInUser ? false : true;
-    //const { data, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': loggedInUser }, { skip: skipUserLocations});
-
+    //useLazyQuery hook allows manual fetching
     const [triggerGetLocations] = useLazyGetUserLocationsQuery();
 
     useEffect(() => {
