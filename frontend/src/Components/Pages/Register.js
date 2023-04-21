@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../Features/auth/authSlice';
+import { setUserLocations } from '../../Features/locations/locationsSlice';
 
 import { useRegisterMutation } from '../../Features/auth/authApiSlice';
 
@@ -32,26 +33,29 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if(pwd !== confirmPwd) 
-            {   
+            if (pwd !== confirmPwd) {
                 const newError = "Password is not the same!";
                 setErrMsg(newError);
                 return;
             }
-            
+
             const userData = await register({ 'username': user, 'password': pwd }).unwrap();
             const accessToken = userData.access_token;
             dispatch(setCredentials({ user, accessToken }));
+
+            //set user locations as empty if new user
+            //if not done the application will retain the state from another user logged in on the same device
+            dispatch(setUserLocations({ "locations": [] }));
+
             setUser('');
             setPwd('');
             navigate('/locations')
-            
-            console.log("Success")
+
         }
         catch (err) {
             if (err?.data?.message) {
                 setErrMsg(err.data.message);
-            }else {
+            } else {
                 setErrMsg('No server response.');
             }
             errRef.current.focus();

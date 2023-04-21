@@ -9,6 +9,7 @@ import { setUserLocations } from '../../Features/locations/locationsSlice';
 
 import '../../Styles/login.css';
 import '../../Styles/app.css';
+import formatLocation from '../../data/utils/formatLocation';
 
 
 const Login = () => {
@@ -56,27 +57,12 @@ const Login = () => {
                 dispatch(setTheme({ "theme": theme }));
             }
 
+            //get user locations from backend
+            //and set user locations for application logic
             const payload = triggerGetLocations({ 'username': user }, false).unwrap();
             payload.then(data => {
                 const locationsFormattedCorrectly = [];
-                data?.locations.forEach(location => {
-                    locationsFormattedCorrectly.push({
-                        "city": {
-                            "name": location.city
-                        },
-                        "province": {
-                            "name": location.province,
-                            "state_code": location.state_code
-                        },
-                        "country": {
-                            "name": location.country,
-                            "iso2": location.iso2
-                        },
-                        "id": location?.id,
-                        "latitude": location?.latitude,
-                        "longitude": location?.longitude
-                    })
-                });
+                data?.locations.forEach(location => locationsFormattedCorrectly.push(formatLocation(location)));
                 dispatch(setUserLocations({ "locations": locationsFormattedCorrectly }));
             });
 
