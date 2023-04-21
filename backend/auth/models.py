@@ -15,9 +15,9 @@ association_table = Table(
     "association_table",
     db.Model.metadata,
     Column("location_id", ForeignKey("locations.id")),
-    Column("user_id", ForeignKey("users.id")),
+    Column("user_id",ForeignKey("users.id")),
+    sa.UniqueConstraint("location_id", "user_id")
 )
-
 
 class LocationModel(db.Model):
 
@@ -72,12 +72,9 @@ class UserModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    @classmethod
-    def return_all_user_locations(cls, user_id):
-        test='test'
-        """         query = select(cls.locations)
+    def return_all_user_locations(self):
+        query = select(LocationModel).join(association_table)
         result = db.session.execute(query).all()
-        print(result)
         locations = []
         for location in result:
             loc = location[0]
@@ -92,7 +89,7 @@ class UserModel(db.Model):
                 'iso2': loc.iso2
             })
 
-        return {'locations': locations} """
+        return {'locations': locations} 
 
     @classmethod
     def find_by_username(cls, username):

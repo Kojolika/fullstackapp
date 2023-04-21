@@ -101,6 +101,11 @@ class AddLocation(Resource):
             else:
                 location_if_exists.save_to_assoc_table(current_user)
 
+                return {
+                    'message': 'Added location',
+                    'id' : location_if_exists.id
+                }
+
         
         except Exception as e:
             print(e)
@@ -117,9 +122,10 @@ class GetAllLocations(Resource):
         data = get_all_location_parser.parse_args()
 
         try:
-            user_id = UserModel.find_by_username(data['username']).id
-            return UserModel.return_all_user_locations(user_id)
-        except:
+            user: UserModel = UserModel.find_by_username(data['username'])
+            return user.return_all_user_locations()
+        except Exception as e:
+            print(e)
             return {'message': 'Something went wrong'},500 
 
 class DeleteLocations(Resource):
