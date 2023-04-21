@@ -2,8 +2,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { selectCurrentUser } from "../../Features/auth/authSlice";
-import { useGetUserLocationsQuery } from "../../Features/auth/authApiSlice";
 import { selectAllLocations, setCurrentLocation } from "../../Features/locations/locationsSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
@@ -16,7 +14,7 @@ import { Delete } from "../../Icons/svgImages/index.js";
 
 const TOOLBAR_STATE = {
     NONE: 'NONE',
-    DELETING: 'DELETING',
+    DELETING: 'DELETING'
 }
 
 
@@ -25,8 +23,6 @@ const Locations = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const user = useSelector(selectCurrentUser);
-    const skipUserLocations = user ? false : true;
     const userLocations = useSelector(selectAllLocations);
     const locations = userLocations ? userLocations : [];
     console.log(locations);
@@ -55,7 +51,7 @@ const Locations = () => {
     const handleLocationDeletion = () => {
 
     }
-    
+
     const confirmDeletionButton = markedForDeletionList.length !== 0 ?
         <div className="confirm-location-delete alert-message" onClick={() => handleLocationDeletion()}>
             {markedForDeletionList.length === 1 ? <span>Remove Location</span> : <span>Remove {markedForDeletionList.length} locations</span>}
@@ -66,7 +62,7 @@ const Locations = () => {
         setMarkedForDeletionList([]);
     }, [toolbarState])
 
-    const handleLocatonClick = (location) => {
+    const handleLocationClick = (location) => {
         dispatch(setCurrentLocation({...location}));
         navigate('/location');
     }
@@ -79,12 +75,12 @@ const Locations = () => {
             : locations.map(location =>
                 <LocationWidget
                     className="location"
-                    key={'' + location.city.name + location.province.state_code + location.country.iso2} //ensures uniqueness
+                    key={location.id}
                     location={location}
                     toolbarState={toolbarState}
                     addLocationToMarkedForDeletionList={addLocationToMarkedForDeletionList}
                     removeLocationFromMarkedForDeletionList={removeLocationFromMarkedForDeletionList}
-                    onClick={handleLocatonClick}
+                    onClick={handleLocationClick}
                 />)
 
     return (

@@ -23,7 +23,7 @@ class UserRegistration(Resource):
 
         new_user = UserModel(
             username = data['username'],
-            password = UserModel.generate_hash(data['password']) 
+            password = UserModel.generate_hash(data['password'])
         )
         try:
             new_user.save_to_db()
@@ -35,7 +35,8 @@ class UserRegistration(Resource):
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
-        except:
+        except Exception as e:
+            print('Login error: ' + e)
             return{
                 'message': 'Something went wrong'
             }, 500
@@ -84,15 +85,25 @@ class AddLocation(Resource):
             state_code = data['province']['state_code'],
             country = data['country']['name'],
             iso2 = data['country']['iso2'],
-            user_id = current_user.id
         )
         try:
-            new_location.save_to_db() 
-            return {
-                'message': 'Added location'
-            }
+            location_if_exists = LocationModel.does_location_already_exist(data['city']['name'], data['province']['name'], data['country']['name'] )
+
+            
+            if(not location_if_exists):
+                new_location.save_to_db()
+                new_location.save_to_assoc_table(current_user)
+
+                return {
+                    'message': 'Added location',
+                    'id' : new_location.id
+                }
+            else:
+                location_if_exists.save_to_assoc_table(current_user)
+
         
         except Exception as e:
+            print(e)
             if(type(e) == exc.IntegrityError):
                 return{'mesesage': 'Cannot add same location twice'}, 409
             
@@ -107,7 +118,7 @@ class GetAllLocations(Resource):
 
         try:
             user_id = UserModel.find_by_username(data['username']).id
-            return LocationModel.return_all_from_user(user_id)
+            return UserModel.return_all_user_locations(user_id)
         except:
             return {'message': 'Something went wrong'},500 
 

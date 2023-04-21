@@ -6,25 +6,93 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey
-from sqlalchemy import select, update
+from sqlalchemy import select, update, Table, Column, insert
 
 from typing import List
 from typing import Optional
+
+association_table = Table(
+    "association_table",
+    db.Model.metadata,
+    Column("location_id", ForeignKey("locations.id")),
+    Column("user_id", ForeignKey("users.id")),
+)
+
+
+class LocationModel(db.Model):
+
+    __tablename__ = 'locations'
+
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
+    city: Mapped[Optional[str]] = mapped_column()
+    province: Mapped[Optional[str]] = mapped_column()
+    state_code: Mapped[Optional[str]] = mapped_column() 
+    country: Mapped[Optional[str]] = mapped_column()
+    iso2: Mapped[Optional[str]] = mapped_column() #country 2 letter code
+    latitude: Mapped[Optional[float]] = mapped_column()
+    longitude: Mapped[Optional[float]] = mapped_column()
+    sa.UniqueConstraint(latitude, longitude)
+    sa.UniqueConstraint(city, province, country)
+
+    users: Mapped[Optional[List["UserModel"]]] = relationship(secondary=association_table,back_populates="locations")
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def save_to_assoc_table(self, user):
+        stmt = insert(association_table).values(user_id = user.id,location_id = self.id)
+        db.session.execute(stmt)
+        db.session.commit()
+
+
+    @classmethod
+    def does_location_already_exist(cls, city, province, country):
+        query = select(cls).where(cls.city == city, cls.province == province, cls.country == country)
+        result = db.session.execute(query).first()
+
+
+        if (result == None):
+            return False
+        
+        return result[0]
 
 
 class UserModel(db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(unique=True)
+    password: Mapped[str] = mapped_column()
 
-    locations: Mapped[List["LocationModel"]] = relationship(back_populates='users')
+    locations: Mapped[Optional[List["LocationModel"]]] = relationship(secondary=association_table,back_populates="users")
 
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+
+    @classmethod
+    def return_all_user_locations(cls, user_id):
+        test='test'
+        """         query = select(cls.locations)
+        result = db.session.execute(query).all()
+        print(result)
+        locations = []
+        for location in result:
+            loc = location[0]
+            locations.append({
+                'id': loc.id,
+                'latitude': loc.latitude,
+                'longitude': loc.longitude,
+                'city': loc.city,
+                'province': loc.province,
+                'state_code': loc.state_code,
+                'country': loc.country,
+                'iso2': loc.iso2
+            })
+
+        return {'locations': locations} """
 
     @classmethod
     def find_by_username(cls, username):
@@ -57,93 +125,6 @@ class UserModel(db.Model):
     @staticmethod
     def verify_hash(password, hash):
         return sha256.verify(password, hash)
-
-
-class LocationModel(db.Model):
-
-    __tablename__ = 'locations'
-
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    latitude: Mapped[Optional[float]] = mapped_column()
-    longitude: Mapped[Optional[float]] = mapped_column()
-    city: Mapped[Optional[str]] = mapped_column()
-    province: Mapped[Optional[str]] = mapped_column()
-    state_code: Mapped[Optional[str]] = mapped_column() 
-    country: Mapped[Optional[str]] = mapped_column()
-    iso2: Mapped[Optional[str]] = mapped_column() #country 2 letter code
-    sa.UniqueConstraint(latitude, longitude)
-    sa.UniqueConstraint(city, province, country)
-
-    user_ids: Mapped[List[int]] = mapped_column(ForeignKey(UserModel.id))
-    users: Mapped[List["UserModel"]] = relationship(back_populates="locations")
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-    @classmethod
-    def subscribe_user_to_location(cls, location_id, user_id):
-        query = select(cls.user_ids).where(cls.id == location_id)
-        result = db.session.execute(query).first()
-        print(result)
-        print(type(result))
-
-        new_ids = []
-
-        for id in result:
-            if(id == user_id):
-                print('already user here')
-                return
-            new_ids.append(id)
-        
-        new_ids.append(user_id)
-        print('account id: ' + str(user_id))
-        print(new_ids)
-        update_stmt = update(cls).where(cls.id == location_id).values(user_ids = user_id)
-        print(update_stmt)
-        db.session.execute(update_stmt)
-
-    @classmethod
-    def does_location_already_exist(cls, city, province, country):
-        query = select(cls.id).where(cls.city == city, cls.province == province, cls.country == country)
-        result = db.session.execute(query).first()
-
-        if (result == None):
-            return False
-        
-        return result
-
-    @classmethod
-    def return_all_from_user(cls, user_id):
-        query = select(
-            cls.id,
-            cls.latitude,
-            cls.longitude,
-            cls.city,
-            cls.province,
-            cls.country,
-            cls.state_code,
-            cls.iso2
-        ).where(cls.user_ids == user_id)
-        result = db.session.execute(query).all()
-        locations = []
-        for location in result:
-            locations.append({
-                'id': location.id,
-                'latitude': location.latitude,
-                'longitude': location.longitude,
-                'city': location.city,
-                'province': location.province,
-                'state_code': location.state_code,
-                'country': location.country,
-                'iso2': location.iso2
-            })
-
-        return {'locations': locations}
-
-
-
-
 
 class RevokeTokenModel(db.Model):
 

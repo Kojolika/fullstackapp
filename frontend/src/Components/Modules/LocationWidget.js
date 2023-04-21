@@ -18,9 +18,9 @@ const LocationWidget = (props) => {
     const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
     const handleCheckBoxClick = () => {
         if (isMarkedForDeletion) {
-            props.removeLocationFromMarkedForDeletionList(props.location_id)
+            props.removeLocationFromMarkedForDeletionList(props.location.id)
         } else {
-            props.addLocationToMarkedForDeletionList(props.location_id);
+            props.addLocationToMarkedForDeletionList(props.location.id);
         }
         setIsMarkedForDeletion(!isMarkedForDeletion);
     }

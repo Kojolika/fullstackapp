@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 
 
-import { addLocation, selectCurrentLocation } from "../../Features/locations/locationsSlice"
+import { addLocation, selectCurrentLocation, setCurrentLocation } from "../../Features/locations/locationsSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGetLocationKeyQuery } from "../../Features/locations/accuWeatherApiSlice";
 
@@ -264,7 +264,7 @@ const LocationData = () => {
     //Five days forecast data from AccuWeather
     const fiveDayForecastArray = isSuccess5DayForecast ? currentDataDailyForecast5Days.DailyForecasts : fiveDayForecastMock;
 
-    //Five days forecast data displayed as React Components
+    //Five days forecast data displayed as html components
     const fiveDayForecastsDisplay = fiveDayForecastArray.map((forecast, index) =>
         <div key={forecast?.Date} id="individual-forecast-day" className="weather-panel border">
             <div className="flex-column flex-center-align" id="forecast-container">
@@ -363,22 +363,35 @@ const LocationData = () => {
 
     //Function that toggles weather or not the location is favorited
     const toggleFavorite = () => {
-        if (isFavorited) setIsFavorited(false);
-        else setIsFavorited(true);
+        if (isFavorited) {
+            setIsFavorited(false);
+        }
+        else{ 
+            setIsFavorited(true);
+            addLocationToUserDatabase();
+        }
     }
 
     const dispatch = useDispatch();
     const [addLocationToBackendDB] = useAddUserLocationMutation();
+
     //Adds the location to the user database
     const addLocationToUserDatabase = async () => {
         console.log(locationBeingDisplayed);
         try{
             //send backend request
             const response = await addLocationToBackendDB({username: user, ...locationBeingDisplayed}).unwrap();
-            console.log(response.message);
+            const unique_id = response.id; //unique id of location in database
+
+            //this is under the assumption the location is now already in the database
+            //need to change the database response if the location is added to just add new user id
+            const {id, ...locationWithoutId} = locationBeingDisplayed; 
+            const locationWithUniqueId = {...locationWithoutId, id: unique_id};
+
+            dispatch(setCurrentLocation({...locationWithUniqueId}));
 
             //set application logic
-            dispatch(addLocation({...locationBeingDisplayed}));
+            dispatch(addLocation({...locationWithUniqueId}));
 
             //backend request contains unique restraint so only 1 of each location can be added
             //calling both in the same try block ensures the unique constraint holds for the application logic dispatch
@@ -386,6 +399,10 @@ const LocationData = () => {
         }catch(error){
             console.log(error);
         }
+        
+    }
+
+    const removeLocationFromDatabase = async () =>{
         
     }
 
