@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser, setCredentials } from '../../Features/auth/authSlice';
-import { useLoginMutation, useGetUserLocationsQuery } from '../../Features/auth/authApiSlice';
+import { useLoginMutation, useGetUserLocationsQuery, useLazyGetUserLocationsQuery } from '../../Features/auth/authApiSlice';
 import { setTheme, setTempUnit } from '../../Features/user_preferences/preferenceSlice';
 import { setUserLocations } from '../../Features/locations/locationsSlice';
 
@@ -26,37 +26,11 @@ const Login = () => {
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useDispatch();
 
-    const loggedInUser = useSelector(selectCurrentUser);
-    const skipUserLocations = loggedInUser ? false : true;
-    const { data, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': loggedInUser }, { skip: skipUserLocations});
+    //const loggedInUser = useSelector(selectCurrentUser);
+    //const skipUserLocations = loggedInUser ? false : true;
+    //const { data, isSuccess, refetch } = useGetUserLocationsQuery({ 'username': loggedInUser }, { skip: skipUserLocations});
 
-    useEffect(() => {
-        if (isSuccess) {
-            const locationsFormattedCorrectly = [];
-            data?.locations.forEach(location => {
-                locationsFormattedCorrectly.push({
-                    "city": {
-                        "name": location.city
-                    },
-                    "province": {
-                        "name": location.province,
-                        "state_code": location.state_code
-                    },
-                    "country": {
-                        "name": location.country,
-                        "iso2": location.iso2
-                    },
-                    "id": location?.id,
-                    "latitude": location?.latitude,
-                    "longitude": location?.longitude
-                })
-            });
-            dispatch(setUserLocations({ "locations": locationsFormattedCorrectly }));
-
-            //once locations are set, navigate to location page
-            navigate('/locations')
-        }
-    }, [data])
+    const [triggerGetLocations] = useLazyGetUserLocationsQuery();
 
     useEffect(() => {
         userRef.current.focus();
@@ -85,12 +59,36 @@ const Login = () => {
                 dispatch(setTheme({ "theme": theme }));
             }
 
-            //ensures the user locations are updated
-            //had an error where if the user added a location and then logged out and logged in the location would not appear
+            const payload = triggerGetLocations({ 'username': user }, false).unwrap();
+            payload.then(data => {
+                const locationsFormattedCorrectly = [];
+                data?.locations.forEach(location => {
+                    locationsFormattedCorrectly.push({
+                        "city": {
+                            "name": location.city
+                        },
+                        "province": {
+                            "name": location.province,
+                            "state_code": location.state_code
+                        },
+                        "country": {
+                            "name": location.country,
+                            "iso2": location.iso2
+                        },
+                        "id": location?.id,
+                        "latitude": location?.latitude,
+                        "longitude": location?.longitude
+                    })
+                });
+                dispatch(setUserLocations({ "locations": locationsFormattedCorrectly }));
+            });
 
             //reset page logic (not sure if neccesary?)
             setUser('');
             setPwd('');
+
+            //once locations are set, navigate to location page
+            navigate('/locations')
 
         }
         catch (err) {

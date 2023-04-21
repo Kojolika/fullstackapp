@@ -25,7 +25,6 @@ const Locations = () => {
 
     const userLocations = useSelector(selectAllLocations);
     const locations = userLocations ? userLocations : [];
-    console.log(locations);
 
     const [toolbarState, setToolbarState] = useState(TOOLBAR_STATE.NONE);
 
