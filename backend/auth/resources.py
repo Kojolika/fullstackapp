@@ -137,7 +137,6 @@ class UserLogoutAccess(Resource):
     @jwt_required()
     def post(self):
         jti = get_jwt()['jti']
-        print(jti)
         try:
             revoked_token = RevokeTokenModel(jti=jti)
             revoked_token.add()

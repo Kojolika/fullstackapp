@@ -49,6 +49,7 @@ export const {
     useLogoutMutation,
     useRegisterMutation,
     useGetUserLocationsQuery,
+    useLazyGetUserLocationsQuery,
     useAddUserLocationMutation
 } = authApiSlice;
 

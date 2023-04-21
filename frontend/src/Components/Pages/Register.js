@@ -22,8 +22,6 @@ const Register = () => {
     const [register, { isLoading }] = useRegisterMutation();
     const dispatch = useDispatch();
 
-   
-
     useEffect(() => {
         userRef.current.focus();
     }, [])

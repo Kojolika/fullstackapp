@@ -73,7 +73,8 @@ class UserModel(db.Model):
         db.session.commit()
 
     def return_all_user_locations(self):
-        query = select(LocationModel).join(association_table)
+        query = select(LocationModel).join(association_table).where(association_table.c.user_id == self.id)
+        print(query)
         result = db.session.execute(query).all()
         locations = []
         for location in result:

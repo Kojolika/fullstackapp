@@ -7,6 +7,7 @@ import useOutsideClick from "../../app/hooks/useOutsideClick";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import '../../Styles/settings.css';
 
@@ -22,6 +23,8 @@ const SettingsButton = () => {
 
     const temp = useSelector(selectTempUnit);
     const theme = useSelector(selectTheme);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         setDegreeUnit(temp);
@@ -40,6 +43,7 @@ const SettingsButton = () => {
         try {
             const message = await logout({ accessToken }).unwrap();
             dispatch(logOut());
+            navigate('/');
             console.log(message);
         }
         catch (err) {

@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 
 
-import { addLocation, selectCurrentLocation, setCurrentLocation } from "../../Features/locations/locationsSlice"
+import { addLocation, selectAllLocations, selectCurrentLocation, setCurrentLocation } from "../../Features/locations/locationsSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGetLocationKeyQuery } from "../../Features/locations/accuWeatherApiSlice";
 
@@ -28,6 +28,8 @@ const LocationData = () => {
 
     const user = useSelector(selectCurrentUser);
     const locationBeingDisplayed = useSelector(selectCurrentLocation);
+    const allUserLocations = useSelector(selectAllLocations);
+    console.log(allUserLocations);
     console.log(locationBeingDisplayed);    
 
     //this is for Air Visual API, you need to query it as 'USA' not 'United States'
