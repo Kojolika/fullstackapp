@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { selectAllLocations, setCurrentLocation } from "../../Features/locations/locationsSlice";
+import { selectAllLocations, setCurrentLocation, deleteLocations } from "../../Features/locations/locationsSlice";
 
 import LocationWidget from "../Modules/LocationWidget";
 
@@ -10,6 +10,8 @@ import '../../Styles/locations.css';
 import '../../Styles/app.css';
 
 import { Delete } from "../../Icons/svgImages/index.js";
+import { useDeleteUserLocationsMutation } from "../../Features/locations/locationsApiSlice";
+import { selectCurrentUser } from "../../Features/auth/authSlice";
 
 
 const TOOLBAR_STATE = {
@@ -47,13 +49,30 @@ const Locations = () => {
             setMarkedForDeletionList(newArray1);
         }
     }
-    const handleLocationDeletion = () => {
 
+    const user = useSelector(selectCurrentUser);
+    const [deleteLocationFromBackendDB, {isLoading: isLoadingDeletingLocationFromDatabase}] = useDeleteUserLocationsMutation()
+    const handleLocationDeletion = async () => {
+        try {
+            //send backend request
+            //ids need not be a list, backend can still process the request 
+            await deleteLocationFromBackendDB({username: user, ids: markedForDeletionList}).unwrap();
+
+            //set application logic
+            dispatch(deleteLocations({ids:markedForDeletionList}));
+
+            //calling both in the same try block ensures server and frontend state sync
+
+            setToolbarState(TOOLBAR_STATE.NONE);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 
     const confirmDeletionButton = markedForDeletionList.length !== 0 ?
         <div className="confirm-location-delete alert-message" onClick={() => handleLocationDeletion()}>
-            {markedForDeletionList.length === 1 ? <span>Remove Location</span> : <span>Remove {markedForDeletionList.length} locations</span>}
+            {markedForDeletionList.length === 1 ? <span>Confirm Remove Location</span> : <span>Confirm Remove {markedForDeletionList.length} locations</span>}
         </div>
         : <></>;
 

@@ -63,11 +63,6 @@
     cursor: pointer;
 }
 
-.iconOptions{
-    position: absolute;
-    top: 0;
-    right: 0;
-}
 .button-selected{
     background-color: lightskyblue;
 }
@@ -83,7 +78,7 @@
 
 .confirm-location-delete
 {
-    background-color: red;
+     background-color: lightcoral;
 
     border-color: darkred; 
     align-items: center;
@@ -98,8 +93,9 @@
     min-width: 175px;
     min-height: 25px;
 
-    max-width: 200px;
+    max-width: 300px;
     max-height: 25px;
+
 
 }
 .confirm-location-delete:hover{

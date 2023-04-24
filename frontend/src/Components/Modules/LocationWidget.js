@@ -46,9 +46,6 @@ const LocationWidget = (props) => {
         <div className='checkbox-position'>
             {checkBox}
         </div>
-        <div className='iconOptions optionsButtons'>
-            <ThreeDots />
-        </div>
         <h2>
             {city === null ? latitude : city}, {province === null ? longitude : province}
             <br />

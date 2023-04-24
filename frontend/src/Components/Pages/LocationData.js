@@ -362,10 +362,13 @@ const LocationData = () => {
     </div>
 
     //set favorited if location is in user favorites, otherwise defualt is not favorited
+    //cannot use id to check, locations searched up via the searchbar do not have an id yet
     const allUserLocations = useSelector(selectAllLocations);
     useEffect(() => {
         for (let index = 0; index < allUserLocations.length; index++) {
-            if (allUserLocations[index].id === locationBeingDisplayed.id) {
+            if (allUserLocations[index].city.name === locationBeingDisplayed.city.name
+                && allUserLocations[index].province.name === locationBeingDisplayed.province.name
+                && allUserLocations[index].country.name === locationBeingDisplayed.country.name) {
                 setIsFavorited(true);
                 return;
             }
@@ -409,6 +412,7 @@ const LocationData = () => {
 
             //backend request contains unique restraint so only 1 of each location can be added
             //calling both in the same try block ensures the unique constraint holds for the application logic dispatch
+            //and ensures server and frontend state sync
 
         } catch (error) {
             console.log(error);
@@ -421,12 +425,12 @@ const LocationData = () => {
         try {
             //send backend request
             //ids need not be a list, backend can still process the request 
-            const response = await deleteLocationFromBackendDB({username: user, ids: locationBeingDisplayed.id}).unwrap();
+            await deleteLocationFromBackendDB({username: user, ids: locationBeingDisplayed.id}).unwrap();
 
             //set application logic
             dispatch(deleteLocations({ids:[locationBeingDisplayed.id]}));
 
-            console.log(allUserLocations);
+            //calling both in the same try block ensures server and frontend state sync
         }
         catch (error) {
             console.log(error);

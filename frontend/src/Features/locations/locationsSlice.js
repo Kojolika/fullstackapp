@@ -40,11 +40,8 @@ const locationsSlice = createSlice({
         },
         deleteLocations: (state, action) => {
             const {ids} = action.payload;
-            console.log(ids);
             const locationsAfterRemoval = state.locations.filter(location => !isInArray(location.id,ids));
             state.locations = locationsAfterRemoval;
-            console.log('after removal: ');
-            console.log(locationsAfterRemoval);
         },  
         setCurrentLocation: (state, action) => {
             const { city, province, country, latitude, longitude, id } = action.payload;
