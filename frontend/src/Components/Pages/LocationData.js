@@ -5,30 +5,30 @@ import { useEffect, useState } from "react";
 import { addLocation, selectAllLocations, selectCurrentLocation, setCurrentLocation } from "../../Features/locations/locationsSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGetLocationKeyQuery } from "../../Features/locations/accuWeatherApiSlice";
+import { useAddUserLocationMutation } from "../../Features/auth/authApiSlice";
+import { selectCurrentUser } from "../../Features/auth/authSlice";
+import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice";
 
 import '../../Styles/location.css';
 import '../../Styles/app.css';
 
-import { StarBorder, StarFilled, ArrowLeft, ArrowRight, Sunglasses, North, Info } from "../../Icons/svgImages/index.js";
-import { selectCurrentUser } from "../../Features/auth/authSlice";
-import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice";
+import { StarBorder, StarFilled, ArrowLeft, ArrowRight, Sunglasses, Info } from "../../Icons/svgImages/index.js";
+import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
 
 import Temperature from "../Atoms/Temperature";
 import WeatherIcon from "../Atoms/WeatherIcon";
-import { WaterDrop } from "../../Icons/svgImages/Weather Icons";
 import Month from "../Atoms/Month";
 import Time from "../Atoms/Time";
 import AirQuality from "../Atoms/AirQuality";
 import Wind from "../Atoms/Wind";
 import ToolTip from "../Atoms/ToolTip";
-import { useAddUserLocationMutation } from "../../Features/auth/authApiSlice";
+import Loading from "../Atoms/Loading";
 
 const LocationData = () => {
     const [isFavorited, setIsFavorited] = useState(false);
 
     const user = useSelector(selectCurrentUser);
     const locationBeingDisplayed = useSelector(selectCurrentLocation);
-    const allUserLocations = useSelector(selectAllLocations);
 
     //this is for Air Visual API, you need to query it as 'USA' not 'United States'
     const locationBeingDisplayAirVisualCall = locationBeingDisplayed?.country?.name === 'United States' ?
@@ -37,7 +37,6 @@ const LocationData = () => {
             "province": locationBeingDisplayed.province,
             "country": {
                 "name": "USA",
-                "iso2": locationBeingDisplayed.country.iso2
             }
         } : locationBeingDisplayed;
 
@@ -50,11 +49,9 @@ const LocationData = () => {
         isError: isErrorAirVisual,
         isFetching: isFetchingAirVisual } = useGetCityWeatherDataQuery(locationBeingDisplayAirVisualCall, { skip })
 
-
     const lastUpdatedhour = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 13) : null;
 
-    const { currentData: currentDataCityData,
-        isSuccess: isSuccessCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
+    const { currentData: currentDataCityData, isSuccess: isSuccessCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });
 
     const timezone = isSuccessCityData ? currentDataCityData?.TimeZone?.Code : 'UTC' // UTC time if no timezone is fetched
     const gmtOffset = isSuccessCityData ? currentDataCityData?.TimeZone?.GmtOffset : 0 // UTC time if no offset is fetched
@@ -70,7 +67,6 @@ const LocationData = () => {
         isSuccess: isSuccess12HourForecast,
         isFetching: isFetching12HourForecast
     } = useGetHourlyForecast12HoursQuery(locationKey, { skip: skipForecasts });
-
 
     //Display of location name at the top of the page
     const locationName = locationBeingDisplayed.city === null ? <></> : <div id='location-name'>
@@ -361,57 +357,79 @@ const LocationData = () => {
     //wind direction from Air Visual API, as an angle of 360° (N=0, E=90, S=180, W=270)
     const windDirection = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.wd : 0;
 
+    const favoriteButton = <div className={user ? 'favorites-button flex-center-align' : 'favorites-button-disabled flex-center-align'} onClick={user ? () => toggleFavorite() : null}>
+        {isFavorited ? <StarFilled /> : <StarBorder />}
+    </div>
+
+    //set favorited if location is in user favorites
+    const allUserLocations = useSelector(selectAllLocations);
+    useEffect(() => {
+        console.log('new render')
+        console.log(allUserLocations);
+        console.log(locationBeingDisplayed);
+        for(let index=0; index < allUserLocations.length; index++){
+            if (allUserLocations[index].id === locationBeingDisplayed.id) {
+                console.log('Setting favorite');
+                setIsFavorited(true);
+                return;
+            }
+        }
+        console.log('Not setting favorite');
+        setIsFavorited(false);
+    }, [locationBeingDisplayed])
+
+
+
     //Function that toggles weather or not the location is favorited
     const toggleFavorite = () => {
         if (isFavorited) {
             setIsFavorited(false);
+            removeLocationFromUser();
         }
-        else{ 
+        else {
             setIsFavorited(true);
-            addLocationToUserDatabase();
+            addLocationToUser();
         }
     }
 
     const dispatch = useDispatch();
-    const [addLocationToBackendDB] = useAddUserLocationMutation();
+    const [addLocationToBackendDB, { isLoading: isLoadingAddingToDatabase }] = useAddUserLocationMutation();
 
     //Adds the location to the user database
-    const addLocationToUserDatabase = async () => {
-        console.log(locationBeingDisplayed);
-        try{
+    const addLocationToUser = async () => {
+        try {
             //send backend request
-            const response = await addLocationToBackendDB({username: user, ...locationBeingDisplayed}).unwrap();
+            const response = await addLocationToBackendDB({ username: user, ...locationBeingDisplayed }).unwrap();
             const unique_id = response.id; //unique id of location in database
+            console.log(unique_id);
 
             //this is under the assumption the location is now already in the database
             //need to change the database response if the location is added to just add new user id
-            const {id, ...locationWithoutId} = locationBeingDisplayed; 
-            const locationWithUniqueId = {...locationWithoutId, id: unique_id};
+            const { id, ...locationWithoutId } = locationBeingDisplayed;
+            const locationWithUniqueId = { ...locationWithoutId, id: unique_id };
 
             dispatch(setCurrentLocation({...locationWithUniqueId}));
 
             //set application logic
-            dispatch(addLocation({...locationWithUniqueId}));
+            dispatch(addLocation({ ...locationWithUniqueId }));
 
             //backend request contains unique restraint so only 1 of each location can be added
             //calling both in the same try block ensures the unique constraint holds for the application logic dispatch
 
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
-        
+
     }
 
-    const removeLocationFromDatabase = async () =>{
-        
+    const removeLocationFromUser = async () => {
+
     }
 
     //Final location data display container
     const locationData = <article id="location-data-display" className="border" >
         <div id="data-formatting-container" className="flex-center-align flex-column">
-            <div id={user ? 'favorites-button' : 'favorites-button-disabled'} className="flex-center-align" onClick={user ? () => toggleFavorite() : null}>
-                {isFavorited ? <StarFilled /> : <StarBorder />}
-            </div>
+            {isLoadingAddingToDatabase ? <Loading height={48} width={48} className='favorites-button' /> : favoriteButton}
             {locationName}
             <div id="location-data" className="weather-panel-seperation" >
                 <div className="flex-column flex-center-align" id="top-row-left-data">

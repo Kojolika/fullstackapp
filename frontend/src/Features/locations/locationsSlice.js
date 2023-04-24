@@ -5,7 +5,10 @@ const initialState = {
     currentLocation: {
         "city": null,
         "province": null,
-        "country": null
+        "country": null,
+        "latitude": null,
+        "longitude": null,
+        "id": null
     }
 };
 
@@ -19,11 +22,14 @@ const locationsSlice = createSlice({
 
         },
         addLocation: (state, action) => {
-            const { city, province, country } = action.payload;
+            const { city, province, country, latitude, longitude, id } = action.payload;
             state.locations = [...state.locations, {
                 "city": city,
                 "province": province,
-                "country": country
+                "country": country,
+                "latitude": latitude,
+                "longitude": longitude,
+                "id" : id
             }]
         },
         setCurrentLocation: (state, action) => {

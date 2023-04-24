@@ -123,7 +123,7 @@
     gap: 5px;
 }
 
-#favorites-button {
+.favorites-button {
     position: absolute;
     top: 0;
     right: 0;
@@ -133,12 +133,12 @@
     margin: 5px;
 }
 
-#favorites-button:hover {
+.favorites-button:hover {
     transform: scale(1.1);
     cursor: pointer;
 }
 
-#favorites-button-disabled {
+.favorites-button-disabled {
     position: absolute;
     top: 0;
     right: 0;
@@ -148,7 +148,7 @@
     margin: 5px;
 }
 
-#favorites-button-disabled:hover {
+.favorites-button-disabled:hover {
     cursor: not-allowed;
 }
 
@@ -246,25 +246,9 @@
     border-width: 1px;
     border-style: solid;
 
-    min-width: 94px;
-
-    transition: 1s;
-}
-
-#individual-forecast-hour {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
-
-    border-color: lightgray;
-    border-width: 1px;
-    border-style: solid;
-
-    transition: 1s;
-
     min-width: 95px;
 
+    transition: 1s;
 }
 
 #hourly-time {

@@ -1,0 +1,11 @@
+@keyframes rotating {
+    from{
+        transform: rotateZ(0deg);
+    }
+    to{
+        transform: rotateZ(359deg);
+    }
+}
+#loading{
+    animation: rotating 2s linear infinite;
+}

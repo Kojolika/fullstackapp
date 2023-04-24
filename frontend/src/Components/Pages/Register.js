@@ -43,7 +43,7 @@ const Register = () => {
             const accessToken = userData.access_token;
             dispatch(setCredentials({ user, accessToken }));
 
-            //set user locations as empty if new user
+            //set user locations as empty for new user
             //if not done the application will retain the state from another user logged in on the same device
             dispatch(setUserLocations({ "locations": [] }));
 
