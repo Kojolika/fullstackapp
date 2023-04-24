@@ -509,7 +509,7 @@ const LocationData = () => {
 
     return (
         <div className="location-data-container">
-            {isErrorAirVisual ? err : isLoadingAirVisual || isFetchingAirVisual ? <span>Loading...</span> : location}
+            {isErrorAirVisual ? err : isLoadingAirVisual || isFetchingAirVisual ? <Loading width={96} height={96} /> : location}
         </div>
     )
 }

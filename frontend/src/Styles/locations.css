@@ -11,6 +11,8 @@
     min-width: 500px;
     max-width: 100%;
     width: 100%;
+
+    margin-top: 20px;
 }
 .locationsContainer{
     display: flex;
@@ -25,7 +27,6 @@
 .locationsOptionsArea{
     background-color: whitesmoke;
     position: relative;
-    margin-top: 10px;
     margin-bottom: 10px;
 
     display: flex;

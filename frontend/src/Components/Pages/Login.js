@@ -1,15 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser, setCredentials } from '../../Features/auth/authSlice';
-import { useLoginMutation, useGetUserLocationsQuery, useLazyGetUserLocationsQuery } from '../../Features/auth/authApiSlice';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../Features/auth/authSlice';
+import { useLoginMutation, useLazyGetUserLocationsQuery } from '../../Features/auth/authApiSlice';
 import { setTheme, setTempUnit } from '../../Features/user_preferences/preferenceSlice';
 import { setUserLocations } from '../../Features/locations/locationsSlice';
 
 import '../../Styles/login.css';
 import '../../Styles/app.css';
 import formatLocation from '../../data/utils/formatLocation';
+import Loading from '../Atoms/Loading';
 
 
 const Login = () => {
@@ -88,7 +89,7 @@ const Login = () => {
     const handleUserInput = (e) => setUser(e.target.value);
     const handlePwdInput = (e) => setPwd(e.target.value);
 
-    const content = isLoading ? <h1 className='login'>loading...</h1> : (
+    const content = isLoading ? <div className='flex-center-align'><Loading width={96} height={96}/></div> : (
         <section className='login'>
             <p ref={errRef} className={errMsg !== '' ? "errmsg" : "offscreen"}> {errMsg}</p>
 
