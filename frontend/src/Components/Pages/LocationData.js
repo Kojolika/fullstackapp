@@ -2,10 +2,10 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 
 
-import { addLocation, selectAllLocations, selectCurrentLocation, setCurrentLocation } from "../../Features/locations/locationsSlice"
+import { addLocation, deleteLocations, selectAllLocations, selectCurrentLocation, setCurrentLocation } from "../../Features/locations/locationsSlice"
 import { useGetCityWeatherDataQuery } from "../../Features/locations/airVisualApiSlice";
 import { useGetDailyForecast5DaysQuery, useGetHourlyForecast12HoursQuery, useGetLocationKeyQuery } from "../../Features/locations/accuWeatherApiSlice";
-import { useAddUserLocationMutation } from "../../Features/auth/authApiSlice";
+import { useAddUserLocationMutation, useDeleteUserLocationsMutation } from "../../Features/locations/locationsApiSlice";
 import { selectCurrentUser } from "../../Features/auth/authSlice";
 import { selectTempUnit } from "../../Features/user_preferences/preferenceSlice";
 
@@ -361,20 +361,15 @@ const LocationData = () => {
         {isFavorited ? <StarFilled /> : <StarBorder />}
     </div>
 
-    //set favorited if location is in user favorites
+    //set favorited if location is in user favorites, otherwise defualt is not favorited
     const allUserLocations = useSelector(selectAllLocations);
     useEffect(() => {
-        console.log('new render')
-        console.log(allUserLocations);
-        console.log(locationBeingDisplayed);
-        for(let index=0; index < allUserLocations.length; index++){
+        for (let index = 0; index < allUserLocations.length; index++) {
             if (allUserLocations[index].id === locationBeingDisplayed.id) {
-                console.log('Setting favorite');
                 setIsFavorited(true);
                 return;
             }
         }
-        console.log('Not setting favorite');
         setIsFavorited(false);
     }, [locationBeingDisplayed])
 
@@ -401,14 +396,13 @@ const LocationData = () => {
             //send backend request
             const response = await addLocationToBackendDB({ username: user, ...locationBeingDisplayed }).unwrap();
             const unique_id = response.id; //unique id of location in database
-            console.log(unique_id);
 
             //this is under the assumption the location is now already in the database
             //need to change the database response if the location is added to just add new user id
             const { id, ...locationWithoutId } = locationBeingDisplayed;
             const locationWithUniqueId = { ...locationWithoutId, id: unique_id };
 
-            dispatch(setCurrentLocation({...locationWithUniqueId}));
+            dispatch(setCurrentLocation({ ...locationWithUniqueId }));
 
             //set application logic
             dispatch(addLocation({ ...locationWithUniqueId }));
@@ -421,15 +415,29 @@ const LocationData = () => {
         }
 
     }
+    const [deleteLocationFromBackendDB, {isLoading: isLoadingDeletingLocationFromDatabase}] = useDeleteUserLocationsMutation();
 
     const removeLocationFromUser = async () => {
+        try {
+            //send backend request
+            //ids need not be a list, backend can still process the request 
+            const response = await deleteLocationFromBackendDB({username: user, ids: locationBeingDisplayed.id}).unwrap();
+
+            //set application logic
+            dispatch(deleteLocations({ids:[locationBeingDisplayed.id]}));
+
+            console.log(allUserLocations);
+        }
+        catch (error) {
+            console.log(error);
+        }
 
     }
 
     //Final location data display container
     const locationData = <article id="location-data-display" className="border" >
         <div id="data-formatting-container" className="flex-center-align flex-column">
-            {isLoadingAddingToDatabase ? <Loading height={48} width={48} className='favorites-button' /> : favoriteButton}
+            {isLoadingAddingToDatabase || isLoadingDeletingLocationFromDatabase? <Loading height={48} width={48} className='favorites-button' /> : favoriteButton}
             {locationName}
             <div id="location-data" className="weather-panel-seperation" >
                 <div className="flex-column flex-center-align" id="top-row-left-data">

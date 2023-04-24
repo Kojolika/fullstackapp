@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey
-from sqlalchemy import select, update, Table, Column, insert
+from sqlalchemy import select, Table, Column, insert, delete
 
 from typing import List
 from typing import Optional
@@ -74,7 +74,6 @@ class UserModel(db.Model):
 
     def return_all_user_locations(self):
         query = select(LocationModel).join(association_table).where(association_table.c.user_id == self.id)
-        print(query)
         result = db.session.execute(query).all()
         locations = []
         for location in result:
@@ -91,6 +90,12 @@ class UserModel(db.Model):
             })
 
         return {'locations': locations} 
+    
+    def delete_locations_from_user(self, location_ids):
+        stmt = delete(association_table).where(association_table.c.user_id == self.id, association_table.c.location_id.in_(location_ids))
+        db.session.execute(stmt)
+        db.session.commit()
+        
 
     @classmethod
     def find_by_username(cls, username):

@@ -72,6 +72,7 @@ api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
 api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.AddLocation, '/addLocation')
+api.add_resource(resources.DeleteLocations, '/deleteLocations')
 api.add_resource(resources.GetAllLocations, '/locations')
 
 api.add_resource(air_visual_api_resources.GetWeatherDataFromCity, '/airVisualApi/weatherData')

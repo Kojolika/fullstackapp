@@ -65,9 +65,9 @@ location_parser = parser.copy()
 location_parser.add_argument('username', help = 'This field cannot be blank', required = True)
 location_parser.add_argument('latitude')
 location_parser.add_argument('longitude')
-location_parser.add_argument('city', type=dict)
-location_parser.add_argument('province', type=dict)
-location_parser.add_argument('country', type=dict)
+location_parser.add_argument('city', type=dict, required = True)
+location_parser.add_argument('province', type=dict, required = True)
+location_parser.add_argument('country', type=dict, required = True)
 
 class AddLocation(Resource):
     @jwt_required()
@@ -97,7 +97,7 @@ class AddLocation(Resource):
                 return {
                     'message': 'Added location',
                     'id' : new_location.id
-                }
+                }, 201 # Indicates that the request has succeeded and a new resource has been created as a result.
             else:
                 location_if_exists.save_to_assoc_table(current_user)
 
@@ -114,12 +114,10 @@ class AddLocation(Resource):
             
             return{'message': 'Something went wrong'}, 500
 
-get_all_location_parser = parser.copy()
-
 class GetAllLocations(Resource):
     @jwt_required()
     def post(self):
-        data = get_all_location_parser.parse_args()
+        data = parser.parse_args()
 
         try:
             user: UserModel = UserModel.find_by_username(data['username'])
@@ -128,10 +126,25 @@ class GetAllLocations(Resource):
             print(e)
             return {'message': 'Something went wrong'},500 
 
+delete_locations_paresr = parser.copy()
+delete_locations_paresr.add_argument('ids',type=int, action='append', required=True)
+
 class DeleteLocations(Resource):
     @jwt_required()
     def delete(self):
-        test = 12
+        try:
+            data = delete_locations_paresr.parse_args()
+            ids = data['ids']
+            user: UserModel = UserModel.find_by_username(data['username'])
+            user.delete_locations_from_user(ids)
+            return {'message': 'Successfully removed location from favorites.'},200
+        
+        except Exception as e:
+            print(e)
+            return {'message': 'Something went wrong'},500 
+
+
+
 
 class UserLogoutAccess(Resource):
     @jwt_required()
