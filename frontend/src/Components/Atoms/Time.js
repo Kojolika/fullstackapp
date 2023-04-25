@@ -6,10 +6,10 @@ const Time = (props) => {
 
 
     useEffect(() => {
-
+        
         //Assumption is that props.number is a string in the form 'HH:MM' where HH is the hour and MM is the minute and is in the UTC timezone
         const militaryHour = parseInt(props.number.slice(0, 2));
-
+        
         //props.offset is the offset number (+ or -) that converts this time from the UTC timezone to the local time
         const offset = props.offset;
 
@@ -19,8 +19,12 @@ const Time = (props) => {
 
         const militaryLocalTime = afterOffsetHour > 24 ?  afterOffsetHour - 24 : afterOffsetHour < 0 ? afterOffsetHour + 24 : afterOffsetHour;
 
-        if(militaryLocalTime > 11) setMeridiem('PM')
-        else setMeridiem('AM')
+        if(militaryLocalTime > 11) {
+            setMeridiem('PM')
+        }
+        else {
+            setMeridiem('AM')
+        }
 
         const regularLocalTime = militaryLocalTime <= 12 ? militaryLocalTime === 0 ? 12 : militaryLocalTime : militaryLocalTime - 12;
 

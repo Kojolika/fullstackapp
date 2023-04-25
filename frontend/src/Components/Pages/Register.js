@@ -41,7 +41,10 @@ const Register = () => {
 
             const userData = await register({ 'username': user, 'password': pwd }).unwrap();
             const accessToken = userData.access_token;
-            dispatch(setCredentials({ user, accessToken }));
+            const csrfAccessToken = userData.csrf_access_token;
+            const csrfRefreshToken = userData.csrf_refresh_token;
+
+            dispatch(setCredentials({ user, accessToken,csrfAccessToken, csrfRefreshToken}));
 
             //set user locations as empty for new user
             //if not done the application will retain the state from another user logged in on the same device

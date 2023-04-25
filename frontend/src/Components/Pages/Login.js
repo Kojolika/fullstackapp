@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../Features/auth/authSlice';
-import { useLoginMutation, useLazyGetUserLocationsQuery } from '../../Features/auth/authApiSlice';
+import { useLazyGetUserLocationsQuery } from '../../Features/locations/locationsApiSlice';
+import { useLoginMutation } from '../../Features/auth/authApiSlice';
 import { setTheme, setTempUnit } from '../../Features/user_preferences/preferenceSlice';
 import { setUserLocations } from '../../Features/locations/locationsSlice';
 
@@ -44,9 +45,13 @@ const Login = () => {
         try {
             //send request to backend to see if user has correct credentials
             const userData = await login({ 'username': user, 'password': pwd }).unwrap();
+
             const accessToken = userData.access_token;
+            const csrfAccessToken = userData.csrf_access_token;
+            const csrfRefreshToken = userData.csrf_refresh_token;
+
             //set application logic
-            dispatch(setCredentials({ user, accessToken }));
+            dispatch(setCredentials({ user, accessToken, csrfAccessToken, csrfRefreshToken }));
 
             //fetch user prefs if they exist
             const tempUnit = localStorage.getItem("temperatureUnit");

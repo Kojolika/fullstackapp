@@ -25,7 +25,6 @@ const locationsSlice = createSlice({
         setUserLocations: (state, action) => {
             const {locations}  = action.payload;
             state.locations = locations;
-
         },
         addLocation: (state, action) => {
             const { city, province, country, latitude, longitude, id } = action.payload;

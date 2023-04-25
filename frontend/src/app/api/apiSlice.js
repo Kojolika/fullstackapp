@@ -1,4 +1,4 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logOut } from '../../Features/auth/authSlice';
 
 const url = 'http://localhost:5000';
@@ -6,39 +6,47 @@ const url = 'http://localhost:5000';
 const baseQuery = fetchBaseQuery({
     baseUrl: url,
     credentials: 'include',
-    prepareHeaders: (headers,{getState}) => {
+    prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token;
-        if(token)
-        {
-            headers.set("authorization", `Bearer ${token}`)
+        if (token) {
+            headers.set("authorization", `Bearer ${token}`);
         }
-        headers.set('Access-Control-Allow-Origin', url)
-        headers.set('Access-Control-Allow-Credentials', 'true')
-        headers.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+        const csrfAccessToken = getState().auth.csrfAccessToken;
+        if (csrfAccessToken) {
+            headers.set('X-CSRF-ACCESS-TOKEN', '' + csrfAccessToken);
+        }
+        const csrfRefreshToken = getState().auth.csrfRefreshToken;
+        if (csrfRefreshToken) {
+            headers.set('X-CSRF-REFRESH-TOKEN', '' + csrfRefreshToken)
+        }
+        headers.set('Access-Control-Allow-Origin', url);
+        headers.set('Access-Control-Allow-Credentials', 'true');
+        headers.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
         return headers;
     }
 
 })
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
-    let result = await baseQuery(args, api ,extraOptions);
+    let result = await baseQuery(args, api, extraOptions);
 
-    if(result?.error?.originalStatus === 403)
-    {
+    if (result?.error?.status === 403) {
         console.log('sending refresh token');
         //send refresh token to get new accessToken
-        const refreshResult = await baseQuery('/token/refresh', api, extraOptions);
-        console.log(refreshResult);
-        if(refreshResult?.data)
-        {
+        const refreshResult = await baseQuery({ method: 'POST', url: '/token/refresh' }, api, extraOptions);
+
+        if (refreshResult?.data) {
             const user = api.getState().auth.user;
+            const csrfAccessToken = refreshResult.data.csrf_access_token;
+
             //store the new token
-            api.dispatch(setCredentials({...refreshResult.data, user}))
+            api.dispatch(setCredentials({ user, csrfAccessToken }))
+
             //retry original query with new token
             result = await baseQuery(args, api, extraOptions);
-        }else
-        {
-          api.dispatch(logOut());  
+        } else {
+            api.dispatch(logOut());
+            console.log('logging out..');
         }
     }
 

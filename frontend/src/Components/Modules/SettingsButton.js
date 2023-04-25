@@ -10,6 +10,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import '../../Styles/settings.css';
+import { setUserLocations } from "../../Features/locations/locationsSlice";
 
 const SettingsButton = () => {
 
@@ -43,6 +44,7 @@ const SettingsButton = () => {
         try {
             const message = await logout({ accessToken }).unwrap();
             dispatch(logOut());
+            dispatch(setUserLocations([]))
             navigate('/');
             console.log(message);
         }

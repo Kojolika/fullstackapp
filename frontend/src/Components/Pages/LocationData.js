@@ -48,7 +48,7 @@ const LocationData = () => {
         error: errorAirVisual,
         isError: isErrorAirVisual,
         isFetching: isFetchingAirVisual } = useGetCityWeatherDataQuery(locationBeingDisplayAirVisualCall, { skip })
-
+ 
     const lastUpdatedhour = isSuccessAirVisual ? currentDataAirVisual?.data?.current?.weather?.ts.slice(11, 13) : null;
 
     const { currentData: currentDataCityData, isSuccess: isSuccessCityData } = useGetLocationKeyQuery(locationBeingDisplayed, { skip });

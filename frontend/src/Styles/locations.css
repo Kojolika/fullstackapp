@@ -1,5 +1,4 @@
-.locationsMainPage
-{
+.locationsMainPage {
     display: flex;
     height: 100%;
     width: 100%;
@@ -14,7 +13,8 @@
 
     margin-top: 20px;
 }
-.locationsContainer{
+
+.locationsContainer {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -22,9 +22,11 @@
 
     justify-content: center;
     align-items: center;
+
+    
 }
 
-.locationsOptionsArea{
+.locationsOptionsArea {
     background-color: whitesmoke;
     position: relative;
     margin-bottom: 10px;
@@ -36,17 +38,18 @@
 
     min-height: 50px;
     max-height: 50px;
-    
+
 }
-.locationsList{
+
+.locationsList {
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
     position: relative;
 }
-.location
-{
+
+.location {
     position: relative;
     background-color: whitesmoke;
     padding-top: 2%;
@@ -55,33 +58,33 @@
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
-    
+
     z-index: 0;
 }
-.location:hover
-{
+
+.location:hover {
     background-color: gainsboro;
     cursor: pointer;
 }
 
-.button-selected{
+.button-selected {
     background-color: lightskyblue;
 }
-.deletion-selected{
+
+.deletion-selected {
     background-color: lightcoral;
 }
 
-.checkbox-position{
+.checkbox-position {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-.confirm-location-delete
-{
-     background-color: lightcoral;
+.confirm-location-delete {
+    background-color: lightcoral;
 
-    border-color: darkred; 
+    border-color: darkred;
     align-items: center;
     text-align: center;
     white-space: nowrap;
@@ -99,8 +102,8 @@
 
 
 }
-.confirm-location-delete:hover{
+
+.confirm-location-delete:hover {
     background-color: rgb(255, 42, 42);
     cursor: pointer;
 }
-
