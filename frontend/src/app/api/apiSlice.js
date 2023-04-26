@@ -15,10 +15,6 @@ const baseQuery = fetchBaseQuery({
         if (csrfAccessToken) {
             headers.set('X-CSRF-ACCESS-TOKEN', '' + csrfAccessToken);
         }
-        const csrfRefreshToken = getState().auth.csrfRefreshToken;
-        if (csrfRefreshToken) {
-            headers.set('X-CSRF-REFRESH-TOKEN', '' + csrfRefreshToken)
-        }
         headers.set('Access-Control-Allow-Origin', url);
         headers.set('Access-Control-Allow-Credentials', 'true');
         headers.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
@@ -28,7 +24,9 @@ const baseQuery = fetchBaseQuery({
 })
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+    console.log(args);
     let result = await baseQuery(args, api, extraOptions);
+    console.log(result);
 
     if (result?.error?.status === 403) {
         console.log('sending refresh token');
