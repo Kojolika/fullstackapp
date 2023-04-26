@@ -1,21 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { user: null, token: null, csrfAccessToken: null, csrfRefreshToken: null };
+const initialState = { user: null, token: null, csrfAccessToken: null };
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         setCredentials: (state, action) => {
-            const { user, accessToken, csrfAccessToken, csrfRefreshToken } = action.payload;
+            const { user, accessToken, csrfAccessToken } = action.payload;
             state.user = user;
             state.token = accessToken;
             state.csrfAccessToken = csrfAccessToken ? csrfAccessToken : state.csrfAccessToken 
-            state.csrfRefreshToken = csrfRefreshToken ? csrfRefreshToken : state.csrfRefreshToken
         },
         logOut: (state, action) => {
             state.user = null;
             state.token = null;
+            state.csrfAccessToken = null;
+            console.log('loging out user in authslice');
         }
     }
 });

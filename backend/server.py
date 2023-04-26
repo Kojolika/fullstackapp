@@ -11,7 +11,7 @@ front_end_url = 'http://localhost:3000'
 app = Flask(__name__)
 CORS(app, origins=front_end_url,supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 10
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 3600
 
 api = Api(app)
 
@@ -83,9 +83,10 @@ from auth import resources, models, air_visual_api_resources, accu_weather_api_r
 #adds endpoints (url destinations essentially) to the api
 api.add_resource(resources.UserRegistration, '/registration')
 api.add_resource(resources.UserLogin, '/login')
-api.add_resource(resources.UserLogoutAccess, '/logout/access')
-api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
+api.add_resource(resources.LoginRefresh, '/login/refresh')
 api.add_resource(resources.TokenRefresh, '/token/refresh')
+api.add_resource(resources.LogoutAccess, '/logout/access')
+api.add_resource(resources.LogoutRefresh, '/logout/refresh')
 api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.AddLocation, '/addLocation')
 api.add_resource(resources.DeleteLocations, '/deleteLocations')

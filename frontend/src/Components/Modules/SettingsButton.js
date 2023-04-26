@@ -1,7 +1,7 @@
 import { Settings, ToggleOff, ToggleOn } from "../../Icons/svgImages/index";
-import { logOut, selectCurrentToken } from "../../Features/auth/authSlice";
+import { logOut } from "../../Features/auth/authSlice";
 import { selectTempUnit, selectTheme, setTempUnit, setTheme } from "../../Features/user_preferences/preferenceSlice";
-import { useLogoutMutation } from "../../Features/auth/authApiSlice";
+import { useLogoutAccessMutation, useLogoutRefreshMutation } from "../../Features/auth/authApiSlice";
 
 import useOutsideClick from "../../app/hooks/useOutsideClick";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,9 +14,9 @@ import { setUserLocations } from "../../Features/locations/locationsSlice";
 
 const SettingsButton = () => {
 
-    const accessToken = useSelector(selectCurrentToken);
     const dispatch = useDispatch();
-    const [logout] = useLogoutMutation();
+    const [logoutAccess] = useLogoutAccessMutation();
+    const [logoutRefresh] = useLogoutRefreshMutation();
     const [isOpen, setIsOpen] = useState(false);
     const [degreeUnit, setDegreeUnit] = useState();
     const [themeSetting, setThemeSetting] = useState();
@@ -42,11 +42,16 @@ const SettingsButton = () => {
 
     const handleLogout = async () => {
         try {
-            const message = await logout({ accessToken }).unwrap();
+            const response = await logoutAccess({}).unwrap();
+            try{
+                const response = await logoutRefresh({}).unwrap();
+            }
+            catch(err){
+                console.log(err);
+            } 
             dispatch(logOut());
-            dispatch(setUserLocations([]))
+            dispatch(setUserLocations([]));
             navigate('/');
-            console.log(message);
         }
         catch (err) {
             console.log(err);
@@ -94,7 +99,7 @@ const SettingsButton = () => {
                 </div>
             </div>
             <div className="settings-drop-down-option icon-button" onClick={() => handleLogout()} >Logout</div>
-        </div> 
+        </div>
         : <></>
 
     return (

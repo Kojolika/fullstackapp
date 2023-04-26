@@ -48,10 +48,9 @@ const Login = () => {
 
             const accessToken = userData.access_token;
             const csrfAccessToken = userData.csrf_access_token;
-            const csrfRefreshToken = userData.csrf_refresh_token;
 
             //set application logic
-            dispatch(setCredentials({ user, accessToken, csrfAccessToken, csrfRefreshToken }));
+            dispatch(setCredentials({ user, accessToken, csrfAccessToken }));
 
             //fetch user prefs if they exist
             const tempUnit = localStorage.getItem("temperatureUnit");
@@ -65,12 +64,10 @@ const Login = () => {
 
             //get user locations from backend
             //and set user locations for application logic
-            const payload = triggerGetLocations({ 'username': user }, false).unwrap();
-            payload.then(data => {
-                const locationsFormattedCorrectly = [];
-                data?.locations.forEach(location => locationsFormattedCorrectly.push(formatLocation(location)));
-                dispatch(setUserLocations({ "locations": locationsFormattedCorrectly }));
-            });
+            const payload = await triggerGetLocations({ 'username': user }, false).unwrap();
+            const locationsFormattedCorrectly = [];
+            payload?.locations.forEach(location => locationsFormattedCorrectly.push(formatLocation(location)));
+            dispatch(setUserLocations({ "locations": locationsFormattedCorrectly }));
 
             //reset page logic (not sure if neccesary?)
             setUser('');
@@ -94,7 +91,7 @@ const Login = () => {
     const handleUserInput = (e) => setUser(e.target.value);
     const handlePwdInput = (e) => setPwd(e.target.value);
 
-    const content = isLoading ? <div className='flex-center-align'><Loading width={96} height={96}/></div> : (
+    const content = isLoading ? <div className='flex-center-align'><Loading width={96} height={96} /></div> : (
         <section className='login'>
             <p ref={errRef} className={errMsg !== '' ? "errmsg" : "offscreen"}> {errMsg}</p>
 

@@ -1,4 +1,4 @@
-from flask_jwt_extended import (get_csrf_token, create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, set_access_cookies, set_refresh_cookies)
+from flask_jwt_extended import (unset_jwt_cookies, get_csrf_token, create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, set_access_cookies, set_refresh_cookies)
 from .models import UserModel, RevokeTokenModel, LocationModel
 from sqlalchemy import exc
 from flask import make_response
@@ -30,14 +30,11 @@ class UserRegistration(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             csrf_access_token = get_csrf_token(access_token)
-            csrf_refresh_token = get_csrf_token(refresh_token)
 
             response = make_response({
                 'message': 'User {} was created'.format(data['username']),
                 'access_token': access_token,
-                'refresh_token': refresh_token,
-                'csrf_access_token': csrf_access_token,
-                'csrf_refresh_token': csrf_refresh_token
+                'csrf_access_token': csrf_access_token
             }, 201)
 
             set_access_cookies(response, access_token)
@@ -64,14 +61,11 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             csrf_access_token = get_csrf_token(access_token)
-            csrf_refresh_token = get_csrf_token(refresh_token)
 
             response = make_response({
                 'message': 'Logged in as {}'.format(data['username']),
                 'access_token': access_token,
-                'refresh_token': refresh_token,
-                'csrf_access_token': csrf_access_token,
-                'csrf_refresh_token': csrf_refresh_token
+                'csrf_access_token': csrf_access_token
             }, 200)
 
             set_access_cookies(response, access_token)
@@ -169,44 +163,90 @@ class DeleteLocations(Resource):
             return {'message': 'Something went wrong'}, 500
 
 
-class UserLogoutAccess(Resource):
+class LogoutAccess(Resource):
     @jwt_required()
-    def post(self):
-        jti = get_jwt()['jti']
+    def delete(self):
         try:
+            jti = get_jwt()['jti']
+
             revoked_token = RevokeTokenModel(jti=jti)
             revoked_token.add()
-            return {'message': 'Access token has been revoked'}
-        except:
+
+            response = make_response({'message': 'Access token has been revoked'})
+
+            return response
+        except Exception as e:
+            print(e)
             return {'message': 'Something went wrong'}, 500
-
-
-class UserLogoutRefresh(Resource):
-    @jwt_required(refresh=True)
-    def post(self):
-        jti = get_jwt()['jti']
+        
+        
+class LogoutRefresh(Resource):
+    @jwt_required(refresh=True, locations=['cookies'])
+    def delete(self):
         try:
+            jti = get_jwt()['jti']
+
             revoked_token = RevokeTokenModel(jti=jti)
             revoked_token.add()
-            return {'message': 'Refresh token has been revoked'}
-        except:
+
+            response = make_response({'message': 'Refresh token has been revoked'})
+            unset_jwt_cookies(response)
+
+            return response
+        
+        except Exception as e:
+            print(e)
             return {'message': 'Something went wrong'}, 500
-
-
+        
 class TokenRefresh(Resource):
     @jwt_required(refresh=True, locations='cookies')
     def post(self):
-        current_user = get_jwt_identity()
-        access_token = create_access_token(identity=current_user)
-        csrf_access_token = get_csrf_token(access_token)
 
-        response = make_response({
-            'access_token': access_token,
-            'csrf_access_token': csrf_access_token
-        }, 200)
-        set_access_cookies(response, access_token)
+        jti = get_jwt()['jti']
 
-        return response
+        if(RevokeTokenModel.is_jti_blacklisted(jti)):
+            return {'message': 'Refresh Token has been revoked'}
+    
+        try:
+            current_user = get_jwt_identity()
+            access_token = create_access_token(identity=current_user)
+            csrf_access_token = get_csrf_token(access_token)
+
+            response = make_response({
+                'access_token': access_token,
+                'csrf_access_token': csrf_access_token
+            }, 200)
+            set_access_cookies(response, access_token)
+
+            return response
+        except Exception as e:
+            print(e)
+            return {'message': 'Something went wrong'}, 500
+    
+class LoginRefresh(Resource):
+    @jwt_required(refresh=True, locations='cookies')
+    def post(self):
+        
+        jti = get_jwt()['jti']
+        if(RevokeTokenModel.is_jti_blacklisted(jti)):
+            return {'message': 'Refresh Token has been revoked'}
+        
+        try:
+            current_user = get_jwt_identity()
+            access_token = create_access_token(identity=current_user)
+            csrf_access_token = get_csrf_token(access_token)
+
+            response = make_response({
+                'user': current_user,
+                'access_token': access_token,
+                'csrf_access_token': csrf_access_token,
+            }, 200)
+            set_access_cookies(response, access_token)
+
+            return response
+        except Exception as e:
+            print(e)
+            return {'message': str(e)}, 500
 
 
 class AllUsers(Resource):
